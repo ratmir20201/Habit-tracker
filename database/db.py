@@ -10,8 +10,8 @@ from sqlalchemy.orm import declarative_base
 
 from settings.config import settings
 
-DATABASE_URL = settings.db_url
-engine = create_async_engine(DATABASE_URL, echo=settings.echo)
+DATABASE_URL = settings.db.db_url
+engine = create_async_engine(DATABASE_URL, echo=settings.db.echo)
 
 
 _Session = async_sessionmaker(

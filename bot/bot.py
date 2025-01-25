@@ -4,7 +4,7 @@ from telebot import TeleBot, apihelper
 
 from settings.config import settings
 
-bot = TeleBot(settings.telegram_token)
+bot = TeleBot(settings.tg_bot.telegram_token)
 
 
 async def set_webhook():
@@ -12,9 +12,9 @@ async def set_webhook():
 
     await asyncio.sleep(1)
 
-    webhook_info = apihelper.get_webhook_info(settings.telegram_token)
-    if webhook_info.get("url") != settings.webhook_url:
-        bot.set_webhook(url=settings.webhook_url)
+    webhook_info = apihelper.get_webhook_info(settings.tg_bot.webhook_url)
+    if webhook_info.get("url") != settings.tg_bot.webhook_url:
+        bot.set_webhook(url=settings.tg_bot.webhook_url)
 
 
 @bot.message_handler(commands=["start"])

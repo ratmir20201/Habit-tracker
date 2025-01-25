@@ -12,17 +12,29 @@ POSTGRES_DB = os.getenv("POSTGRES_DB")
 WEBHOOK_URL = os.getenv("WEBHOOK_URL")
 
 
-class Settings(BaseSettings):
-    """Базовые настройки для приложения."""
+class DbSettings(BaseSettings):
+    """Настройки базы данных."""
 
-    telegram_token: str = TELEGRAM_TOKEN
     db_url: str = "postgresql+asyncpg://{user}:{password}@postgres:5432/{db}".format(
         user=POSTGRES_USER,
         password=POSTGRES_PASSWORD,
         db=POSTGRES_DB,
     )
     echo: bool = True
+
+
+class TelegramBotSettings(BaseSettings):
+    """Настройки телеграмм бота."""
+
+    telegram_token: str = TELEGRAM_TOKEN
     webhook_url: str = WEBHOOK_URL
+
+
+class Settings(BaseSettings):
+    """Базовые настройки для приложения."""
+
+    tg_bot: TelegramBotSettings = TelegramBotSettings()
+    db: DbSettings = DbSettings()
 
 
 settings = Settings()
