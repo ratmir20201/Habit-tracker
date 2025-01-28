@@ -2,7 +2,7 @@ import asyncio
 
 from telebot import TeleBot, apihelper
 
-from settings.config import settings
+from config import settings
 
 bot = TeleBot(settings.tg_bot.telegram_token)
 
