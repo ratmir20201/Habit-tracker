@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings
 
 load_dotenv()
 
@@ -24,7 +24,8 @@ class DbSettings(BaseSettings):
             name=self.db_name,
         )
 
-    model_config = SettingsConfigDict(env_file=".env", env_prefix="POSTGRES_")
+    class Config:
+        env_prefix = "DB_"
 
 
 class TelegramBotSettings(BaseSettings):
@@ -33,7 +34,8 @@ class TelegramBotSettings(BaseSettings):
     token: str = ""
     webhook_url: str = ""
 
-    model_config = SettingsConfigDict(env_file=".env", env_prefix="TELEGRAM_")
+    class Config:
+        env_prefix = "TG_"
 
 
 class Settings(BaseSettings):
@@ -41,8 +43,6 @@ class Settings(BaseSettings):
 
     tg_bot: TelegramBotSettings = TelegramBotSettings()
     db: DbSettings = DbSettings()
-
-    model_config = SettingsConfigDict(env_file=".env")
 
 
 settings = Settings()

@@ -4,7 +4,7 @@ from telebot import TeleBot, apihelper
 
 from config import settings
 
-bot = TeleBot(settings.tg_bot.telegram_token)
+bot = TeleBot(settings.tg_bot.token)
 
 
 async def set_webhook():
