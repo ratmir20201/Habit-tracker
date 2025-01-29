@@ -9,7 +9,7 @@ from api.crud.habits import (
     update_habit,
 )
 from api.database.db import get_session
-from api.dependencies.habit import habit_by_id
+from api.dependencies.habits import habit_by_id
 from api.models.habit import Habit
 from api.schemas.habit import HabitCreate, HabitResponse, HabitUpdate
 

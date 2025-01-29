@@ -16,5 +16,5 @@ async def habit_by_id(
 
     raise HTTPException(
         status_code=HTTP_404_NOT_FOUND,
-        detail="Привычка по id {} не была найдена".format(habit_id),
+        detail="Привычка по id {} не была найдена.".format(habit_id),
     )

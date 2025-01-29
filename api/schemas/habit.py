@@ -1,6 +1,10 @@
+from __future__ import annotations
+
 from typing import List, Union
 
 from pydantic import BaseModel
+
+from api.schemas.user import User
 
 
 class HabitBase(BaseModel):
@@ -23,6 +27,7 @@ class Habit(HabitBase):
     """Схема привычки с дополнительными данными."""
 
     id: int
+    user: "User"
 
     class Config:
         from_attributes = True
@@ -39,5 +44,5 @@ class HabitResponse(BaseModel):
         arbitrary_types_allowed = True
 
 
-Habit.update_forward_refs()
-HabitResponse.update_forward_refs()
+Habit.model_rebuild()
+HabitResponse.model_rebuild()

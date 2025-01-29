@@ -1,6 +1,11 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from pydantic import BaseModel, EmailStr
 
-from api.schemas.habit import Habit
+if TYPE_CHECKING:
+    from api.schemas.habit import Habit
 
 
 class UserBase(BaseModel):
@@ -18,7 +23,7 @@ class User(UserBase):
     """Схема пользователя с дополнительными данными."""
 
     id: int
-    habits: list[Habit] = []
+    habits: list["Habit"] = []
 
     class Config:
         from_attributes = True

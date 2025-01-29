@@ -7,7 +7,7 @@ from api.schemas.habit import HabitCreate, HabitUpdate
 
 
 async def create_habit(session: AsyncSession, habit: HabitCreate) -> Habit:
-    new_habit = Habit(name=habit.name, user_id=habit.user_id)
+    new_habit = Habit(**habit.model_dump())
 
     session.add(new_habit)
     await session.commit()
