@@ -1,6 +1,6 @@
-from pydantic import BaseModel, ConfigDict
+from typing import List, Union
 
-from api.schemas.user import User
+from pydantic import BaseModel
 
 
 class HabitBase(BaseModel):
@@ -23,13 +23,21 @@ class Habit(HabitBase):
     """Схема привычки с дополнительными данными."""
 
     id: int
-    user: User
 
-    model_config = ConfigDict(from_attributes=True)
+    class Config:
+        from_attributes = True
 
 
 class HabitResponse(BaseModel):
     """Схема для ответа."""
 
     result: bool
-    data: Habit | list[Habit]
+    data: Union[Habit, List[Habit]]
+
+    class Config:
+        from_attributes = True
+        arbitrary_types_allowed = True
+
+
+Habit.update_forward_refs()
+HabitResponse.update_forward_refs()

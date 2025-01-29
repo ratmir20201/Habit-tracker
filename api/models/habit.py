@@ -2,7 +2,6 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from api.database.base import Base
-from api.models.user import User
 
 
 class Habit(Base):

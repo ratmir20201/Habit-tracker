@@ -1,9 +1,8 @@
-from pydantic import BaseModel, EmailStr, ConfigDict
+from pydantic import BaseModel, EmailStr
 
-from api.models.habit import Habit
+from api.schemas.habit import Habit
 
 
-# Базовые схемы
 class UserBase(BaseModel):
     """Базовая схема пользователя."""
 
@@ -11,11 +10,8 @@ class UserBase(BaseModel):
     email: EmailStr
 
 
-# Схемы для создания записей
 class UserCreate(UserBase):
     """Схема для создания пользователя."""
-
-    pass
 
 
 class User(UserBase):
@@ -24,7 +20,8 @@ class User(UserBase):
     id: int
     habits: list[Habit] = []
 
-    model_config = ConfigDict(from_attributes=True)
+    class Config:
+        from_attributes = True
 
 
 class UserResponse(BaseModel):

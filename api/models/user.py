@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from api.database.base import Base
-from api.models.habit import Habit
 
 
 class User(Base):
