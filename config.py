@@ -7,25 +7,25 @@ load_dotenv()
 class DbSettings(BaseSettings):
     """Настройки базы данных."""
 
-    db_user: str = "user"
-    db_password: str = "password"
-    db_host: str = "postgres"
-    db_port: int = 5432
-    db_name: str = ""
+    user: str = "user"
+    password: str = "password"
+    host: str = "postgres"
+    port: int = 5432
+    name: str = ""
     echo: bool = True
 
     @property
     def db_url(self) -> str:
         return "postgresql+asyncpg://{user}:{password}@{host}:{port}/{name}".format(
-            user=self.db_user,
-            password=self.db_password,
-            host=self.db_host,
-            port=self.db_port,
-            name=self.db_name,
+            user=self.user,
+            password=self.password,
+            host=self.host,
+            port=self.port,
+            name=self.name,
         )
 
     class Config:
-        env_prefix = "DB_"
+        env_prefix = "DB__"
 
 
 class TelegramBotSettings(BaseSettings):
@@ -35,7 +35,18 @@ class TelegramBotSettings(BaseSettings):
     webhook_url: str = ""
 
     class Config:
-        env_prefix = "TG_"
+        env_prefix = "TG__"
+
+
+class AccessTokenSettings(BaseSettings):
+    """Настройки токена для аутентификации."""
+
+    lifetime_seconds: int = 3600
+    reset_password_token_secret: str
+    verification_token_secret: str
+
+    class Config:
+        env_prefix = "ACCESS_TOKEN__"
 
 
 class Settings(BaseSettings):
@@ -43,6 +54,8 @@ class Settings(BaseSettings):
 
     tg_bot: TelegramBotSettings = TelegramBotSettings()
     db: DbSettings = DbSettings()
+    access_token: AccessTokenSettings = AccessTokenSettings()
 
 
 settings = Settings()
+print(settings.db.db_url)
