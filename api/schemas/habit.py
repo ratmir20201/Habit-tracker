@@ -1,10 +1,9 @@
-from __future__ import annotations
-
-from typing import List, Union
+from typing import List, Union, TYPE_CHECKING
 
 from pydantic import BaseModel
 
-from api.schemas.user import User
+if TYPE_CHECKING:
+    pass
 
 
 class HabitBase(BaseModel):
@@ -27,7 +26,7 @@ class Habit(HabitBase):
     """Схема привычки с дополнительными данными."""
 
     id: int
-    user: "User"
+    # user: "User"
 
     class Config:
         from_attributes = True
@@ -41,8 +40,3 @@ class HabitResponse(BaseModel):
 
     class Config:
         from_attributes = True
-        arbitrary_types_allowed = True
-
-
-Habit.model_rebuild()
-HabitResponse.model_rebuild()

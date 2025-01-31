@@ -1,5 +1,4 @@
 # from fastapi import Depends, HTTPException
-# from sqlalchemy.ext.asyncio import AsyncSession
 # from starlette.status import HTTP_404_NOT_FOUND
 #
 # from api.database.db import get_session
@@ -17,3 +16,12 @@
 #         status_code=HTTP_404_NOT_FOUND,
 #         detail="Пользователь с id {} не был найден.".format(user_id),
 #     )
+from fastapi import Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from api.database.db import get_session
+from api.models.user import User
+
+
+async def get_user_db(session: AsyncSession = Depends(get_session)):
+    yield User.get_db(session=session)

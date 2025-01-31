@@ -1,4 +1,4 @@
-from sqlalchemy.orm import DeclarativeBase, declared_attr, Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase, declared_attr
 
 
 class Base(DeclarativeBase):
@@ -6,9 +6,15 @@ class Base(DeclarativeBase):
 
     @declared_attr.directive
     def __tablename__(cls) -> str:
-        return f"{cls.__name__.lower()}s"
+        result_table_name = ""
+        class_name = cls.__name__
+        for i in range(len(class_name) - 1):
+            result_table_name += class_name[i]
+            if class_name[i + 1].isupper():
+                result_table_name += "_"
+        result_table_name += class_name[-1]
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+        return result_table_name.lower() + "s"
 
     repr_cols_num = 3
     repr_cols = tuple()

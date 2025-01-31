@@ -2,9 +2,10 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from api.database.base import Base
+from api.models.mixins.id_int_pk import IdIntPkMixin
 
 
-class Habit(Base):
+class Habit(Base, IdIntPkMixin):
     """Модель привычки."""
 
     name: Mapped[str]

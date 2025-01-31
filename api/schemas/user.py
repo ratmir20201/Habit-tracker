@@ -1,34 +1,33 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from dataclasses import field
 
-from pydantic import BaseModel, EmailStr
+from fastapi_users import schemas
+from pydantic import BaseModel
 
-if TYPE_CHECKING:
-    from api.schemas.habit import Habit
+from api.schemas.habit import HabitBase
 
 
-class UserBase(BaseModel):
-    """Базовая схема пользователя."""
-
+class UserRead(schemas.BaseUser[int]):
     username: str
-    email: EmailStr
+    habits: list[HabitBase] = field(default_factory=list)
 
 
-class UserCreate(UserBase):
-    """Схема для создания пользователя."""
+class UserCreate(schemas.BaseUserCreate):
+    username: str
+    # habits: list[HabitBase] = field(default_factory=list)
 
 
-class User(UserBase):
+class UserUpdate(schemas.BaseUserUpdate):
+    username: str
+    habits: list[HabitBase] = field(default_factory=list)
+
+
+class User(BaseModel):
     """Схема пользователя с дополнительными данными."""
 
-    id: int
-    habits: list["Habit"] = []
+    username: str
+    habits: list[HabitBase] = field(default_factory=list)
 
     class Config:
         from_attributes = True
-
-
-class UserResponse(BaseModel):
-    result: bool
-    data: User
