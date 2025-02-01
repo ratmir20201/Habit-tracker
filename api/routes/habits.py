@@ -13,11 +13,11 @@ from api.dependencies.habits import habit_by_id
 from api.models.habit import Habit
 from api.schemas.habit import HabitCreate, HabitResponse, HabitUpdate
 
-router = APIRouter(tags=["Habits"])
+router = APIRouter(tags=["Habits"], prefix="/habits")
 
 
 @router.post(
-    "/api/habits",
+    "/",
     status_code=HTTP_201_CREATED,
     response_model=HabitResponse,
 )
@@ -30,7 +30,7 @@ async def add_habit(habit: HabitCreate, session: AsyncSession = Depends(get_sess
 
 
 @router.get(
-    "/api/habits/{user_id}",
+    "/{user_id}",
     status_code=HTTP_200_OK,
     response_model=HabitResponse,
 )
@@ -46,7 +46,7 @@ async def get_all_habits_by_user_id(
 
 
 @router.get(
-    "/api/habits/{habit_id}",
+    "/{habit_id}",
     status_code=HTTP_200_OK,
     response_model=HabitResponse,
 )
@@ -57,7 +57,7 @@ async def get_habit_by_id(habit: Habit = Depends(habit_by_id)):
 
 
 @router.patch(
-    "/api/habits/{habit_id}",
+    "/{habit_id}",
     status_code=HTTP_200_OK,
     response_model=HabitResponse,
 )
@@ -71,7 +71,7 @@ async def update_habit(
     return HabitResponse(result=True, data=habit)
 
 
-@router.delete("/api/habits/{habit_id}", status_code=HTTP_204_NO_CONTENT)
+@router.delete("/{habit_id}", status_code=HTTP_204_NO_CONTENT)
 async def delete_habit(
     habit: Habit = Depends(habit_by_id),
     session: AsyncSession = Depends(get_session),

@@ -5,7 +5,7 @@ from api.schemas.user import UserRead, UserUpdate
 
 router = APIRouter(
     tags=["Users"],
-    prefix="/api/users",
+    prefix="/users",
 )
 
 
