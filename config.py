@@ -42,11 +42,20 @@ class AccessTokenSettings(BaseSettings):
     """Настройки токена для аутентификации."""
 
     lifetime_seconds: int = 3600
-    reset_password_token_secret: str
-    verification_token_secret: str
+    reset_password_token_secret: str = ""
+    verification_token_secret: str = ""
 
     class Config:
         env_prefix = "ACCESS_TOKEN__"
+
+
+class ApiSettings(BaseSettings):
+    superuser_name: str = "admin"
+    superuser_email: str = "admin@admin.com"
+    superuser_password: str = "admin"
+
+    class Config:
+        env_prefix = "API__"
 
 
 class Settings(BaseSettings):
@@ -55,6 +64,7 @@ class Settings(BaseSettings):
     tg_bot: TelegramBotSettings = TelegramBotSettings()
     db: DbSettings = DbSettings()
     access_token: AccessTokenSettings = AccessTokenSettings()
+    api: ApiSettings = ApiSettings()
 
 
 settings = Settings()
