@@ -1,59 +1,66 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from starlette.status import HTTP_201_CREATED, HTTP_200_OK, HTTP_204_NO_CONTENT
+from starlette.status import (
+    HTTP_201_CREATED,
+    HTTP_200_OK,
+    HTTP_204_NO_CONTENT,
+    HTTP_403_FORBIDDEN,
+)
 
 from api.crud.habits import (
     create_habit,
     get_habits_by_user_id,
     delete_habit_by_id,
-    update_habit,
+    update_habit_by_id,
 )
 from api.database.db import get_session
+from api.dependencies.fastapi_users_router import fastapi_users
 from api.dependencies.habits import habit_by_id
+from api.models import User
 from api.models.habit import Habit
-from api.schemas.habit import HabitCreate, HabitResponse, HabitUpdate
+from api.schemas.habit import HabitCreate, HabitResponse, HabitUpdate, HabitsResponse
 
 router = APIRouter(tags=["Habits"], prefix="/habits")
 
 
-@router.post(
-    "/",
-    status_code=HTTP_201_CREATED,
-    response_model=HabitResponse,
-)
-async def add_habit(habit: HabitCreate, session: AsyncSession = Depends(get_session)):
-    """Endpoint для создания привычки."""
-
-    created_habit = await create_habit(session=session, habit=habit)
-
-    return HabitResponse(result=True, data=created_habit)
-
-
 @router.get(
-    "/{user_id}",
+    "/me",
     status_code=HTTP_200_OK,
-    response_model=HabitResponse,
+    response_model=HabitsResponse,
 )
-async def get_all_habits_by_user_id(
-    user_id: int,
+async def get_all_my_habits(
     session: AsyncSession = Depends(get_session),
+    current_user: User = Depends(fastapi_users.current_user()),
 ):
     """Endpoint для получения всех привычек пользователя."""
 
-    all_habits = await get_habits_by_user_id(session=session, user_id=user_id)
+    all_habits = await get_habits_by_user_id(
+        session=session,
+        user_id=current_user.id,
+    )
 
-    return HabitResponse(result=True, data=all_habits)
+    return HabitsResponse(result=True, habits=all_habits)
 
 
-@router.get(
-    "/{habit_id}",
-    status_code=HTTP_200_OK,
+@router.post(
+    "",
+    status_code=HTTP_201_CREATED,
     response_model=HabitResponse,
 )
-async def get_habit_by_id(habit: Habit = Depends(habit_by_id)):
-    """Endpoint для получения привычки по id."""
+async def add_habit(
+    habit: HabitCreate,
+    session: AsyncSession = Depends(get_session),
+    current_user: User = Depends(fastapi_users.current_user()),
+):
+    """Endpoint для создания привычки."""
 
-    return HabitResponse(result=True, data=habit)
+    created_habit = await create_habit(
+        session=session,
+        habit=habit,
+        user_id=current_user.id,
+    )
+
+    return HabitResponse(result=True, habit=created_habit)
 
 
 @router.patch(
@@ -63,19 +70,49 @@ async def get_habit_by_id(habit: Habit = Depends(habit_by_id)):
 )
 async def update_habit(
     habit_update: HabitUpdate,
+    current_user: User = Depends(fastapi_users.current_user()),
     habit: Habit = Depends(habit_by_id),
     session: AsyncSession = Depends(get_session),
 ):
     """Endpoint для изменения привычки."""
-    habit = await update_habit(habit=habit, session=session, habit_update=habit_update)
-    return HabitResponse(result=True, data=habit)
+    habit = await update_habit_by_id(
+        habit=habit,
+        session=session,
+        habit_update=habit_update,
+        user_id=current_user.id,
+    )
+    return HabitResponse(result=True, habit=habit)
+
+
+@router.get(
+    "/{habit_id}",
+    status_code=HTTP_200_OK,
+    response_model=HabitResponse,
+)
+async def get_habit_by_id(
+    current_user: User = Depends(fastapi_users.current_user()),
+    habit: Habit = Depends(habit_by_id),
+):
+    """Endpoint для получения привычки по id."""
+    if habit.user_id == current_user.id:
+        return HabitResponse(result=True, habit=habit)
+
+    raise HTTPException(
+        status_code=HTTP_403_FORBIDDEN,
+        detail="У вас недостаточно прав для данной операции.",
+    )
 
 
 @router.delete("/{habit_id}", status_code=HTTP_204_NO_CONTENT)
 async def delete_habit(
+    current_user: User = Depends(fastapi_users.current_user()),
     habit: Habit = Depends(habit_by_id),
     session: AsyncSession = Depends(get_session),
 ):
     """Endpoint для удаления привычки."""
 
-    return await delete_habit_by_id(session=session, habit=habit)
+    return await delete_habit_by_id(
+        session=session,
+        habit=habit,
+        user_id=current_user.id,
+    )

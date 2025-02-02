@@ -1,4 +1,4 @@
-from typing import List, Union, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from pydantic import BaseModel
 
@@ -14,8 +14,6 @@ class HabitBase(BaseModel):
 
 class HabitCreate(HabitBase):
     """Схема для создания привычки."""
-
-    user_id: int
 
 
 class HabitUpdate(HabitCreate):
@@ -36,7 +34,17 @@ class HabitResponse(BaseModel):
     """Схема для ответа."""
 
     result: bool
-    data: Union[Habit, List[Habit]]
+    habit: Habit
+
+    class Config:
+        from_attributes = True
+
+
+class HabitsResponse(BaseModel):
+    """Схема для ответа."""
+
+    result: bool
+    habits: list[Habit]
 
     class Config:
         from_attributes = True

@@ -8,7 +8,8 @@ from api.models.habit import Habit
 
 
 async def habit_by_id(
-    habit_id: int, session: AsyncSession = Depends(get_session)
+    habit_id: int,
+    session: AsyncSession = Depends(get_session),
 ) -> Habit:
     habit = await get_habit(session=session, habit_id=habit_id)
     if habit is not None:
