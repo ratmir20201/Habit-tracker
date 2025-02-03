@@ -799,6 +799,22 @@ files = [
 ]
 
 [[package]]
+name = "isort"
+version = "6.0.0"
+description = "A Python utility / library to sort Python imports."
+optional = false
+python-versions = ">=3.9.0"
+groups = ["dev"]
+files = [
+    {file = "isort-6.0.0-py3-none-any.whl", hash = "sha256:567954102bb47bb12e0fae62606570faacddd441e45683968c8d1734fb1af892"},
+    {file = "isort-6.0.0.tar.gz", hash = "sha256:75d9d8a1438a9432a7d7b54f2d3b45cad9a4a0fdba43617d9873379704a8bdf1"},
+]
+
+[package.extras]
+colors = ["colorama"]
+plugins = ["setuptools"]
+
+[[package]]
 name = "makefun"
 version = "1.15.6"
 description = "Small library to dynamically create python functions."
@@ -1583,4 +1599,4 @@ pygments = ">=2.4,<3.0"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<4.0"
-content-hash = "0be7b75a824e9e04fee3297e3cd07fc4b50abaeb68ffe228e44fc20a66ecc483"
+content-hash = "02b930ca6df39b87724cc45521ed5a06ba209111ed5c5b21ca1017a6c6e6c88c"
