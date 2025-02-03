@@ -5,7 +5,7 @@ from fastapi import HTTPException, Request
 from telebot import types
 
 from api.main import get_app
-from bot.main import tg_bot, set_webhook
+from bot.main import set_webhook, tg_bot
 
 app = get_app()
 
@@ -22,6 +22,8 @@ async def telegram_webhook(request: Request):
 
 
 if __name__ == "__main__":
+    from bot.handlers import *  # noqa
+
     asyncio.run(set_webhook())
     # Бот не показывает команды в папке handlers нужно исправить
     uvicorn.run("main:app", reload=True)

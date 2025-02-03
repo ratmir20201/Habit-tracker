@@ -1,2 +1,2 @@
-from . import echo
-from . import start
+from .start import *
+from .echo import *
