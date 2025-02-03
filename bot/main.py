@@ -6,6 +6,8 @@ from config import settings
 
 tg_bot = TeleBot(settings.tg_bot.token)
 
+import handlers  # noqa
+
 
 async def set_webhook():
     tg_bot.remove_webhook()
