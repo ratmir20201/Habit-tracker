@@ -1,5 +1,5 @@
 from bot.main import tg_bot
-from handlers.constants.bot_info import INFO_TEXT
+from constants.bot_info import INFO_TEXT
 
 
 @tg_bot.message_handler(commands=["info"])
