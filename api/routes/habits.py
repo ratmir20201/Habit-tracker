@@ -1,17 +1,24 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from starlette.status import (HTTP_200_OK, HTTP_201_CREATED,
-                              HTTP_204_NO_CONTENT, HTTP_403_FORBIDDEN)
+from starlette.status import (
+    HTTP_200_OK,
+    HTTP_201_CREATED,
+    HTTP_204_NO_CONTENT,
+    HTTP_403_FORBIDDEN,
+)
 
-from api.crud.habits import (create_habit, delete_habit_by_id,
-                             get_habits_by_user_id, update_habit_by_id)
+from api.crud.habits import (
+    create_habit,
+    delete_habit_by_id,
+    get_habits_by_user_id,
+    update_habit_by_id,
+)
 from api.database.db import get_session
-from api.dependencies.fastapi_users_router import fastapi_users
+from api.authentication.fastapi_users_router import fastapi_users
 from api.dependencies.habits import habit_by_id
 from api.models import User
 from api.models.habit import Habit
-from api.schemas.habit import (HabitCreate, HabitResponse, HabitsResponse,
-                               HabitUpdate)
+from api.schemas.habit import HabitCreate, HabitResponse, HabitsResponse, HabitUpdate
 
 router = APIRouter(tags=["Habits"], prefix="/habits")
 
