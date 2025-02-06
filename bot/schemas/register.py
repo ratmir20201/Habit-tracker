@@ -8,7 +8,7 @@ class RegisterSchema(BaseModel):
     telegram_id: int
     username: str
     email: EmailStr
-    password: str = Field(..., min_length=8, pattern=r"^(?=.*[A-Z])(?=.*\d).*$")
+    password: str
 
     @model_validator(mode="after")
     def check_passwords_match(self) -> Self:
