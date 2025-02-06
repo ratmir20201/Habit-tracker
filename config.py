@@ -53,6 +53,7 @@ class ApiSettings(BaseSettings):
     superuser_name: str = "admin"
     superuser_email: str = "admin@admin.com"
     superuser_password: str = "admin"
+    url: str = "http://localhost:8000"
 
     class Config:
         env_prefix = "API__"
