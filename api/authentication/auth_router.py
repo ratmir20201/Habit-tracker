@@ -1,8 +1,9 @@
 from fastapi import APIRouter
 
-from api.dependencies.backend import authentication_backend
-from api.dependencies.fastapi_users_router import fastapi_users
+from api.authentication.backend import authentication_backend
+from api.authentication.fastapi_users_router import fastapi_users
 from api.schemas.user import UserCreate, UserRead
+from api.authentication.telegram.auth import router as telegram_router
 
 router = APIRouter(
     prefix="/auth",
@@ -26,3 +27,6 @@ router.include_router(
 router.include_router(
     fastapi_users.get_reset_password_router(),
 )
+
+
+router.include_router(telegram_router)
