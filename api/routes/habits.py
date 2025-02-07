@@ -18,7 +18,7 @@ from api.authentication.fastapi_users_router import fastapi_users
 from api.dependencies.habits import habit_by_id
 from api.models import User
 from api.models.habit import Habit
-from api.schemas.habit import HabitCreate, HabitResponse, HabitsResponse, HabitUpdate
+from api.schemas.habit import HabitCreate, HabitResponse, HabitUpdate
 
 router = APIRouter(tags=["Habits"], prefix="/habits")
 
@@ -26,7 +26,7 @@ router = APIRouter(tags=["Habits"], prefix="/habits")
 @router.get(
     "/me",
     status_code=HTTP_200_OK,
-    response_model=HabitsResponse,
+    response_model=list[HabitResponse],
 )
 async def get_all_my_habits(
     session: AsyncSession = Depends(get_session),
@@ -39,7 +39,7 @@ async def get_all_my_habits(
         user_id=current_user.id,
     )
 
-    return HabitsResponse(result=True, habits=all_habits)
+    return all_habits
 
 
 @router.post(
@@ -60,7 +60,7 @@ async def add_habit(
         user_id=current_user.id,
     )
 
-    return HabitResponse(result=True, habit=created_habit)
+    return created_habit
 
 
 @router.patch(
@@ -75,13 +75,13 @@ async def update_habit(
     session: AsyncSession = Depends(get_session),
 ):
     """Endpoint для изменения привычки."""
-    habit = await update_habit_by_id(
+    updated_habit = await update_habit_by_id(
         habit=habit,
         session=session,
         habit_update=habit_update,
         user_id=current_user.id,
     )
-    return HabitResponse(result=True, habit=habit)
+    return updated_habit
 
 
 @router.get(
@@ -95,7 +95,7 @@ async def get_habit_by_id(
 ):
     """Endpoint для получения привычки по id."""
     if habit.user_id == current_user.id:
-        return HabitResponse(result=True, habit=habit)
+        return habit
 
     raise HTTPException(
         status_code=HTTP_403_FORBIDDEN,
