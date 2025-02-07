@@ -26,6 +26,8 @@ def add_habit(message: Message):
         json=habit_data,
         headers=headers,
     )
+    print(response)
+    print(response.json())
 
     if response.status_code == 201:
         habit = response.json()
