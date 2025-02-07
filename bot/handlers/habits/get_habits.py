@@ -8,6 +8,8 @@ from test_config import settings
 
 @tg_bot.message_handler(commands=["get_habits"])
 def get_habits(message: Message):
+    """Команда для отображения всех привычек пользователя."""
+
     headers = get_auth_headers_by_telegram_id_in_message(message)
     response = requests.get(
         "{url}/api/habits/me".format(url=settings.api.url),
@@ -18,7 +20,8 @@ def get_habits(message: Message):
         message_text = "✨ *Ваши привычки:*\n\n"
 
         for habit in habits:
-            message_text += "📌 *{habit_name}*\n".format(habit_name=habit["name"])
+            habit_name = habit["name"].capitalize()
+            message_text += "📌 *{habit_name}*\n".format(habit_name=habit_name)
             # message_text += "   🔥 Дней подряд: *{habit_streak}*"
         tg_bot.send_message(
             message.chat.id,
