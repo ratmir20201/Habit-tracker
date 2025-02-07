@@ -1,4 +1,5 @@
 import requests
+from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 
 from telebot.types import Message
 from bot.main import tg_bot
@@ -26,16 +27,15 @@ def add_habit(message: Message):
         json=habit_data,
         headers=headers,
     )
-    print(response)
-    print(response.json())
 
-    if response.status_code == 201:
+    if response.status_code == HTTP_201_CREATED:
         habit = response.json()
+        habit_name = habit["name"].capitalize()
         message_text = (
             "✨ *Новая привычка добавлена!* ✨\n\n"
             "✅ Привычка *{habit_name}* успешно создана!"
         ).format(
-            habit_name=habit["name"],
+            habit_name=habit_name,
         )
 
         tg_bot.send_message(
@@ -43,5 +43,7 @@ def add_habit(message: Message):
             message_text,
             parse_mode="Markdown",
         )
+    elif response.status_code == HTTP_400_BAD_REQUEST:
+        tg_bot.send_message(message.chat.id, "🚫 У вас уже имеется такая привычка.")
     else:
         tg_bot.send_message(message.chat.id, "❌ Ошибка сервера. Попробуйте позже.")
