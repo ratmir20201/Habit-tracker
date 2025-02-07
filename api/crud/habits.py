@@ -2,7 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
-from starlette.status import HTTP_403_FORBIDDEN
+from starlette.status import HTTP_403_FORBIDDEN, HTTP_400_BAD_REQUEST
 
 from api.models.habit import Habit
 from api.schemas.habit import HabitCreate, HabitUpdate
@@ -13,6 +13,21 @@ async def create_habit(
     habit: HabitCreate,
     user_id: int,
 ) -> Habit:
+    habit_query = await session.execute(
+        select(Habit)
+        .options(
+            joinedload(Habit.user),
+        )
+        .where(Habit.name == habit.name and Habit.user_id == user_id),
+    )
+    exist_habit = habit_query.scalar_one_or_none()
+
+    if exist_habit:
+        raise HTTPException(
+            status_code=HTTP_400_BAD_REQUEST,
+            detail="Привычка с таким именем уже существует.",
+        )
+
     new_habit = Habit(**habit.model_dump(), user_id=user_id)
 
     session.add(new_habit)
