@@ -3,11 +3,12 @@ import requests
 from handlers.auth.before_register import get_username
 from main import tg_bot
 from redis_cache.client import get_redis_client
+from telebot.types import Message
 from test_config import settings
 
 
 @tg_bot.message_handler(commands=["start"])
-def start_message(message):
+def start_message(message: Message):
     telegram_id = message.from_user.id
 
     response = requests.post(

@@ -1,9 +1,10 @@
+from telebot.types import Message
 from bot.main import tg_bot
 from constants.all_commands import ALL_COMMANDS
 
 
 @tg_bot.message_handler(commands=["help"])
-def help_message(message):
+def help_message(message: Message):
     commands = [
         "/{command} - {description}".format(
             command=command,

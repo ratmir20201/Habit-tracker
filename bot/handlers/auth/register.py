@@ -1,3 +1,4 @@
+from telebot.types import Message
 import requests
 
 from main import tg_bot
@@ -5,7 +6,7 @@ from test_config import settings
 from validators.register_validator import validate_user_data
 
 
-def register(message, username: str, email: str, password: str):
+def register(message: Message, username: str, email: str, password: str):
 
     user_data = {
         "telegram_id": message.from_user.id,
