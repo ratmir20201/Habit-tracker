@@ -1,4 +1,4 @@
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from api.database.base import Base
@@ -12,3 +12,5 @@ class Habit(Base, IdIntPkMixin):
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
 
     user: Mapped["User"] = relationship(back_populates="habits")
+
+    __table_args__ = (UniqueConstraint("user_id", "name", name="unique_user_habit"),)
