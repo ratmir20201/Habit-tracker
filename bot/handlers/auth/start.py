@@ -1,6 +1,6 @@
 import requests
 
-from handlers.auth.register import register_user
+from handlers.auth.before_register import get_username
 from main import tg_bot
 from test_config import settings
 
@@ -13,20 +13,19 @@ def start_message(message):
         "{url}/auth/telegram/login".format(url=settings.api.url),
         params={"telegram_id": telegram_id},
     )
-    print(response)
 
     if response.status_code == 200:
         token = response.json()["token"]["access_token"]
         tg_bot.send_message(
             message.chat.id,
-            f"✅ Авторизация успешна! Ваш токен:\n`{token}`",
+            "✅ Авторизация успешна! Ваш токен:\n`{token}`".format(token=token),
             parse_mode="Markdown",
         )
     elif response.status_code == 404:
         tg_bot.send_message(
             message.chat.id,
-            "🔹 Вас нет в системе. Давайте зарегистрируемся!",
+            "🔹 Вас нет в системе. Давайте зарегистрируемся!\n\nВведите ваше имя: ",
         )
-        tg_bot.register_next_step_handler(message, register_user)
+        tg_bot.register_next_step_handler(message, get_username)
     else:
         tg_bot.send_message(message.chat.id, "❌ Ошибка сервера. Попробуйте позже.")

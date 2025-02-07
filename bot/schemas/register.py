@@ -1,7 +1,9 @@
-from pydantic import BaseModel, EmailStr, Field, root_validator, model_validator
+from pydantic import (
+    BaseModel,
+    EmailStr,
+    field_validator,
+)
 import re
-
-from typing_extensions import Self
 
 
 class RegisterSchema(BaseModel):
@@ -10,13 +12,15 @@ class RegisterSchema(BaseModel):
     email: EmailStr
     password: str
 
-    @model_validator(mode="after")
-    def check_passwords_match(self) -> Self:
-        if len(self.password) < 8:
-            raise ValueError("Passwords do not match")
-        if not re.search(r"[A-Z]", self.password):
-            raise ValueError("Пароль должен содержать хотя бы одну заглавную букву.")
-        if not re.search(r"\d", self.password):
-            raise ValueError("Пароль должен содержать хотя бы одну цифру.")
+    @field_validator("password")
+    @classmethod
+    def check_password(cls, value: str) -> str:
+        """Валидатор пароля: минимум 8 символов, одна заглавная буква и одна цифра."""
 
-        return self
+        if len(value) < 8:
+            raise ValueError("Пароль должен содержать минимум 8 символов.")
+        if not re.search(r"[A-Z]", value):
+            raise ValueError("Пароль должен содержать хотя бы одну заглавную букву.")
+        if not re.search(r"\d", value):
+            raise ValueError("Пароль должен содержать хотя бы одну цифру.")
+        return value
