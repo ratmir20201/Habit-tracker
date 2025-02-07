@@ -8,7 +8,6 @@ def validate_user_data(message, data) -> RegisterSchema | None:
 
     try:
         user_data = RegisterSchema(**data)
-        print(user_data)
         return user_data
     except ValidationError as e:
         from handlers import get_username
@@ -17,7 +16,6 @@ def validate_user_data(message, data) -> RegisterSchema | None:
         for error in errors:
             field = error["loc"][0]
             error_message = error["msg"]
-            print(error_message)
 
             if field == "email":
                 error_message = (
