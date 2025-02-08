@@ -1,8 +1,8 @@
 from handlers.auth.register import register
 from telebot.types import Message
+from utils.register_message_checker import is_command
 
 from main import tg_bot
-from utils.register_message_checker import is_command
 
 
 def get_username(message: Message):

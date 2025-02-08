@@ -27,7 +27,7 @@ class HabitsHelper(ApiHelper):
         elif response.status_code == HTTP_401_UNAUTHORIZED:
             return
 
-    def add_habit(self) -> dict[str, Any]:
+    def add_habit(self) -> dict[str, Any] | None:
         habit_name = self.message.text.strip().capitalize()
         habit_data = {"name": habit_name}
 
@@ -41,9 +41,7 @@ class HabitsHelper(ApiHelper):
             habit = response.json()
             return habit
         elif response.status_code == HTTP_400_BAD_REQUEST:
-            tg_bot.send_message(
-                self.message.chat.id, "🚫 У вас уже имеется такая привычка."
-            )
+            return None
 
     def update_habit(self, habit_id: int) -> dict[str, Any]:
         new_habit_name = self.message.text.strip().capitalize()

@@ -2,16 +2,11 @@ from typing import Any
 
 import requests
 import starlette
-from starlette.status import (
-    HTTP_201_CREATED,
-    HTTP_200_OK,
-    HTTP_404_NOT_FOUND,
-    HTTP_401_UNAUTHORIZED,
-)
-from telebot.types import Message
-
 from helpers.api import ApiHelper
 from redis_cache.client import get_redis_client
+from starlette.status import (HTTP_200_OK, HTTP_201_CREATED,
+                              HTTP_401_UNAUTHORIZED, HTTP_404_NOT_FOUND)
+from telebot.types import Message
 from test_config import settings
 from validators.register_validator import validate_user_data
 

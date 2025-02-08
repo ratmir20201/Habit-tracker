@@ -1,5 +1,6 @@
 from helpers.auth import AuthenticationHelper
-from starlette.status import HTTP_200_OK, HTTP_404_NOT_FOUND, HTTP_401_UNAUTHORIZED
+from starlette.status import (HTTP_200_OK, HTTP_401_UNAUTHORIZED,
+                              HTTP_404_NOT_FOUND)
 from telebot.types import Message
 
 from main import tg_bot

@@ -1,7 +1,7 @@
+from helpers.auth import AuthenticationHelper
 from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from telebot.types import Message
 
-from helpers.auth import AuthenticationHelper
 from main import tg_bot
 
 
