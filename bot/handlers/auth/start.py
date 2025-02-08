@@ -1,4 +1,5 @@
 import requests
+from starlette.status import HTTP_200_OK, HTTP_404_NOT_FOUND
 
 from handlers.auth.before_register import get_username
 from main import tg_bot
@@ -16,7 +17,7 @@ def start_message(message: Message):
         params={"telegram_id": telegram_id},
     )
 
-    if response.status_code == 200:
+    if response.status_code == HTTP_200_OK:
         redis_client = get_redis_client()
         token = response.json()["token"]["access_token"]
         redis_client.setex(
@@ -25,7 +26,7 @@ def start_message(message: Message):
             value=token,
         )
         tg_bot.send_message(message.chat.id, "✅ Авторизация успешна!")
-    elif response.status_code == 404:
+    elif response.status_code == HTTP_404_NOT_FOUND:
         tg_bot.send_message(
             message.chat.id,
             "🔹 Вас нет в системе. Давайте зарегистрируемся!\n\nВведите ваше имя: ",

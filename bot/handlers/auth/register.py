@@ -1,3 +1,4 @@
+from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from telebot.types import Message
 import requests
 
@@ -24,12 +25,12 @@ def register(message: Message, username: str, email: str, password: str):
         json=valid_user_data.model_dump(),
     )
 
-    if response.status_code == 201:
+    if response.status_code == HTTP_201_CREATED:
         tg_bot.send_message(
             message.chat.id,
             "✅ Регистрация успешна! Теперь отправьте команду /start для входа.",
         )
-    elif response.status_code == 400:
+    elif response.status_code == HTTP_400_BAD_REQUEST:
         from handlers import get_username
 
         tg_bot.send_message(
