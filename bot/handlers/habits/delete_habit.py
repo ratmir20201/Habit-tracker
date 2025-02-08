@@ -8,7 +8,7 @@ from bot.main import tg_bot
 from utils.habits import HabitsHelper
 
 
-@tg_bot.message_handler(commands=["edit_habit"])
+@tg_bot.message_handler(commands=["delete_habit"])
 def get_habit_name_what_we_update(message: Message):
     """Запрашиваем у пользователя название привычки."""
     habits_helper = HabitsHelper(message)
@@ -25,14 +25,14 @@ def get_habit_name_what_we_update(message: Message):
 
     tg_bot.send_message(
         message.chat.id,
-        "Выберите привычку, которую хотите отредактировать:",
+        "Выберите привычку, которую хотите удалить:",
         reply_markup=keyboard,
     )
-    tg_bot.register_next_step_handler(message, get_new_habit_name, habits)
+    tg_bot.register_next_step_handler(message, get_habit_id, habits)
 
 
-def get_new_habit_name(message: Message, habits: list[dict[str, Any]]):
-    """Функция для получения нового названия привычки."""
+def get_habit_id(message: Message, habits: list[dict[str, Any]]):
+    """Команда для изменения привычки."""
     habit_name = message.text.strip().capitalize()
     habit_object = None
 
@@ -41,20 +41,14 @@ def get_new_habit_name(message: Message, habits: list[dict[str, Any]]):
             habit_object = habit
             break
 
-    if not habit_object:
-        tg_bot.send_message(message.chat.id, "❌ Такой привычки нет в вашем списке.")
-        return
-
-    tg_bot.send_message(message.chat.id, "Введите новое название для привычки:")
-    tg_bot.register_next_step_handler(message, save_new_habit_name, habit_object["id"])
+    delete_habit(message, habit_object)
 
 
-def save_new_habit_name(message: Message, habit_id: int):
-    """Функция для сохранения нового названия привычки."""
+def delete_habit(message: Message, habit_object: dict[str, Any]):
     habits_helper = HabitsHelper(message)
-    habit = habits_helper.update_habit(habit_id)
+    habits_helper.delete_habit(habit_object["id"])
 
     tg_bot.send_message(
         message.chat.id,
-        "✅ Привычка успешно обновлена на: {}.".format(habit["name"]),
+        "✅ Привычка {} успешно удалена.".format(habit_object["name"]),
     )

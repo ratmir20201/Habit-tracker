@@ -7,6 +7,7 @@ from starlette.status import (
     HTTP_401_UNAUTHORIZED,
     HTTP_201_CREATED,
     HTTP_400_BAD_REQUEST,
+    HTTP_204_NO_CONTENT,
 )
 from telebot.types import Message
 
@@ -57,7 +58,7 @@ class HabitsHelper:
         elif response.status_code == HTTP_401_UNAUTHORIZED:
             return
 
-    def add_habit(self):
+    def add_habit(self) -> dict[str, Any]:
         habit_name = self.message.text.strip().capitalize()
         habit_data = {"name": habit_name}
 
@@ -75,7 +76,7 @@ class HabitsHelper:
                 self.message.chat.id, "🚫 У вас уже имеется такая привычка."
             )
 
-    def update_habit(self, habit_id: int):
+    def update_habit(self, habit_id: int) -> dict[str, Any]:
         new_habit_name = self.message.text.strip().capitalize()
         habit_data = {"name": new_habit_name}
 
@@ -88,3 +89,9 @@ class HabitsHelper:
         if response.status_code == HTTP_200_OK:
             habit = response.json()
             return habit
+
+    def delete_habit(self, habit_id: int) -> None:
+        response = self._send_request(
+            method="delete",
+            endpoint="/api/habits/{habit_id}".format(habit_id=habit_id),
+        )
