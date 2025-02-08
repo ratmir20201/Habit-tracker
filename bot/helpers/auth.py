@@ -2,7 +2,12 @@ from typing import Any
 
 import requests
 import starlette
-from starlette.status import HTTP_201_CREATED, HTTP_200_OK, HTTP_404_NOT_FOUND
+from starlette.status import (
+    HTTP_201_CREATED,
+    HTTP_200_OK,
+    HTTP_404_NOT_FOUND,
+    HTTP_401_UNAUTHORIZED,
+)
 from telebot.types import Message
 
 from helpers.api import ApiHelper
@@ -49,6 +54,7 @@ class AuthenticationHelper(ApiHelper):
             return HTTP_404_NOT_FOUND
 
     def _save_token_in_redis(self, token: str):
+        """Функция для сохранения токена в redis."""
         redis_client = get_redis_client()
         telegram_id = self.message.from_user.id
         redis_client.setex(
@@ -56,3 +62,15 @@ class AuthenticationHelper(ApiHelper):
             time=settings.redis.token_expire,
             value=token,
         )
+
+    def logout_and_delete_token_in_redis(self) -> starlette.status:
+        """Функция для выхода пользователя из аккаунта."""
+        redis_client = get_redis_client()
+        telegram_id = self.message.from_user.id
+
+        token_key = "user_token:{telegram_id}".format(telegram_id=telegram_id)
+        if redis_client.exists(token_key):
+            redis_client.delete(token_key)
+            return HTTP_200_OK
+
+        return HTTP_401_UNAUTHORIZED

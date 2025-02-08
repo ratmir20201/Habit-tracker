@@ -25,7 +25,7 @@ class RedisSettings(BaseSettings):
     host: str = "localhost"
     port: int = 6379
     db: int = 0
-    token_expire: int = 3
+    token_expire: int = 3600
 
     class Config:
         env_prefix = "REDIS__"
