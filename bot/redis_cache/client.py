@@ -1,5 +1,4 @@
 import redis
-
 from test_config import settings
 
 

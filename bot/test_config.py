@@ -1,7 +1,6 @@
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
 
-
 load_dotenv()
 
 
@@ -26,7 +25,7 @@ class RedisSettings(BaseSettings):
     host: str = "localhost"
     port: int = 6379
     db: int = 0
-    token_expire: int = 3600
+    token_expire: int = 3
 
     class Config:
         env_prefix = "REDIS__"

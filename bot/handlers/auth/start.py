@@ -1,36 +1,21 @@
-import requests
-from starlette.status import HTTP_200_OK, HTTP_404_NOT_FOUND
-
 from handlers.auth.before_register import get_username
-from main import tg_bot
-from redis_cache.client import get_redis_client
+from helpers.auth import AuthenticationHelper
+from starlette.status import HTTP_200_OK, HTTP_404_NOT_FOUND
 from telebot.types import Message
-from test_config import settings
+
+from main import tg_bot
 
 
 @tg_bot.message_handler(commands=["start"])
 def start_message(message: Message):
-    telegram_id = message.from_user.id
+    auth_helper = AuthenticationHelper(message)
+    status_code = auth_helper.login_and_save_token_in_redis()
 
-    response = requests.post(
-        "{url}/auth/telegram/login".format(url=settings.api.url),
-        params={"telegram_id": telegram_id},
-    )
-
-    if response.status_code == HTTP_200_OK:
-        redis_client = get_redis_client()
-        token = response.json()["token"]["access_token"]
-        redis_client.setex(
-            name="user_token:{telegram_id}".format(telegram_id=telegram_id),
-            time=settings.redis.token_expire,
-            value=token,
-        )
+    if status_code == HTTP_200_OK:
         tg_bot.send_message(message.chat.id, "✅ Авторизация успешна!")
-    elif response.status_code == HTTP_404_NOT_FOUND:
+    elif status_code == HTTP_404_NOT_FOUND:
         tg_bot.send_message(
             message.chat.id,
             "🔹 Вас нет в системе. Давайте зарегистрируемся!\n\nВведите ваше имя: ",
         )
         tg_bot.register_next_step_handler(message, get_username)
-    else:
-        tg_bot.send_message(message.chat.id, "❌ Ошибка сервера. Попробуйте позже.")

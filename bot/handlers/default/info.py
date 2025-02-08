@@ -1,6 +1,7 @@
-from bot.main import tg_bot
 from constants.bot_info import INFO_TEXT
 from telebot.types import Message
+
+from bot.main import tg_bot
 
 
 @tg_bot.message_handler(commands=["info"])

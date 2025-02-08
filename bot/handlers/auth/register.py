@@ -1,10 +1,8 @@
 from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from telebot.types import Message
-import requests
 
+from helpers.auth import AuthenticationHelper
 from main import tg_bot
-from test_config import settings
-from validators.register_validator import validate_user_data
 
 
 def register(message: Message, username: str, email: str, password: str):
@@ -16,21 +14,15 @@ def register(message: Message, username: str, email: str, password: str):
         "password": password,
     }
 
-    valid_user_data = validate_user_data(message, user_data)
-    if valid_user_data is None:
-        return
+    auth_helper = AuthenticationHelper(message)
+    status_code = auth_helper.register_user(user_data=user_data)
 
-    response = requests.post(
-        "{url}/auth/register".format(url=settings.api.url),
-        json=valid_user_data.model_dump(),
-    )
-
-    if response.status_code == HTTP_201_CREATED:
+    if status_code == HTTP_201_CREATED:
         tg_bot.send_message(
             message.chat.id,
             "✅ Регистрация успешна! Теперь отправьте команду /start для входа.",
         )
-    elif response.status_code == HTTP_400_BAD_REQUEST:
+    elif status_code == HTTP_400_BAD_REQUEST:
         from handlers import get_username
 
         tg_bot.send_message(
@@ -41,5 +33,3 @@ def register(message: Message, username: str, email: str, password: str):
             message.chat.id, "🔁 Попробуйте еще раз.\n\nВведите ваше имя:"
         )
         tg_bot.register_next_step_handler(message, get_username)
-    else:
-        tg_bot.send_message(message.chat.id, "❌ Ошибка регистрации. Попробуйте снова.")

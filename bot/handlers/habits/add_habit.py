@@ -1,11 +1,10 @@
 import requests
+from helpers.habits import HabitsHelper
 from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
-
 from telebot.types import Message
-from bot.main import tg_bot
-from redis_cache.auth_headers import get_auth_headers_by_telegram_id_in_message
 from test_config import settings
-from utils.habits import HabitsHelper
+
+from bot.main import tg_bot
 
 
 @tg_bot.message_handler(commands=["add_habit"])

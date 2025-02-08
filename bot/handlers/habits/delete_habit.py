@@ -1,11 +1,11 @@
 from typing import Any
 
 import requests
+from helpers.habits import HabitsHelper
 from starlette.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED
+from telebot.types import KeyboardButton, Message, ReplyKeyboardMarkup
 
-from telebot.types import Message, ReplyKeyboardMarkup, KeyboardButton
 from bot.main import tg_bot
-from utils.habits import HabitsHelper
 
 
 @tg_bot.message_handler(commands=["delete_habit"])

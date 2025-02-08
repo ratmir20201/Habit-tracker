@@ -1,7 +1,7 @@
 from pydantic import ValidationError
+from schemas.register import RegisterSchema
 
 from main import tg_bot
-from schemas.register import RegisterSchema
 
 
 def validate_user_data(message, data) -> RegisterSchema | None:
