@@ -5,6 +5,7 @@ from telebot.types import Message
 from bot.main import tg_bot
 from redis_cache.auth_headers import get_auth_headers_by_telegram_id_in_message
 from test_config import settings
+from utils.habits import HabitsHelper
 
 
 @tg_bot.message_handler(commands=["add_habit"])
@@ -16,34 +17,19 @@ def get_data_for_habit(message: Message):
 
 def add_habit(message: Message):
     """Обрабатываем ответ пользователя и создаем привычку."""
+    habits_helper = HabitsHelper(message)
+    habit = habits_helper.add_habit()
 
-    habit_name = message.text
-    habit_data = {"name": habit_name}
-
-    headers = get_auth_headers_by_telegram_id_in_message(message)
-
-    response = requests.post(
-        "{url}/api/habits".format(url=settings.api.url),
-        json=habit_data,
-        headers=headers,
+    habit_name = habit["name"]
+    message_text = (
+        "✨ *Новая привычка добавлена!* ✨\n\n"
+        "✅ Привычка *{habit_name}* успешно создана!"
+    ).format(
+        habit_name=habit_name,
     )
 
-    if response.status_code == HTTP_201_CREATED:
-        habit = response.json()
-        habit_name = habit["name"].capitalize()
-        message_text = (
-            "✨ *Новая привычка добавлена!* ✨\n\n"
-            "✅ Привычка *{habit_name}* успешно создана!"
-        ).format(
-            habit_name=habit_name,
-        )
-
-        tg_bot.send_message(
-            message.chat.id,
-            message_text,
-            parse_mode="Markdown",
-        )
-    elif response.status_code == HTTP_400_BAD_REQUEST:
-        tg_bot.send_message(message.chat.id, "🚫 У вас уже имеется такая привычка.")
-    else:
-        tg_bot.send_message(message.chat.id, "❌ Ошибка сервера. Попробуйте позже.")
+    tg_bot.send_message(
+        message.chat.id,
+        message_text,
+        parse_mode="Markdown",
+    )

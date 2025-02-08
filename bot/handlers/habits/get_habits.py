@@ -3,14 +3,14 @@ from starlette.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED
 
 from telebot.types import Message
 from bot.main import tg_bot
-from utils.habits import get_user_habits
+from utils.habits import HabitsHelper
 
 
 @tg_bot.message_handler(commands=["get_habits"])
 def get_habits(message: Message):
     """Команда для отображения всех привычек пользователя."""
-
-    habits = get_user_habits(message)
+    habits_helper = HabitsHelper(message)
+    habits = habits_helper.get_user_habits()
 
     message_text = "✨ *Ваши привычки:*\n\n"
 
