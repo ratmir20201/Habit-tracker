@@ -74,3 +74,17 @@ class HabitsHelper:
             tg_bot.send_message(
                 self.message.chat.id, "🚫 У вас уже имеется такая привычка."
             )
+
+    def update_habit(self, habit_id: int):
+        new_habit_name = self.message.text.strip().capitalize()
+        habit_data = {"name": new_habit_name}
+
+        response = self._send_request(
+            method="patch",
+            endpoint="/api/habits/{habit_id}".format(habit_id=habit_id),
+            data=habit_data,
+        )
+
+        if response.status_code == HTTP_200_OK:
+            habit = response.json()
+            return habit
