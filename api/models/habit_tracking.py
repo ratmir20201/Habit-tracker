@@ -1,0 +1,18 @@
+from sqlalchemy import ForeignKey, Date, UniqueConstraint
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+import datetime
+from api.database.base import Base
+from api.models.mixins.id_int_pk import IdIntPkMixin
+
+
+class HabitTracking(Base, IdIntPkMixin):
+    """Модель отслеживания выполнения привычки."""
+
+    habit_id: Mapped[int] = mapped_column(ForeignKey("habits.id", ondelete="CASCADE"))
+    habit: Mapped["Habit"] = relationship(back_populates="tracking", lazy="selectin")
+
+    date: Mapped[datetime.datetime] = mapped_column(Date)
+
+    __table_args__ = (
+        UniqueConstraint("habit_id", "date", name="unique_habit_tracking_date"),
+    )

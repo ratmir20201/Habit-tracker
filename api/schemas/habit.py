@@ -24,6 +24,7 @@ class HabitResponse(HabitBase):
     """Схема привычки с дополнительными данными."""
 
     id: int
+    streak: int
 
     class Config:
         from_attributes = True

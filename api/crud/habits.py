@@ -17,10 +17,11 @@ async def create_habit(
         select(Habit)
         .options(
             joinedload(Habit.user),
+            joinedload(Habit.tracking),
         )
         .where(Habit.name == habit.name and Habit.user_id == user_id),
     )
-    exist_habit = habit_query.scalar_one_or_none()
+    exist_habit = habit_query.unique().scalar_one_or_none()
 
     if exist_habit:
         raise HTTPException(
@@ -44,10 +45,11 @@ async def get_habits_by_user_id(
         select(Habit)
         .options(
             joinedload(Habit.user),
+            joinedload(Habit.tracking),
         )
         .where(Habit.user_id == user_id),
     )
-    habits = habits_query.scalars().all()
+    habits = habits_query.unique().scalars().all()
 
     return habits
 
@@ -57,10 +59,11 @@ async def get_habit(session: AsyncSession, habit_id: int) -> Habit | None:
         select(Habit)
         .options(
             joinedload(Habit.user),
+            joinedload(Habit.tracking),
         )
         .where(Habit.id == habit_id),
     )
-    habit = habit_query.scalar_one_or_none()
+    habit = habit_query.unique().scalar_one_or_none()
 
     return habit
 
