@@ -2,10 +2,10 @@ from typing import Any
 
 import requests
 from helpers.habits import HabitsHelper
-from starlette.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED
 from telebot.types import KeyboardButton, Message, ReplyKeyboardMarkup
 
 from bot.main import tg_bot
+from keyboards.reply.choice_habit import get_habits_keyboard
 from utils.get_habit_by_name import get_habit_object_from_habits_by_name
 
 
@@ -14,14 +14,10 @@ def get_habit_name_what_we_update(message: Message):
     """Запрашиваем у пользователя название привычки."""
     habits_helper = HabitsHelper(message)
     habits = habits_helper.get_user_habits()
-
     if not habits:
-        tg_bot.send_message(message.chat.id, "❌ У вас пока нет привычек.")
         return
 
-    keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-    for habit in habits:
-        keyboard.add(KeyboardButton(habit["name"]))
+    keyboard = get_habits_keyboard(habits)
 
     tg_bot.send_message(
         message.chat.id,

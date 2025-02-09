@@ -1,9 +1,13 @@
 from typing import Any
 
 from helpers.api import ApiHelper
-from starlette.status import (HTTP_200_OK, HTTP_201_CREATED,
-                              HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST,
-                              HTTP_401_UNAUTHORIZED)
+from starlette.status import (
+    HTTP_200_OK,
+    HTTP_201_CREATED,
+    HTTP_204_NO_CONTENT,
+    HTTP_400_BAD_REQUEST,
+    HTTP_401_UNAUTHORIZED,
+)
 from telebot.types import Message
 
 from main import tg_bot
@@ -23,6 +27,9 @@ class HabitsHelper(ApiHelper):
 
         if response.status_code == HTTP_200_OK:
             habits = response.json()
+            if not habits:
+                tg_bot.send_message(self.message.chat.id, "❌ У вас пока нет привычек.")
+                return None
             return habits
         elif response.status_code == HTTP_401_UNAUTHORIZED:
             return
