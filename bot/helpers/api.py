@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 import requests
 from redis_cache.client import get_redis_client
-from telebot.types import Message
+from telebot.types import Message, CallbackQuery
 from test_config import settings
 
 from main import tg_bot
@@ -17,7 +17,11 @@ class ApiHelper(ABC):
 
     API_URL: str = settings.api.url
 
-    def __init__(self, message: Message, is_auth: bool = False):
+    def __init__(
+        self,
+        message: Message | CallbackQuery,
+        is_auth: bool = False,
+    ):
         self.message = message
         self.headers = self.get_auth_headers_by_telegram_id_in_message(is_auth)
 
@@ -29,6 +33,7 @@ class ApiHelper(ABC):
             return {}
 
         telegram_id = self.message.from_user.id
+
         redis_client = get_redis_client()
         token = redis_client.get(
             "user_token:{telegram_id}".format(telegram_id=telegram_id)

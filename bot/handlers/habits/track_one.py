@@ -9,7 +9,7 @@ from keyboards.reply.choice_habit import get_habits_keyboard
 from utils.get_habit_by_name import get_habit_object_from_habits_by_name
 
 
-@tg_bot.message_handler(commands=["track_habit"])
+@tg_bot.message_handler(commands=["track_one"])
 def get_habit_name(message: Message):
     """Запрашиваем у пользователя название привычки."""
     habits_helper = HabitsHelper(message)
