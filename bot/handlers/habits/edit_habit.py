@@ -6,6 +6,7 @@ from starlette.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED
 from telebot.types import KeyboardButton, Message, ReplyKeyboardMarkup
 
 from bot.main import tg_bot
+from utils.get_habit_by_name import get_habit_object_from_habits_by_name
 
 
 @tg_bot.message_handler(commands=["edit_habit"])
@@ -18,7 +19,6 @@ def get_habit_name_what_we_update(message: Message):
         tg_bot.send_message(message.chat.id, "❌ У вас пока нет привычек.")
         return
 
-    # Создаем клавиатуру с привычками
     keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
     for habit in habits:
         keyboard.add(KeyboardButton(habit["name"]))
@@ -33,16 +33,9 @@ def get_habit_name_what_we_update(message: Message):
 
 def get_new_habit_name(message: Message, habits: list[dict[str, Any]]):
     """Функция для получения нового названия привычки."""
-    habit_name = message.text.strip().capitalize()
-    habit_object = None
-
-    for habit in habits:
-        if habit_name == habit["name"]:
-            habit_object = habit
-            break
+    habit_object = get_habit_object_from_habits_by_name(message, habits)
 
     if not habit_object:
-        tg_bot.send_message(message.chat.id, "❌ Такой привычки нет в вашем списке.")
         return
 
     tg_bot.send_message(message.chat.id, "Введите новое название для привычки:")

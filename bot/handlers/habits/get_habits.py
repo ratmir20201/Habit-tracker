@@ -16,9 +16,7 @@ def get_habits(message: Message):
 
     for habit in habits:
         message_text += "📌 *{habit_name}*\n".format(habit_name=habit["name"])
-        # message_text += "   🔥 Дней подряд: *{habit_streak}*"
-    tg_bot.send_message(
-        message.chat.id,
-        message_text,
-        parse_mode="Markdown",
-    )
+        message_text += "   🔥 Дней подряд: *{habit_streak}*\n\n".format(
+            habit_streak=habit["streak"],
+        )
+    tg_bot.send_message(message.chat.id, message_text, parse_mode="Markdown")

@@ -1,8 +1,5 @@
-import requests
 from helpers.habits import HabitsHelper
-from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from telebot.types import Message
-from test_config import settings
 
 from bot.main import tg_bot
 
@@ -20,9 +17,7 @@ def add_habit(message: Message):
     habit = habits_helper.add_habit()
 
     if not habit:
-        tg_bot.send_message(
-            message.chat.id, "🚫 У вас уже имеется такая привычка."
-        )
+        tg_bot.send_message(message.chat.id, "🚫 У вас уже имеется такая привычка.")
 
     habit_name = habit["name"]
     message_text = (
