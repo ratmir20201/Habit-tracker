@@ -6,7 +6,8 @@ from api.authentication.fastapi_users_router import fastapi_users
 from api.crud.habit_tracking import create_habit_tracking
 from api.database.db import get_session
 from api.models import User
-from api.schemas.habit_tracking import HabitTrackingResponse, HabitTrackingCreate
+from api.schemas.habit_tracking import (HabitTrackingCreate,
+                                        HabitTrackingResponse)
 
 router = APIRouter(tags=["HabitTracking"], prefix="/track_habit")
 

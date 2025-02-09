@@ -1,11 +1,12 @@
 from typing import Any
 
 from helpers.habit_tracking import HabitTrackingHelper
+from helpers.habits import HabitsHelper
+from keyboards.inline.confirmation_tracking import \
+    get_confirmation_tracking_keyboard
 from telebot.types import Message
 
 from bot.main import tg_bot
-from helpers.habits import HabitsHelper
-from keyboards.inline.confirmation_tracking import get_confirmation_tracking_keyboard
 
 
 @tg_bot.message_handler(commands=["track_all"])

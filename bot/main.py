@@ -15,7 +15,7 @@ async def set_webhook():
     print(f"Webhook установлен на {settings.tg_bot.webhook_url}")
 
 
-from handlers import *
+from handlers import *  # noqa
 
 if __name__ == "__main__":
     tg_bot.infinity_polling()

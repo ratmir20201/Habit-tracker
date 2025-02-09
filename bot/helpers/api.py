@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 import requests
 from redis_cache.client import get_redis_client
-from telebot.types import Message, CallbackQuery
+from telebot.types import CallbackQuery, Message
 from test_config import settings
 
 from main import tg_bot

@@ -1,13 +1,9 @@
 from typing import Any
 
 from helpers.api import ApiHelper
-from starlette.status import (
-    HTTP_200_OK,
-    HTTP_201_CREATED,
-    HTTP_204_NO_CONTENT,
-    HTTP_400_BAD_REQUEST,
-    HTTP_401_UNAUTHORIZED,
-)
+from starlette.status import (HTTP_200_OK, HTTP_201_CREATED,
+                              HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST,
+                              HTTP_401_UNAUTHORIZED)
 from telebot.types import Message
 
 from main import tg_bot

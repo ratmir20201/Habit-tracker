@@ -1,6 +1,8 @@
-from sqlalchemy import ForeignKey, Date, UniqueConstraint
-from sqlalchemy.orm import Mapped, mapped_column, relationship
 import datetime
+
+from sqlalchemy import Date, ForeignKey, UniqueConstraint
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from api.database.base import Base
 from api.models.mixins.id_int_pk import IdIntPkMixin
 

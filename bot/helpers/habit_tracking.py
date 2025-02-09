@@ -1,7 +1,6 @@
+from helpers.api import ApiHelper
 from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from telebot.types import Message
-
-from helpers.api import ApiHelper
 
 
 class HabitTrackingHelper(ApiHelper):
