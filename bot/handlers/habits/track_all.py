@@ -2,14 +2,13 @@ from typing import Any
 
 from helpers.habit_tracking import HabitTrackingHelper
 from helpers.habits import HabitsHelper
-from keyboards.inline.confirmation_tracking import \
-    get_confirmation_tracking_keyboard
+from keyboards.inline.confirmation_tracking import get_confirmation_tracking_keyboard
 from telebot.types import Message
 
 from bot.main import tg_bot
 
 
-@tg_bot.message_handler(commands=["track_all"])
+@tg_bot.message_handler(commands=["trackall"])
 def add_habits_tracking(message: Message):
     """Запрашиваем у пользователя название привычки."""
     habits_helper = HabitsHelper(message)

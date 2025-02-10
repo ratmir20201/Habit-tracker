@@ -9,7 +9,7 @@ from utils.get_habit_by_name import get_habit_object_from_habits_by_name
 from bot.main import tg_bot
 
 
-@tg_bot.message_handler(commands=["track_one"])
+@tg_bot.message_handler(commands=["trackone"])
 def get_habit_name(message: Message):
     """Запрашиваем у пользователя название привычки."""
     habits_helper = HabitsHelper(message)

@@ -4,7 +4,7 @@ from telebot.types import Message
 from bot.main import tg_bot
 
 
-@tg_bot.message_handler(commands=["add_habit"])
+@tg_bot.message_handler(commands=["addhabit"])
 def get_data_for_habit(message: Message):
     """Запрашиваем у пользователя название привычки."""
     tg_bot.send_message(message.chat.id, "Введите название привычки:")

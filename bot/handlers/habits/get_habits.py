@@ -6,7 +6,7 @@ from telebot.types import Message
 from bot.main import tg_bot
 
 
-@tg_bot.message_handler(commands=["get_habits"])
+@tg_bot.message_handler(commands=["gethabits"])
 def get_habits(message: Message):
     """Команда для отображения всех привычек пользователя."""
     habits_helper = HabitsHelper(message)
