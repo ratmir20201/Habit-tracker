@@ -1,6 +1,8 @@
 from typing import TYPE_CHECKING
 
-from pydantic import BaseModel
+from pydantic import BaseModel, computed_field
+
+from api.models import Habit
 
 if TYPE_CHECKING:
     pass

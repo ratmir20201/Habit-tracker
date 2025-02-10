@@ -1,11 +1,12 @@
 from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, selectinload
 from starlette.status import HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN
 
 from api.models.habit import Habit
 from api.schemas.habit import HabitCreate, HabitUpdate
+from api.utils.habit_checker import check_if_habit_already_exist
 
 
 async def create_habit(
@@ -13,21 +14,11 @@ async def create_habit(
     habit: HabitCreate,
     user_id: int,
 ) -> Habit:
-    habit_query = await session.execute(
-        select(Habit)
-        .options(
-            joinedload(Habit.user),
-            joinedload(Habit.tracking),
-        )
-        .where(Habit.name == habit.name and Habit.user_id == user_id),
+    await check_if_habit_already_exist(
+        session=session,
+        habit_name=habit.name,
+        user_id=user_id,
     )
-    exist_habit = habit_query.unique().scalar_one_or_none()
-
-    if exist_habit:
-        raise HTTPException(
-            status_code=HTTP_400_BAD_REQUEST,
-            detail="Привычка с таким именем уже существует.",
-        )
 
     new_habit = Habit(**habit.model_dump(), user_id=user_id)
 
@@ -45,7 +36,7 @@ async def get_habits_by_user_id(
         select(Habit)
         .options(
             joinedload(Habit.user),
-            joinedload(Habit.tracking),
+            selectinload(Habit.tracking),
         )
         .where(Habit.user_id == user_id),
     )
@@ -59,7 +50,7 @@ async def get_habit(session: AsyncSession, habit_id: int) -> Habit | None:
         select(Habit)
         .options(
             joinedload(Habit.user),
-            joinedload(Habit.tracking),
+            selectinload(Habit.tracking),
         )
         .where(Habit.id == habit_id),
     )
@@ -74,6 +65,12 @@ async def update_habit_by_id(
     habit_update: HabitUpdate,
     user_id: int,
 ) -> Habit:
+    await check_if_habit_already_exist(
+        session=session,
+        habit_name=habit.name,
+        user_id=user_id,
+    )
+
     if habit.user_id == user_id:
         for name, value in habit_update.model_dump(exclude_unset=True).items():
             setattr(habit, name, value)

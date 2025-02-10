@@ -1,5 +1,3 @@
-from functools import cached_property
-
 from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -13,7 +11,7 @@ class Habit(Base, IdIntPkMixin):
     name: Mapped[str]
     tracking: Mapped[list["HabitTracking"]] = relationship(
         back_populates="habit",
-        lazy="joined",
+        lazy="selectin",
     )
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
@@ -21,7 +19,7 @@ class Habit(Base, IdIntPkMixin):
 
     __table_args__ = (UniqueConstraint("user_id", "name", name="unique_user_habit"),)
 
-    @cached_property
+    @property
     def streak(self) -> int:
         """Получает количество дней выполнения привычки."""
         return len(self.tracking)
