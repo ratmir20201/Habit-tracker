@@ -16,6 +16,13 @@ from api.crud.habits import (
 )
 from api.database.db import get_session
 from api.dependencies.habits import habit_by_id
+from api.exceptions.habits import (
+    get_all_my_habits_responses,
+    add_habit_responses,
+    update_habit_responses,
+    get_habit_by_id_responses,
+    delete_habit_responses,
+)
 from api.models import User
 from api.models.habit import Habit
 from api.schemas.habit import HabitCreate, HabitResponse, HabitUpdate, HabitBase
@@ -27,6 +34,7 @@ router = APIRouter(tags=["Habits"], prefix="/habits")
     "/me",
     status_code=HTTP_200_OK,
     response_model=list[HabitResponse],
+    responses=get_all_my_habits_responses,
 )
 async def get_all_my_habits(
     session: AsyncSession = Depends(get_session),
@@ -46,6 +54,7 @@ async def get_all_my_habits(
     "",
     status_code=HTTP_201_CREATED,
     response_model=HabitBase,
+    responses=add_habit_responses,
 )
 async def add_habit(
     habit: HabitCreate,
@@ -67,6 +76,7 @@ async def add_habit(
     "/{habit_id}",
     status_code=HTTP_200_OK,
     response_model=HabitResponse,
+    responses=update_habit_responses,
 )
 async def update_habit(
     habit_update: HabitUpdate,
@@ -88,6 +98,7 @@ async def update_habit(
     "/{habit_id}",
     status_code=HTTP_200_OK,
     response_model=HabitResponse,
+    responses=get_habit_by_id_responses,
 )
 async def get_habit_by_id(
     current_user: User = Depends(fastapi_users.current_user()),
@@ -103,7 +114,11 @@ async def get_habit_by_id(
     )
 
 
-@router.delete("/{habit_id}", status_code=HTTP_204_NO_CONTENT)
+@router.delete(
+    "/{habit_id}",
+    status_code=HTTP_204_NO_CONTENT,
+    responses=delete_habit_responses,
+)
 async def delete_habit(
     current_user: User = Depends(fastapi_users.current_user()),
     habit: Habit = Depends(habit_by_id),

@@ -8,7 +8,7 @@ from starlette.status import HTTP_400_BAD_REQUEST
 from api.models import HabitTracking
 
 
-async def checker_habit_tracking_already_exist(
+async def check_habit_tracking_already_exist(
     session: AsyncSession,
     habit_id: int,
 ) -> None:
