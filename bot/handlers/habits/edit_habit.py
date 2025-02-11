@@ -1,12 +1,16 @@
 from typing import Any
 
+from telebot.types import Message
+
+from bot.main import tg_bot
 from helpers.habits import HabitsHelper
 from keyboards.reply.choice_habit import get_habits_keyboard
 from message_generators.responses.habits import generate_edit_habit_message
-from telebot.types import Message
+from message_generators.services.habits import (
+    answer_habit_edit_message,
+    answer_new_habit_name_message,
+)
 from utils.get_habit_by_name import get_habit_object_from_habits_by_name
-
-from bot.main import tg_bot
 
 
 @tg_bot.message_handler(commands=["edithabit"])
@@ -21,7 +25,7 @@ def get_habit_name_what_we_update(message: Message):
 
     tg_bot.send_message(
         message.chat.id,
-        "Выберите привычку, которую хотите отредактировать:",
+        answer_habit_edit_message,
         reply_markup=keyboard,
     )
     tg_bot.register_next_step_handler(message, get_new_habit_name, habits)
@@ -34,7 +38,7 @@ def get_new_habit_name(message: Message, habits: list[dict[str, Any]]):
     if not habit_object:
         return
 
-    tg_bot.send_message(message.chat.id, "Введите новое название для привычки:")
+    tg_bot.send_message(message.chat.id, answer_new_habit_name_message)
     tg_bot.register_next_step_handler(message, save_new_habit_name, habit_object["id"])
 
 

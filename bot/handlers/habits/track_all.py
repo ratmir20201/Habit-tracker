@@ -1,13 +1,14 @@
-from helpers.habit_tracking import HabitTrackingHelper
-from helpers.habits import HabitsHelper
-from keyboards.inline.confirmation_tracking import \
-    get_confirmation_tracking_keyboard
-from message_generators.responses.congratulations import \
-    generate_congratulations_message
-from message_generators.responses.tracking import habit_already_pointed_message
 from telebot.types import Message
 
 from bot.main import tg_bot
+from helpers.habit_tracking import HabitTrackingHelper
+from helpers.habits import HabitsHelper
+from keyboards.inline.confirmation_tracking import get_confirmation_tracking_keyboard
+from message_generators.responses.congratulations import (
+    generate_congratulations_message,
+)
+from message_generators.responses.tracking import habit_already_pointed_message
+from message_generators.services.tracking import generate_answer_track_message
 
 
 @tg_bot.message_handler(commands=["trackall"])
@@ -21,7 +22,7 @@ def add_habits_tracking(message: Message):
     for habit in habits:
         tg_bot.send_message(
             message.chat.id,
-            "Выполнили ли вы сегодня привычку  *{}*?".format(habit["name"]),
+            generate_answer_track_message(habit_name=habit["name"]),
             reply_markup=get_confirmation_tracking_keyboard(habit["id"]),
             parse_mode="Markdown",
         )
