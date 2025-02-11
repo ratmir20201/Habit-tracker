@@ -4,6 +4,8 @@ from helpers.habit_tracking import HabitTrackingHelper
 from helpers.habits import HabitsHelper
 from keyboards.reply.choice_habit import get_habits_keyboard
 from telebot.types import Message
+
+from test_config import settings
 from utils.get_habit_by_name import get_habit_object_from_habits_by_name
 
 from bot.main import tg_bot
@@ -32,13 +34,13 @@ def add_habit_tracking(message: Message, habits: list[dict[str, Any]]):
     habit_tracking_helper = HabitTrackingHelper(message)
 
     habit_object = get_habit_object_from_habits_by_name(message, habits)
+    habit_name = habit_object["name"]
     if not habit_object:
         return
 
-    is_pointed = habit_tracking_helper.add_tracking(habit_object["id"])
+    my_response, habit_name = habit_tracking_helper.add_tracking(habit_object["id"])
 
-    if is_pointed:
-        habit_name = habit_object["name"]
+    if my_response == "habit_pointed":
         message_text = (
             "✅ Привычка *{habit_name}* успешно помечена как выполненная!".format(
                 habit_name=habit_name,
@@ -46,6 +48,15 @@ def add_habit_tracking(message: Message, habits: list[dict[str, Any]]):
         )
 
         tg_bot.send_message(message.chat.id, message_text, parse_mode="Markdown")
+    elif my_response == "habit_totally_complete":
+        tg_bot.send_message(
+            message.chat.id,
+            "🎉 Поздравляем! Вы успешно закрепили привычку {habit_name}, выполнив её {habit_streak} дней подряд. "
+            "Теперь она стала частью вашей жизни!".format(
+                habit_name=habit_name,
+                habit_streak=settings.tg_bot.carry_over_complete_habits_days,
+            ),
+        )
     else:
         tg_bot.send_message(
             message.chat.id,

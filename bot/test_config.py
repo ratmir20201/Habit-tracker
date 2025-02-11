@@ -9,6 +9,7 @@ class TelegramBotSettings(BaseSettings):
 
     token: str = ""
     webhook_url: str = ""
+    carry_over_complete_habits_days: int = 21
 
     class Config:
         env_prefix = "TG__"

@@ -34,12 +34,21 @@ def handle_confirmation(call):
     habit_id = int(habit_id)
     if action == "confirm_yes":
         habit_tracking_helper = HabitTrackingHelper(call)
-        is_pointed = habit_tracking_helper.add_tracking(habit_id)
+        my_response, habit_name = habit_tracking_helper.add_tracking(habit_id=habit_id)
 
-        if not is_pointed:
+        if my_response == "habit_not_pointed":
             tg_bot.send_message(
                 call.message.chat.id,
                 "Данная привычка уже отмечена как выполненная сегодня!",
+            )
+        elif my_response == "habit_totally_complete":
+            tg_bot.send_message(
+                call.message.chat.id,
+                "🎉 Поздравляем! Вы успешно закрепили привычку {habit_name}, выполнив её {habit_streak} дней подряд. "
+                "Теперь она стала частью вашей жизни!".format(
+                    habit_name=habit_name,
+                    habit_streak=settings.tg_bot.carry_over_complete_habits_days,
+                ),
             )
 
     # Удаляем кнопки после выбора
