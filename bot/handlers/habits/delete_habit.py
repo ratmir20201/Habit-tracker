@@ -1,13 +1,13 @@
 from typing import Any
 
-from telebot.types import KeyboardButton, Message, ReplyKeyboardMarkup
-
-from bot.main import tg_bot
 from helpers.habits import HabitsHelper
 from message_generators.errors.habits import habits_not_exist_message
 from message_generators.responses.habits import generate_delete_habit_message
 from message_generators.services.habits import answer_habit_delete_message
+from telebot.types import KeyboardButton, Message, ReplyKeyboardMarkup
 from utils.get_habit_by_name import get_habit_object_from_habits_by_name
+
+from bot import tg_bot
 
 
 @tg_bot.message_handler(commands=["deletehabit"])

@@ -1,10 +1,9 @@
+from database.base import Base
 from fastapi_users_db_sqlalchemy import (SQLAlchemyBaseUserTable,
                                          SQLAlchemyUserDatabase)
+from models.mixins.id_int_pk import IdIntPkMixin
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
-from api.database.base import Base
-from api.models.mixins.id_int_pk import IdIntPkMixin
 
 
 class User(Base, IdIntPkMixin, SQLAlchemyBaseUserTable[int]):

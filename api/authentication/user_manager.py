@@ -1,11 +1,10 @@
 import logging
 from typing import Optional
 
+from config import settings
 from fastapi import Request
 from fastapi_users import BaseUserManager, IntegerIDMixin
-
-from api.models.user import User
-from config import settings
+from models.user import User
 
 log = logging.getLogger(__name__)
 

@@ -5,7 +5,7 @@ from message_generators.services.auth import register_suggestion_message
 from starlette.status import HTTP_200_OK, HTTP_404_NOT_FOUND
 from telebot.types import Message
 
-from main import tg_bot
+from bot import tg_bot
 
 
 @tg_bot.message_handler(commands=["start"])

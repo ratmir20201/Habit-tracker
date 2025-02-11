@@ -1,10 +1,9 @@
+from exceptions.responses import (forbid_response,
+                                  habit_already_exist_response,
+                                  habit_not_found_response,
+                                  unauthorized_response)
 from starlette.status import (HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED,
                               HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND)
-
-from api.exceptions.responses import (forbid_response,
-                                      habit_already_exist_response,
-                                      habit_not_found_response,
-                                      unauthorized_response)
 
 get_all_my_habits_responses = {HTTP_401_UNAUTHORIZED: unauthorized_response}
 

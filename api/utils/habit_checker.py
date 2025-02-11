@@ -1,10 +1,9 @@
 from fastapi import HTTPException
+from models import Habit
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 from starlette.status import HTTP_400_BAD_REQUEST
-
-from api.models import Habit
 
 
 async def check_if_habit_already_exist(

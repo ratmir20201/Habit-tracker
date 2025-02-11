@@ -1,4 +1,4 @@
-from test_config import settings
+from config import settings
 
 
 def generate_congratulations_message(habit_name: str) -> str:

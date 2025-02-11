@@ -4,7 +4,7 @@ from message_generators.services.auth import (input_email_message,
 from telebot.types import Message
 from utils.register_message_checker import is_command
 
-from main import tg_bot
+from bot import tg_bot
 
 
 def get_username(message: Message):

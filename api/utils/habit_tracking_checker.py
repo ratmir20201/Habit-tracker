@@ -1,11 +1,10 @@
 import datetime
 
 from fastapi import HTTPException
+from models import HabitTracking
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.status import HTTP_400_BAD_REQUEST
-
-from api.models import HabitTracking
 
 
 async def check_habit_tracking_already_exist(

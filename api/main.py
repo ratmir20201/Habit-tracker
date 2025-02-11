@@ -1,11 +1,11 @@
 import uvicorn
-from fastapi import FastAPI
-from starlette.status import HTTP_401_UNAUTHORIZED
-
-from api.actions.create_superuser import create_superuser
-from api.authentication.auth_router import router as auth_roter
-from api.routes.router import main_router
+from actions.create_superuser import create_superuser
+from authentication.auth_router import router as auth_roter
 from config import settings
+from exceptions.unauth_handler import custom_unauthorized_handler
+from fastapi import FastAPI
+from routes.router import main_router
+from starlette.status import HTTP_401_UNAUTHORIZED
 
 
 async def lifespan(app: FastAPI):
@@ -19,16 +19,10 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-from api.exceptions.unauth_handler import custom_unauthorized_handler
-
 app.include_router(main_router)
 app.include_router(auth_roter)
 
 app.add_exception_handler(HTTP_401_UNAUTHORIZED, custom_unauthorized_handler)
-
-
-def get_app() -> FastAPI:
-    return app
 
 
 if __name__ == "__main__":

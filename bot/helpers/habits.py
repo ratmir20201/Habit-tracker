@@ -9,7 +9,7 @@ from starlette.status import (HTTP_200_OK, HTTP_201_CREATED,
                               HTTP_401_UNAUTHORIZED)
 from telebot.types import Message
 
-from main import tg_bot
+from bot import tg_bot
 
 
 class HabitsHelper(ApiHelper):

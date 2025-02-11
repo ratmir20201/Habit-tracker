@@ -1,16 +1,14 @@
 from typing import Any
 
-from telebot.types import Message
-
-from bot.main import tg_bot
 from helpers.habits import HabitsHelper
 from keyboards.reply.choice_habit import get_habits_keyboard
 from message_generators.responses.habits import generate_edit_habit_message
-from message_generators.services.habits import (
-    answer_habit_edit_message,
-    answer_new_habit_name_message,
-)
+from message_generators.services.habits import (answer_habit_edit_message,
+                                                answer_new_habit_name_message)
+from telebot.types import Message
 from utils.get_habit_by_name import get_habit_object_from_habits_by_name
+
+from bot import tg_bot
 
 
 @tg_bot.message_handler(commands=["edithabit"])

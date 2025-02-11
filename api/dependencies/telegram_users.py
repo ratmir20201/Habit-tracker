@@ -1,12 +1,11 @@
+from crud.habits import get_habit
+from database.db import get_session
 from fastapi import Depends, HTTPException
+from models import User
+from models.habit import Habit
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.status import HTTP_404_NOT_FOUND
-
-from api.crud.habits import get_habit
-from api.database.db import get_session
-from api.models import User
-from api.models.habit import Habit
 
 
 async def user_by_telegram_id(

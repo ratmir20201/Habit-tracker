@@ -1,12 +1,11 @@
 from fastapi import HTTPException
+from models.habit import Habit
+from schemas.habit import HabitCreate, HabitUpdate
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload, selectinload
 from starlette.status import HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN
-
-from api.models.habit import Habit
-from api.schemas.habit import HabitCreate, HabitUpdate
-from api.utils.habit_checker import check_if_habit_already_exist
+from utils.habit_checker import check_if_habit_already_exist
 
 
 async def create_habit(

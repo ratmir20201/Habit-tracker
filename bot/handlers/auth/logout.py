@@ -3,7 +3,7 @@ from message_generators.responses.auth import (already_logout_message,
                                                logout_success_message)
 from telebot.types import Message
 
-from main import tg_bot
+from bot import tg_bot
 
 
 @tg_bot.message_handler(commands=["logout"])

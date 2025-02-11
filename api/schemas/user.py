@@ -4,8 +4,7 @@ from dataclasses import field
 
 from fastapi_users import schemas
 from pydantic import BaseModel
-
-from api.schemas.habit import HabitBase
+from schemas.habit import HabitBase
 
 
 class UserRead(schemas.BaseUser[int]):

@@ -1,8 +1,7 @@
+from database.base import Base
+from models.mixins.id_int_pk import IdIntPkMixin
 from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
-from api.database.base import Base
-from api.models.mixins.id_int_pk import IdIntPkMixin
 
 
 class Habit(Base, IdIntPkMixin):

@@ -1,9 +1,9 @@
-from telebot.types import Message
-
-from bot.main import tg_bot
 from helpers.habits import HabitsHelper
 from message_generators.responses.habits import generate_add_habit_message
 from message_generators.services.habits import answer_habit_name_message
+from telebot.types import Message
+
+from bot import tg_bot
 
 
 @tg_bot.message_handler(commands=["addhabit"])

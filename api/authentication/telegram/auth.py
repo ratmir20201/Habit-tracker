@@ -1,12 +1,11 @@
 import json
 
+from authentication.backend import authentication_backend
+from authentication.strategy import get_database_strategy
+from dependencies.telegram_users import user_by_telegram_id
 from fastapi import APIRouter, Depends
 from fastapi_users.authentication.strategy import DatabaseStrategy
-
-from api.authentication.backend import authentication_backend
-from api.authentication.strategy import get_database_strategy
-from api.dependencies.telegram_users import user_by_telegram_id
-from api.models import User
+from models import User
 
 router = APIRouter(tags=["Telegram"])
 

@@ -3,8 +3,7 @@ from __future__ import annotations
 import datetime
 
 from pydantic import BaseModel
-
-from api.schemas.habit import HabitResponse
+from schemas.habit import HabitResponse
 
 
 class HabitTrackingBase(BaseModel):

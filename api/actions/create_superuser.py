@@ -1,13 +1,12 @@
 import contextlib
 
+from authentication.user_manager import UserManager
+from database.db import get_async_context_session
+from dependencies.user_manager import get_user_manager
+from dependencies.users import get_user_db
+from models import User
+from schemas.user import UserCreate
 from sqlalchemy import select
-
-from api.authentication.user_manager import UserManager
-from api.database.db import get_async_context_session
-from api.dependencies.user_manager import get_user_manager
-from api.dependencies.users import get_user_db
-from api.models import User
-from api.schemas.user import UserCreate
 
 get_user_db_context = contextlib.asynccontextmanager(get_user_db)
 get_user_manager_context = contextlib.asynccontextmanager(get_user_manager)

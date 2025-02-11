@@ -1,15 +1,13 @@
+from authentication.fastapi_users_router import fastapi_users
+from crud.habit_tracking import create_habit_tracking
+from database.db import get_session
+from dependencies.habits import habit_by_id
+from exceptions.habit_tracking import add_habit_tracking_responses
 from fastapi import APIRouter, Depends, HTTPException
+from models import User
+from schemas.habit_tracking import HabitTrackingCreate, HabitTrackingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.status import HTTP_201_CREATED, HTTP_403_FORBIDDEN
-
-from api.authentication.fastapi_users_router import fastapi_users
-from api.crud.habit_tracking import create_habit_tracking
-from api.database.db import get_session
-from api.dependencies.habits import habit_by_id
-from api.exceptions.habit_tracking import add_habit_tracking_responses
-from api.models import User
-from api.schemas.habit_tracking import (HabitTrackingCreate,
-                                        HabitTrackingResponse)
 
 router = APIRouter(tags=["HabitTracking"], prefix="/track_habit")
 

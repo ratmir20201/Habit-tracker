@@ -1,20 +1,17 @@
 from typing import Any
 
-from telebot.types import Message
-
-from bot.main import tg_bot
 from helpers.habit_tracking import HabitTrackingHelper
 from helpers.habits import HabitsHelper
 from keyboards.reply.choice_habit import get_habits_keyboard
-from message_generators.responses.congratulations import (
-    generate_congratulations_message,
-)
+from message_generators.responses.congratulations import \
+    generate_congratulations_message
 from message_generators.responses.tracking import (
-    generate_is_tracked,
-    habit_already_pointed_message,
-)
+    generate_is_tracked, habit_already_pointed_message)
 from message_generators.services.tracking import answer_point_habit_message
+from telebot.types import Message
 from utils.get_habit_by_name import get_habit_object_from_habits_by_name
+
+from bot import tg_bot
 
 
 @tg_bot.message_handler(commands=["trackone"])

@@ -1,7 +1,7 @@
 from message_generators.services.auth import register_canceled_message
 from telebot.types import Message
 
-from main import tg_bot
+from bot import tg_bot
 
 
 def is_command(message: Message) -> bool:

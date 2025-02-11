@@ -3,7 +3,7 @@ from typing import Any
 from message_generators.errors.habits import habit_not_exist_message
 from telebot.types import Message
 
-from main import tg_bot
+from bot import tg_bot
 
 
 def get_habit_object_from_habits_by_name(

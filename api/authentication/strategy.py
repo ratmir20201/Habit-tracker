@@ -1,10 +1,9 @@
+from config import settings
+from dependencies.access_token import get_access_token_db
 from fastapi import Depends
 from fastapi_users.authentication.strategy.db import (AccessTokenDatabase,
                                                       DatabaseStrategy)
-
-from api.dependencies.access_token import get_access_token_db
-from api.models.access_token import AccessToken
-from config import settings
+from models.access_token import AccessToken
 
 
 def get_database_strategy(

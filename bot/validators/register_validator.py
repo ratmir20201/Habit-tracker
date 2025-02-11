@@ -3,7 +3,7 @@ from message_generators.services.auth import try_again_register_message
 from pydantic import ValidationError
 from schemas.register import RegisterSchema
 
-from main import tg_bot
+from bot import tg_bot
 
 
 def validate_user_data(message, data) -> RegisterSchema | None:

@@ -1,12 +1,12 @@
 from typing import Any
 
 import starlette
+from config import settings
 from helpers.api import ApiHelper
 from redis_cache.client import get_redis_client
 from starlette.status import (HTTP_200_OK, HTTP_201_CREATED,
                               HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND)
 from telebot.types import Message
-from test_config import settings
 from validators.register_validator import validate_user_data
 
 

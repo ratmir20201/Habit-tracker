@@ -28,16 +28,6 @@ class DbSettings(BaseSettings):
         env_prefix = "DB__"
 
 
-class TelegramBotSettings(BaseSettings):
-    """Настройки телеграмм бота."""
-
-    token: str = ""
-    webhook_url: str = ""
-
-    class Config:
-        env_prefix = "TG__"
-
-
 class AccessTokenSettings(BaseSettings):
     """Настройки токена для аутентификации."""
 
@@ -53,7 +43,6 @@ class ApiSettings(BaseSettings):
     superuser_name: str = "admin"
     superuser_email: str = "admin@admin.com"
     superuser_password: str = "admin"
-    url: str = "http://localhost:8000"
 
     class Config:
         env_prefix = "API__"
@@ -62,7 +51,6 @@ class ApiSettings(BaseSettings):
 class Settings(BaseSettings):
     """Общие настройки приложения."""
 
-    tg_bot: TelegramBotSettings = TelegramBotSettings()
     db: DbSettings = DbSettings()
     access_token: AccessTokenSettings = AccessTokenSettings()
     api: ApiSettings = ApiSettings()

@@ -1,7 +1,7 @@
 from message_generators.responses.default_commands import hello_message
 from telebot.types import Message
 
-from bot.main import tg_bot
+from bot import tg_bot
 
 
 @tg_bot.message_handler(commands=["hello"])
