@@ -32,4 +32,6 @@ async def create_habit_tracking(
     session.add(new_habit_tracking)
     await session.commit()
 
+    await session.refresh(exist_habit)
+
     return new_habit_tracking
