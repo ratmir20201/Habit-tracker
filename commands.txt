@@ -1,1 +1,2 @@
-python -c 'import secrets; print(secrets.token_hex())' - генерация секретных токенов
+python -c 'import secrets; print(secrets.token_hex())'  # генерация секретных токенов
+poetry install --without dev  # установить только продакшен-зависимости

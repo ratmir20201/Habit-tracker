@@ -30,6 +30,5 @@ async def telegram_webhook(request: Request):
 
 
 if __name__ == "__main__":
-
     asyncio.run(set_webhook())
     uvicorn.run("main:app", reload=True, port=8001)
