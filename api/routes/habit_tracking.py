@@ -8,7 +8,8 @@ from api.database.db import get_session
 from api.dependencies.habits import habit_by_id
 from api.exceptions.habit_tracking import add_habit_tracking_responses
 from api.models import User
-from api.schemas.habit_tracking import HabitTrackingCreate, HabitTrackingResponse
+from api.schemas.habit_tracking import (HabitTrackingCreate,
+                                        HabitTrackingResponse)
 
 router = APIRouter(tags=["HabitTracking"], prefix="/track_habit")
 

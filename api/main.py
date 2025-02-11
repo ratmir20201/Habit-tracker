@@ -21,7 +21,6 @@ app = FastAPI(lifespan=lifespan)
 
 from api.exceptions.unauth_handler import custom_unauthorized_handler
 
-
 app.include_router(main_router)
 app.include_router(auth_roter)
 

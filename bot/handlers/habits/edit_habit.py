@@ -1,9 +1,9 @@
 from typing import Any
 
-import requests
 from helpers.habits import HabitsHelper
 from keyboards.reply.choice_habit import get_habits_keyboard
-from telebot.types import KeyboardButton, Message, ReplyKeyboardMarkup
+from message_generators.responses.habits import generate_edit_habit_message
+from telebot.types import Message
 from utils.get_habit_by_name import get_habit_object_from_habits_by_name
 
 from bot.main import tg_bot
@@ -45,5 +45,6 @@ def save_new_habit_name(message: Message, habit_id: int):
 
     tg_bot.send_message(
         message.chat.id,
-        "✅ Привычка успешно обновлена на: {}.".format(habit["name"]),
+        generate_edit_habit_message(habit_name=habit["name"]),
+        parse_mode="Markdown",
     )

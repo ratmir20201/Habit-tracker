@@ -1,11 +1,10 @@
 from typing import Any
 
-import requests
 import starlette
 from helpers.api import ApiHelper
 from redis_cache.client import get_redis_client
 from starlette.status import (HTTP_200_OK, HTTP_201_CREATED,
-                              HTTP_401_UNAUTHORIZED, HTTP_404_NOT_FOUND)
+                              HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND)
 from telebot.types import Message
 from test_config import settings
 from validators.register_validator import validate_user_data
@@ -17,7 +16,7 @@ class AuthenticationHelper(ApiHelper):
     def __init__(self, message: Message):
         super().__init__(message, is_auth=True)
 
-    def register_user(self, user_data: dict[str, Any]) -> starlette.status:
+    def register_user(self, user_data: dict[str, Any]) -> str:
         """Функция для регистрации пользователя."""
         valid_user_data = validate_user_data(self.message, user_data)
         if valid_user_data is None:
@@ -29,7 +28,10 @@ class AuthenticationHelper(ApiHelper):
             data=valid_user_data.model_dump(),
         )
 
-        return response.status_code
+        if response.status_code == HTTP_201_CREATED:
+            return "success"
+        elif response.status_code == HTTP_400_BAD_REQUEST:
+            return "register_user_already_exist"
 
     def login_and_save_token_in_redis(self) -> starlette.status:
         """Функция для входа пользователя в систему."""
@@ -58,7 +60,7 @@ class AuthenticationHelper(ApiHelper):
             value=token,
         )
 
-    def logout_and_delete_token_in_redis(self) -> starlette.status:
+    def logout_and_delete_token_in_redis(self) -> str:
         """Функция для выхода пользователя из аккаунта."""
         redis_client = get_redis_client()
         telegram_id = self.message.from_user.id
@@ -66,6 +68,6 @@ class AuthenticationHelper(ApiHelper):
         token_key = "user_token:{telegram_id}".format(telegram_id=telegram_id)
         if redis_client.exists(token_key):
             redis_client.delete(token_key)
-            return HTTP_200_OK
+            return "success"
 
-        return HTTP_401_UNAUTHORIZED
+        return "user_already_logout"

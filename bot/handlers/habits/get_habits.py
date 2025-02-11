@@ -1,6 +1,5 @@
-import requests
 from helpers.habits import HabitsHelper
-from starlette.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED
+from message_generators.responses.habits import generate_get_habits_message
 from telebot.types import Message
 
 from bot.main import tg_bot
@@ -12,11 +11,5 @@ def get_habits(message: Message):
     habits_helper = HabitsHelper(message)
     habits = habits_helper.get_user_habits()
 
-    message_text = "✨ *Ваши привычки:*\n\n"
-
-    for habit in habits:
-        message_text += "📌 *{habit_name}*\n".format(habit_name=habit["name"])
-        message_text += "   🔥 Дней подряд: *{habit_streak}*\n\n".format(
-            habit_streak=habit["streak"],
-        )
+    message_text = generate_get_habits_message(habits=habits)
     tg_bot.send_message(message.chat.id, message_text, parse_mode="Markdown")

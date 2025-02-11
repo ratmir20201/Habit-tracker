@@ -1,5 +1,8 @@
 from helpers.auth import AuthenticationHelper
-from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
+from message_generators.errors.auth import user_already_exist_message
+from message_generators.responses.auth import register_success_message
+from message_generators.services.auth import (input_name_message,
+                                              try_again_register_message)
 from telebot.types import Message
 
 from main import tg_bot
@@ -9,7 +12,7 @@ from main import tg_bot
 def register_new_user(message: Message):
     from handlers import get_username
 
-    tg_bot.send_message(message.chat.id, "Введите ваше имя:")
+    tg_bot.send_message(message.chat.id, input_name_message)
     tg_bot.register_next_step_handler(message, get_username)
 
 
@@ -22,21 +25,22 @@ def register(message: Message, username: str, email: str, password: str):
     }
 
     auth_helper = AuthenticationHelper(message)
-    status_code = auth_helper.register_user(user_data=user_data)
+    my_response = auth_helper.register_user(user_data=user_data)
 
-    if status_code == HTTP_201_CREATED:
+    if my_response == "success":
         tg_bot.send_message(
             message.chat.id,
-            "✅ Регистрация успешна! Теперь отправьте команду /start для входа.",
+            register_success_message,
         )
-    elif status_code == HTTP_400_BAD_REQUEST:
+    elif my_response == "register_user_already_exist":
         from handlers import get_username
 
         tg_bot.send_message(
             message.chat.id,
-            "Пользователь с таким именем или email уже существует.",
+            user_already_exist_message,
         )
         tg_bot.send_message(
-            message.chat.id, "🔁 Попробуйте еще раз.\n\nВведите ваше имя:"
+            message.chat.id,
+            try_again_register_message,
         )
         tg_bot.register_next_step_handler(message, get_username)

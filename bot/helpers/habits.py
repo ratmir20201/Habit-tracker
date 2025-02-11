@@ -1,13 +1,12 @@
 from typing import Any
 
 from helpers.api import ApiHelper
-from starlette.status import (
-    HTTP_200_OK,
-    HTTP_201_CREATED,
-    HTTP_204_NO_CONTENT,
-    HTTP_400_BAD_REQUEST,
-    HTTP_401_UNAUTHORIZED,
-)
+from message_generators.errors.habits import (delete_habit_error_message,
+                                              habit_already_exist_message,
+                                              habits_not_exist_message)
+from starlette.status import (HTTP_200_OK, HTTP_201_CREATED,
+                              HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST,
+                              HTTP_401_UNAUTHORIZED)
 from telebot.types import Message
 
 from main import tg_bot
@@ -28,7 +27,7 @@ class HabitsHelper(ApiHelper):
         if response.status_code == HTTP_200_OK:
             habits = response.json()
             if not habits:
-                tg_bot.send_message(self.message.chat.id, "❌ У вас пока нет привычек.")
+                tg_bot.send_message(self.message.chat.id, habits_not_exist_message)
                 return None
             return habits
         elif response.status_code == HTTP_401_UNAUTHORIZED:
@@ -50,7 +49,7 @@ class HabitsHelper(ApiHelper):
         elif response.status_code == HTTP_400_BAD_REQUEST:
             tg_bot.send_message(
                 self.message.chat.id,
-                "🚫 {error_message}".format(error_message=response.json()["detail"]),
+                habit_already_exist_message,
             )
             return
 
@@ -70,7 +69,7 @@ class HabitsHelper(ApiHelper):
         elif response.status_code == HTTP_400_BAD_REQUEST:
             tg_bot.send_message(
                 self.message.chat.id,
-                "🚫 {error_message}".format(error_message=response.json()["detail"]),
+                habit_already_exist_message,
             )
             return
 
@@ -82,7 +81,8 @@ class HabitsHelper(ApiHelper):
 
         if response.status_code != HTTP_204_NO_CONTENT:
             tg_bot.send_message(
-                self.message.chat.id, "❌ Ошибка при удалении привычки."
+                self.message.chat.id,
+                delete_habit_error_message,
             )
             return None
 

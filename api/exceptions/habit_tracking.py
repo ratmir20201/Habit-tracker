@@ -1,16 +1,9 @@
-from starlette.status import (
-    HTTP_400_BAD_REQUEST,
-    HTTP_404_NOT_FOUND,
-    HTTP_401_UNAUTHORIZED,
-    HTTP_403_FORBIDDEN,
-)
+from starlette.status import (HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED,
+                              HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND)
 
-from api.exceptions.responses import (
-    habit_already_pointed,
-    habit_not_found_response,
-    unauthorized_response,
-    forbid_response,
-)
+from api.exceptions.responses import (forbid_response, habit_already_pointed,
+                                      habit_not_found_response,
+                                      unauthorized_response)
 
 add_habit_tracking_responses = {
     HTTP_400_BAD_REQUEST: habit_already_pointed,

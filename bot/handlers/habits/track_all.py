@@ -1,8 +1,10 @@
-from typing import Any
-
 from helpers.habit_tracking import HabitTrackingHelper
 from helpers.habits import HabitsHelper
-from keyboards.inline.confirmation_tracking import get_confirmation_tracking_keyboard
+from keyboards.inline.confirmation_tracking import \
+    get_confirmation_tracking_keyboard
+from message_generators.responses.congratulations import \
+    generate_congratulations_message
+from message_generators.responses.tracking import habit_already_pointed_message
 from telebot.types import Message
 
 from bot.main import tg_bot
@@ -39,16 +41,12 @@ def handle_confirmation(call):
         if my_response == "habit_not_pointed":
             tg_bot.send_message(
                 call.message.chat.id,
-                "Данная привычка уже отмечена как выполненная сегодня!",
+                habit_already_pointed_message,
             )
         elif my_response == "habit_totally_complete":
             tg_bot.send_message(
                 call.message.chat.id,
-                "🎉 Поздравляем! Вы успешно закрепили привычку {habit_name}, выполнив её {habit_streak} дней подряд. "
-                "Теперь она стала частью вашей жизни!".format(
-                    habit_name=habit_name,
-                    habit_streak=settings.tg_bot.carry_over_complete_habits_days,
-                ),
+                generate_congratulations_message(habit_name=habit_name),
             )
 
     # Удаляем кнопки после выбора

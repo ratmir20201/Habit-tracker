@@ -1,4 +1,5 @@
 from helpers.habits import HabitsHelper
+from message_generators.responses.habits import generate_add_habit_message
 from telebot.types import Message
 
 from bot.main import tg_bot
@@ -16,13 +17,7 @@ def add_habit(message: Message):
     habits_helper = HabitsHelper(message)
     habit = habits_helper.add_habit()
 
-    habit_name = habit["name"]
-    message_text = (
-        "✨ *Новая привычка добавлена!* ✨\n\n"
-        "✅ Привычка *{habit_name}* успешно создана!"
-    ).format(
-        habit_name=habit_name,
-    )
+    message_text = generate_add_habit_message(habit_name=habit["name"])
 
     tg_bot.send_message(
         message.chat.id,

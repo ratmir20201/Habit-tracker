@@ -1,12 +1,12 @@
 from typing import Any
 
-import requests
 from helpers.habits import HabitsHelper
-from starlette.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED
+from message_generators.errors.habits import habits_not_exist_message
+from message_generators.responses.habits import generate_delete_habit_message
 from telebot.types import KeyboardButton, Message, ReplyKeyboardMarkup
+from utils.get_habit_by_name import get_habit_object_from_habits_by_name
 
 from bot.main import tg_bot
-from utils.get_habit_by_name import get_habit_object_from_habits_by_name
 
 
 @tg_bot.message_handler(commands=["deletehabit"])
@@ -16,7 +16,7 @@ def get_habit_name_what_we_update(message: Message):
     habits = habits_helper.get_user_habits()
 
     if not habits:
-        tg_bot.send_message(message.chat.id, "❌ У вас пока нет привычек.")
+        tg_bot.send_message(message.chat.id, habits_not_exist_message)
         return
 
     # Создаем клавиатуру с привычками
@@ -40,5 +40,6 @@ def delete_habit(message: Message, habits: list[dict[str, Any]]):
 
     tg_bot.send_message(
         message.chat.id,
-        "✅ Привычка {} успешно удалена.".format(habit_object["name"]),
+        generate_delete_habit_message(habit_name=habit_object["name"]),
+        parse_mode="Markdown",
     )

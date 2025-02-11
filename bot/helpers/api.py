@@ -1,7 +1,10 @@
 import logging
-from abc import ABC, abstractmethod
+from abc import ABC
 
 import requests
+from message_generators.errors.auth import user_not_authorized_message
+from message_generators.errors.unexpected import \
+    unexpected_server_error_message
 from redis_cache.client import get_redis_client
 from telebot.types import CallbackQuery, Message
 from test_config import settings
@@ -43,7 +46,8 @@ class ApiHelper(ABC):
             return {"Authorization": "Bearer {token}".format(token=token)}
 
         tg_bot.send_message(
-            self.message.chat.id, "❌ Вы не авторизованы! Введите /start"
+            self.message.chat.id,
+            user_not_authorized_message,
         )
         return None
 
@@ -69,6 +73,7 @@ class ApiHelper(ABC):
         except requests.exceptions.RequestException as e:
             logger.error(f"Ошибка запроса: {e}")
             tg_bot.send_message(
-                self.message.chat.id, "❌ Ошибка сервера. Попробуйте позже."
+                self.message.chat.id,
+                unexpected_server_error_message,
             )
             return None

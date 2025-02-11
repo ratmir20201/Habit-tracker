@@ -1,3 +1,5 @@
+from message_generators.errors.auth import generate_register_error_message
+from message_generators.services.auth import try_again_register_message
 from pydantic import ValidationError
 from schemas.register import RegisterSchema
 
@@ -13,20 +15,9 @@ def validate_user_data(message, data) -> RegisterSchema | None:
         from handlers import get_username
 
         errors = e.errors()
-        for error in errors:
-            field = error["loc"][0]
-            error_message = error["msg"]
+        error_message = generate_register_error_message(errors=errors)
+        tg_bot.send_message(message.chat.id, error_message)
 
-            if field == "email":
-                error_message = (
-                    "Некорректный формат email. Пожалуйста, введите правильный email."
-                )
-            elif field == "password":
-                error_message = "Пароль должен содержать минимум 8 символов, одну заглавную букву и цифру."
-            tg_bot.send_message(message.chat.id, "❌ Ошибка: {}".format(error_message))
-
-        tg_bot.send_message(
-            message.chat.id, "🔁 Попробуйте еще раз.\n\nВведите ваше имя:"
-        )
+        tg_bot.send_message(message.chat.id, try_again_register_message)
         tg_bot.register_next_step_handler(message, get_username)
         return None

@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.status import HTTP_400_BAD_REQUEST
 
 from api.crud.habits import get_habit
-from api.models import HabitTracking, Habit
+from api.models import Habit, HabitTracking
 from api.schemas.habit_tracking import HabitTrackingCreate
 from api.utils.habit_tracking_checker import check_habit_tracking_already_exist
 
