@@ -1,9 +1,13 @@
 from typing import Any
 
 from helpers.api import ApiHelper
-from starlette.status import (HTTP_200_OK, HTTP_201_CREATED,
-                              HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST,
-                              HTTP_401_UNAUTHORIZED)
+from starlette.status import (
+    HTTP_200_OK,
+    HTTP_201_CREATED,
+    HTTP_204_NO_CONTENT,
+    HTTP_400_BAD_REQUEST,
+    HTTP_401_UNAUTHORIZED,
+)
 from telebot.types import Message
 
 from main import tg_bot
@@ -44,7 +48,11 @@ class HabitsHelper(ApiHelper):
             habit = response.json()
             return habit
         elif response.status_code == HTTP_400_BAD_REQUEST:
-            return None
+            tg_bot.send_message(
+                self.message.chat.id,
+                "🚫 {error_message}".format(error_message=response.json()["detail"]),
+            )
+            return
 
     def update_habit(self, habit_id: int) -> dict[str, Any]:
         new_habit_name = self.message.text.strip().capitalize()
@@ -59,6 +67,12 @@ class HabitsHelper(ApiHelper):
         if response.status_code == HTTP_200_OK:
             habit = response.json()
             return habit
+        elif response.status_code == HTTP_400_BAD_REQUEST:
+            tg_bot.send_message(
+                self.message.chat.id,
+                "🚫 {error_message}".format(error_message=response.json()["detail"]),
+            )
+            return
 
     def delete_habit(self, habit_id: int) -> None:
         response = self._send_request(
@@ -71,3 +85,5 @@ class HabitsHelper(ApiHelper):
                 self.message.chat.id, "❌ Ошибка при удалении привычки."
             )
             return None
+
+        return

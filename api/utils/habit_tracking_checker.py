@@ -15,7 +15,7 @@ async def checker_habit_tracking_already_exist(
     today = datetime.datetime.now().date()
     query = await session.execute(
         select(HabitTracking).where(
-            HabitTracking.habit_id == habit_id and HabitTracking.date == today
+            (HabitTracking.habit_id == habit_id) & (HabitTracking.date == today)
         ),
     )
     exist_tracking = query.scalar_one_or_none()

@@ -6,6 +6,7 @@ from starlette.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED
 from telebot.types import KeyboardButton, Message, ReplyKeyboardMarkup
 
 from bot.main import tg_bot
+from utils.get_habit_by_name import get_habit_object_from_habits_by_name
 
 
 @tg_bot.message_handler(commands=["deletehabit"])
@@ -28,23 +29,12 @@ def get_habit_name_what_we_update(message: Message):
         "Выберите привычку, которую хотите удалить:",
         reply_markup=keyboard,
     )
-    tg_bot.register_next_step_handler(message, get_habit_id, habits)
+    tg_bot.register_next_step_handler(message, delete_habit, habits)
 
 
-def get_habit_id(message: Message, habits: list[dict[str, Any]]):
-    """Команда для изменения привычки."""
-    habit_name = message.text.strip().capitalize()
-    habit_object = None
+def delete_habit(message: Message, habits: list[dict[str, Any]]):
+    habit_object = get_habit_object_from_habits_by_name(message, habits)
 
-    for habit in habits:
-        if habit_name == habit["name"]:
-            habit_object = habit
-            break
-
-    delete_habit(message, habit_object)
-
-
-def delete_habit(message: Message, habit_object: dict[str, Any]):
     habits_helper = HabitsHelper(message)
     habits_helper.delete_habit(habit_object["id"])
 

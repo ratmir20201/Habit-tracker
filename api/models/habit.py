@@ -11,6 +11,7 @@ class Habit(Base, IdIntPkMixin):
     name: Mapped[str]
     tracking: Mapped[list["HabitTracking"]] = relationship(
         back_populates="habit",
+        cascade="all, delete-orphan",
         lazy="selectin",
     )
 

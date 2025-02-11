@@ -16,9 +16,6 @@ def add_habit(message: Message):
     habits_helper = HabitsHelper(message)
     habit = habits_helper.add_habit()
 
-    if not habit:
-        tg_bot.send_message(message.chat.id, "🚫 У вас уже имеется такая привычка.")
-
     habit_name = habit["name"]
     message_text = (
         "✨ *Новая привычка добавлена!* ✨\n\n"

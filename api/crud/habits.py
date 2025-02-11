@@ -38,11 +38,11 @@ async def get_habits_by_user_id(
             joinedload(Habit.user),
             selectinload(Habit.tracking),
         )
-        .where(Habit.user_id == user_id),
+        .where(Habit.user_id == user_id)
     )
     habits = habits_query.unique().scalars().all()
 
-    return habits
+    return sorted(habits, key=lambda habit: habit.streak, reverse=True)
 
 
 async def get_habit(session: AsyncSession, habit_id: int) -> Habit | None:
@@ -67,7 +67,7 @@ async def update_habit_by_id(
 ) -> Habit:
     await check_if_habit_already_exist(
         session=session,
-        habit_name=habit.name,
+        habit_name=habit_update.name,
         user_id=user_id,
     )
 

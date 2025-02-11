@@ -19,7 +19,7 @@ def add_habits_tracking(message: Message):
     for habit in habits:
         tg_bot.send_message(
             message.chat.id,
-            "Выполнили ли вы сегодня привычку:  *{}*?".format(habit["name"]),
+            "Выполнили ли вы сегодня привычку  *{}*?".format(habit["name"]),
             reply_markup=get_confirmation_tracking_keyboard(habit["id"]),
             parse_mode="Markdown",
         )

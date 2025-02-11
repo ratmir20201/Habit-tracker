@@ -17,7 +17,7 @@ async def check_if_habit_already_exist(
         .options(
             joinedload(Habit.user),
         )
-        .where(Habit.name == habit_name and Habit.user_id == user_id),
+        .where((Habit.name == habit_name) & (Habit.user_id == user_id)),
     )
     exist_habit = habit_query.scalar_one_or_none()
 
