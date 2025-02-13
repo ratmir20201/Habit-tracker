@@ -1,2 +1,3 @@
 python -c 'import secrets; print(secrets.token_hex())'  # генерация секретных токенов
 poetry install --without dev  # установить только продакшен-зависимости
+redis-server --port 6380   # запустить redis потом в докер использовать

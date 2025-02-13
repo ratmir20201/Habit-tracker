@@ -44,7 +44,7 @@ class ApiSettings(BaseSettings):
     superuser_email: str = "admin@admin.com"
     superuser_password: str = "admin"
 
-    cache_time: int = 30
+    cache_time: int = 60
 
     class Config:
         env_prefix = "API__"
