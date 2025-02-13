@@ -44,8 +44,27 @@ class ApiSettings(BaseSettings):
     superuser_email: str = "admin@admin.com"
     superuser_password: str = "admin"
 
+    cache_time: int = 30
+
     class Config:
         env_prefix = "API__"
+
+
+class RedisSettings(BaseSettings):
+    host: str = "localhost"
+    port: int = 6380
+    db: int = 0
+
+    @property
+    def redis_url(self) -> str:
+        return "redis://{host}:{port}/db".format(
+            host=self.host,
+            port=self.port,
+            db=self.db,
+        )
+
+    class Config:
+        env_prefix = "REDIS__"
 
 
 class Settings(BaseSettings):
@@ -54,6 +73,7 @@ class Settings(BaseSettings):
     db: DbSettings = DbSettings()
     access_token: AccessTokenSettings = AccessTokenSettings()
     api: ApiSettings = ApiSettings()
+    redis: RedisSettings = RedisSettings()
 
 
 settings = Settings()

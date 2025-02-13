@@ -1,6 +1,7 @@
 import uvicorn
 from actions.create_superuser import create_superuser
 from authentication.auth_router import router as auth_roter
+from cache import init_cache
 from config import settings
 from exceptions.unauth_handler import custom_unauthorized_handler
 from fastapi import FastAPI
@@ -14,6 +15,8 @@ async def lifespan(app: FastAPI):
         username=settings.api.superuser_name,
         password=settings.api.superuser_password,
     )
+    await init_cache()
+
     yield
 
 
