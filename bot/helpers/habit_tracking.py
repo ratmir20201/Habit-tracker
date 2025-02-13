@@ -23,10 +23,9 @@ class HabitTrackingHelper(ApiHelper):
 
         if response.status_code == HTTP_201_CREATED:
             habit_object = response.json()["habit"]
-            habit_name = habit_object["name"]
             habit_streak = habit_object["streak"]
             if habit_streak >= settings.tg_bot.carry_over_complete_habits_days:
-                return "habit_totally_complete", habit_name
-            return "habit_pointed", habit_name
+                return "habit_totally_complete", habit_object
+            return "habit_pointed", habit_object
         elif response.status_code == HTTP_400_BAD_REQUEST:
             return "habit_not_pointed", None

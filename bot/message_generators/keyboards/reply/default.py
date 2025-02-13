@@ -1,0 +1,5 @@
+start_button = "🚀 Начать"
+info_button = "ℹ️ О боте"
+help_button = "ℹ️ Команды"
+login_button = "🔑 Войти"
+logout_button = "🚪 Выйти"

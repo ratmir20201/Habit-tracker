@@ -1,15 +1,27 @@
-from constants.all_commands import (DEFAULT_COMMANDS, HABITS_COMMANDS,
-                                    TRACKING_COMMANDS)
-from utils.help_message_generator import \
-    create_command_descr_text_for_command_help
+from constants.all_commands import DEFAULT_COMMANDS, HABITS_COMMANDS, TRACKING_COMMANDS
+
 
 echo_message = "К сожалению я не знаю такой команды."
-hello_message = "Привет! Я Telegram-бот с FastAPI!"
+hello_message = "👋 Привет! Я бот для отслеживания привычек."
 
 info_message = (
     "Я помогу вам выработать новые хорошие привычки. Мы будем вместе отслеживать ваши действия и замерять ваш прогресс. "
     "Помните лучшее время чтобы начать это сегодня."
 )
+
+
+def create_command_descr_text_for_command_help(
+    commands: tuple[tuple[str, str]],
+) -> str:
+    text_commands = "\n".join(
+        "/{command} - _{description}_".format(
+            command=command,
+            description=description,
+        )
+        for command, description in commands
+    )
+
+    return text_commands
 
 
 def generate_help_message() -> str:

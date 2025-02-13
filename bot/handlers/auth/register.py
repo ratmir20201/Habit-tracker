@@ -1,8 +1,10 @@
 from helpers.auth import AuthenticationHelper
 from message_generators.errors.auth import user_already_exist_message
 from message_generators.responses.auth import register_success_message
-from message_generators.services.auth import (input_name_message,
-                                              try_again_register_message)
+from message_generators.services.auth import (
+    input_name_message,
+    try_again_register_message,
+)
 from telebot.types import Message
 
 from bot import tg_bot

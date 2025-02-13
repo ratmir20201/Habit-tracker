@@ -1,36 +1,37 @@
 from typing import Any
 
 from helpers.habits import HabitsHelper
+from keyboards.reply.choice_habit import get_habits_keyboard
+from keyboards.reply.habits import get_habits_crud_keyboard
 from message_generators.errors.habits import habits_not_exist_message
+from message_generators.keyboards.reply.habits import delete_habit_button
 from message_generators.responses.habits import generate_delete_habit_message
 from message_generators.services.habits import answer_habit_delete_message
-from telebot.types import KeyboardButton, Message, ReplyKeyboardMarkup
-from utils.get_habit_by_name import get_habit_object_from_habits_by_name
+from telebot.types import Message
 
 from bot import tg_bot
+from utils.get_habit_by_name import (
+    get_habit_name_from_user,
+    get_habit_object_from_habits_by_name,
+)
 
 
 @tg_bot.message_handler(commands=["deletehabit"])
-def get_habit_name_what_we_update(message: Message):
-    """Запрашиваем у пользователя название привычки."""
-    habits_helper = HabitsHelper(message)
-    habits = habits_helper.get_user_habits()
-
-    if not habits:
-        tg_bot.send_message(message.chat.id, habits_not_exist_message)
-        return
-
-    # Создаем клавиатуру с привычками
-    keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-    for habit in habits:
-        keyboard.add(KeyboardButton(habit["name"]))
-
-    tg_bot.send_message(
-        message.chat.id,
-        answer_habit_delete_message,
-        reply_markup=keyboard,
+def delete_habit_by_keyboard_command(message: Message):
+    get_habit_name_from_user(
+        message=message,
+        message_text=answer_habit_delete_message,
+        next_step_handler=delete_habit,
     )
-    tg_bot.register_next_step_handler(message, delete_habit, habits)
+
+
+@tg_bot.message_handler(func=lambda message: message.text == delete_habit_button)
+def delete_habit_by_keyboard(message: Message):
+    get_habit_name_from_user(
+        message=message,
+        message_text=answer_habit_delete_message,
+        next_step_handler=delete_habit,
+    )
 
 
 def delete_habit(message: Message, habits: list[dict[str, Any]]):
@@ -42,5 +43,6 @@ def delete_habit(message: Message, habits: list[dict[str, Any]]):
     tg_bot.send_message(
         message.chat.id,
         generate_delete_habit_message(habit_name=habit_object["name"]),
+        reply_markup=get_habits_crud_keyboard(),
         parse_mode="Markdown",
     )

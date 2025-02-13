@@ -1,5 +1,7 @@
-from typing import Any
+from typing import Any, Callable
 
+from helpers.habits import HabitsHelper
+from keyboards.reply.choice_habit import get_habits_keyboard
 from message_generators.errors.habits import habit_not_exist_message
 from telebot.types import Message
 
@@ -26,3 +28,26 @@ def get_habit_object_from_habits_by_name(
         return None
 
     return habit_object
+
+
+def get_habit_name_from_user(
+    message: Message,
+    message_text: str,
+    next_step_handler: Callable,
+) -> None:
+    """Запрашиваем у пользователя название привычки."""
+
+    habits_helper = HabitsHelper(message)
+    habits = habits_helper.get_user_habits()
+
+    if not habits:
+        return
+
+    keyboard = get_habits_keyboard(habits)
+
+    tg_bot.send_message(
+        message.chat.id,
+        message_text,
+        reply_markup=keyboard,
+    )
+    tg_bot.register_next_step_handler(message, next_step_handler, habits)
