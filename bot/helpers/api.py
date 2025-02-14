@@ -71,7 +71,7 @@ class ApiHelper(ABC):
             )
             return response
         except requests.exceptions.RequestException as e:
-            logger.error(f"Ошибка запроса: {e}")
+            logger.error("Ошибка запроса: {}".format(e))
             tg_bot.send_message(
                 self.message.chat.id,
                 unexpected_server_error_message,

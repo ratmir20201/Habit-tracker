@@ -128,6 +128,11 @@ async def get_user_habits(
     user: User = Depends(user_by_id),
     current_user: User = Depends(fastapi_users.current_user(superuser=True)),
 ):
+    """
+    Endpoint для получения привычек пользователя по его id.
+
+    Может использовать только superuser.
+    """
     all_habits = await get_habits_by_user_id(
         session=session,
         user_id=user.id,

@@ -17,12 +17,8 @@ async def get_users_with_telegram_id(session: AsyncSession) -> list[User]:
 
 
 async def get_untracked_habits(session: AsyncSession) -> list[dict[str, Any]]:
-    """
-    Функция для получения непомеченных привычек пользователей с telegram_id.
+    """Функция для получения непомеченных привычек пользователей с telegram_id."""
 
-    Функция возвращает словарь, где ключ это telegram_id пользователя, а
-    значение это список объектов привычки пользователя.
-    """
     users_with_telegram_id = await get_users_with_telegram_id(session=session)
     last_24_hours = datetime.now() - timedelta(days=1)
 

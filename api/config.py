@@ -40,6 +40,8 @@ class AccessTokenSettings(BaseSettings):
 
 
 class ApiSettings(BaseSettings):
+    """Настройки api сервера."""
+
     superuser_name: str = "admin"
     superuser_email: str = "admin@admin.com"
     superuser_password: str = "admin"
@@ -51,6 +53,8 @@ class ApiSettings(BaseSettings):
 
 
 class RedisSettings(BaseSettings):
+    """Настройки Redis."""
+
     host: str = "localhost"
     port: int = 6380
     db: int = 0

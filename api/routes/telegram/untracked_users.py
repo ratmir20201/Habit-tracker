@@ -24,6 +24,12 @@ async def untracked_users(
     session: AsyncSession = Depends(get_session),
     current_user: User = Depends(fastapi_users.current_user(superuser=True)),
 ):
+    """
+    Endpoint для получения пользователей не отметивших свои привычки.
+
+    Может использовать только superuser.
+    """
+
     untracked_users_habits = await get_untracked_habits(session=session)
 
     result = []

@@ -8,8 +8,6 @@ class TelegramBotSettings(BaseSettings):
     """Настройки телеграмм бота."""
 
     token: str = ""
-    webhook_url: str = ""
-    carry_over_complete_habits_days: int = 21
 
     class Config:
         env_prefix = "TG__"
@@ -19,21 +17,21 @@ class ApiSettings(BaseSettings):
     """Настройки api сервера."""
 
     url: str = "http://localhost:8000"
+    superuser_email: str = "admin@admin.com"
+    superuser_password: str = "admin"
 
     class Config:
         env_prefix = "API__"
 
 
-class RedisSettings(BaseSettings):
-    """Настройки Redis."""
+class NotificationSettings(BaseSettings):
+    """Настройки сервиса уведомлений."""
 
-    host: str = "localhost"
-    port: int = 6379
-    db: int = 0
-    token_expire: int = 3600
+    hour_we_remind: int = 17
+    timezone: str = "Asia/Almaty"
 
     class Config:
-        env_prefix = "REDIS__"
+        env_prefix = "NOTIFICATION__"
 
 
 class Settings(BaseSettings):
@@ -41,7 +39,7 @@ class Settings(BaseSettings):
 
     tg_bot: TelegramBotSettings = TelegramBotSettings()
     api: ApiSettings = ApiSettings()
-    redis: RedisSettings = RedisSettings()
+    notification: NotificationSettings = NotificationSettings()
 
 
 settings = Settings()

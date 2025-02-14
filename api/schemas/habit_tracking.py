@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import datetime
+from datetime import date
 
 from pydantic import BaseModel
 from schemas.habit import HabitResponse
@@ -24,7 +24,7 @@ class HabitTrackingResponse(HabitTrackingBase):
     """Схема трекера привычки с дополнительными данными."""
 
     id: int
-    date: datetime.datetime
+    date: date
     habit: HabitResponse
 
     class Config:
