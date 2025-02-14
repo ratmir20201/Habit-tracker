@@ -1,37 +1,23 @@
-from random import random
-
-from fastapi_cache.decorator import cache
-
 from authentication.fastapi_users_router import fastapi_users
 from config import settings
-from crud.habits import (
-    create_habit,
-    delete_habit_by_id,
-    get_habits_by_user_id,
-    update_habit_by_id,
-)
+from crud.habits import (create_habit, delete_habit_by_id,
+                         get_habits_by_user_id, update_habit_by_id)
 from database.db import get_session
 from dependencies.habits import habit_by_id
 from dependencies.users import user_by_id
-from exceptions.habits import (
-    add_habit_responses,
-    delete_habit_responses,
-    get_all_my_habits_responses,
-    get_habit_by_id_responses,
-    update_habit_responses,
-    get_all_user_habits_responses,
-)
+from exceptions.habits import (add_habit_responses, delete_habit_responses,
+                               get_all_my_habits_responses,
+                               get_all_user_habits_responses,
+                               get_habit_by_id_responses,
+                               update_habit_responses)
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi_cache.decorator import cache
 from models import User
 from models.habit import Habit
 from schemas.habit import HabitBase, HabitCreate, HabitResponse, HabitUpdate
 from sqlalchemy.ext.asyncio import AsyncSession
-from starlette.status import (
-    HTTP_200_OK,
-    HTTP_201_CREATED,
-    HTTP_204_NO_CONTENT,
-    HTTP_403_FORBIDDEN,
-)
+from starlette.status import (HTTP_200_OK, HTTP_201_CREATED,
+                              HTTP_204_NO_CONTENT, HTTP_403_FORBIDDEN)
 
 router = APIRouter(tags=["Habits"], prefix="/habits")
 
@@ -136,6 +122,7 @@ async def get_habit_by_id(
     response_model=list[HabitResponse],
     responses=get_all_user_habits_responses,
 )
+@cache(expire=settings.api.cache_time)
 async def get_user_habits(
     session: AsyncSession = Depends(get_session),
     user: User = Depends(user_by_id),

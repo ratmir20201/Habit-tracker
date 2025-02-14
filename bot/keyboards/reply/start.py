@@ -1,13 +1,10 @@
-from telebot.types import ReplyKeyboardMarkup, KeyboardButton
-
-from message_generators.keyboards.reply.default import (
-    start_button,
-    info_button,
-    login_button,
-    logout_button,
-    help_button,
-)
+from message_generators.keyboards.reply.default import (help_button,
+                                                        info_button,
+                                                        login_button,
+                                                        logout_button,
+                                                        start_button)
 from message_generators.services.keyboards import choose_command_message
+from telebot.types import KeyboardButton, ReplyKeyboardMarkup
 
 
 def get_start_keyboard():

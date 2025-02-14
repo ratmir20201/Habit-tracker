@@ -8,12 +8,10 @@ from message_generators.keyboards.reply.habits import delete_habit_button
 from message_generators.responses.habits import generate_delete_habit_message
 from message_generators.services.habits import answer_habit_delete_message
 from telebot.types import Message
+from utils.get_habit_by_name import (get_habit_name_from_user,
+                                     get_habit_object_from_habits_by_name)
 
 from bot import tg_bot
-from utils.get_habit_by_name import (
-    get_habit_name_from_user,
-    get_habit_object_from_habits_by_name,
-)
 
 
 @tg_bot.message_handler(commands=["deletehabit"])

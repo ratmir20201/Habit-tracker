@@ -1,15 +1,13 @@
 from helpers.habit_tracking import HabitTrackingHelper
 from helpers.habits import HabitsHelper
-from keyboards.inline.confirmation_tracking import get_confirmation_tracking_keyboard
+from keyboards.inline.confirmation_tracking import \
+    get_confirmation_tracking_keyboard
 from keyboards.reply.habits import get_habits_crud_keyboard
 from message_generators.keyboards.reply.habits import track_all_habit_button
-from message_generators.responses.congratulations import (
-    generate_congratulations_message,
-)
+from message_generators.responses.congratulations import \
+    generate_congratulations_message
 from message_generators.responses.tracking import (
-    habit_already_pointed_message,
-    generate_is_tracked,
-)
+    generate_is_tracked, habit_already_pointed_message)
 from message_generators.services.tracking import generate_answer_track_message
 from telebot.types import Message
 

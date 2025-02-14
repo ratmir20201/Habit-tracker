@@ -5,15 +5,11 @@ from keyboards.reply.choice_habit import get_habits_keyboard
 from keyboards.reply.habits import get_habits_crud_keyboard
 from message_generators.keyboards.reply.habits import edit_habit_button
 from message_generators.responses.habits import generate_edit_habit_message
-from message_generators.services.habits import (
-    answer_habit_edit_message,
-    answer_new_habit_name_message,
-)
+from message_generators.services.habits import (answer_habit_edit_message,
+                                                answer_new_habit_name_message)
 from telebot.types import Message
-from utils.get_habit_by_name import (
-    get_habit_object_from_habits_by_name,
-    get_habit_name_from_user,
-)
+from utils.get_habit_by_name import (get_habit_name_from_user,
+                                     get_habit_object_from_habits_by_name)
 
 from bot import tg_bot
 

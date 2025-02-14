@@ -1,5 +1,5 @@
-from constants.all_commands import DEFAULT_COMMANDS, HABITS_COMMANDS, TRACKING_COMMANDS
-
+from constants.all_commands import (DEFAULT_COMMANDS, HABITS_COMMANDS,
+                                    TRACKING_COMMANDS)
 
 echo_message = "К сожалению я не знаю такой команды."
 hello_message = "👋 Привет! Я бот для отслеживания привычек."

@@ -1,9 +1,7 @@
-from telebot.types import BotCommand
-
 from config import settings
-from telebot import TeleBot
-
 from constants.all_commands import ALL_COMMANDS
+from telebot import TeleBot
+from telebot.types import BotCommand
 
 tg_bot = TeleBot(settings.tg_bot.token)
 

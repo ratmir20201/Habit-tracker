@@ -1,7 +1,8 @@
 from handlers.auth.before_register import get_username
 from helpers.auth import AuthenticationHelper
 from helpers.habits import HabitsHelper
-from keyboards.reply.habits import get_create_habit_keyboard, get_habits_crud_keyboard
+from keyboards.reply.habits import (get_create_habit_keyboard,
+                                    get_habits_crud_keyboard)
 from message_generators.keyboards.reply.default import login_button
 from message_generators.responses.auth import auth_success_message
 from message_generators.services.auth import register_suggestion_message

@@ -1,12 +1,10 @@
-from sqlalchemy import select
-from starlette.status import HTTP_404_NOT_FOUND
-
 from database.db import get_session
 from fastapi import Depends, HTTPException
-
 from models import Habit
 from models.user import User
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette.status import HTTP_404_NOT_FOUND
 
 
 async def get_user_db(session: AsyncSession = Depends(get_session)):
