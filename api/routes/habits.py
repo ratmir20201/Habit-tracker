@@ -12,12 +12,14 @@ from crud.habits import (
 )
 from database.db import get_session
 from dependencies.habits import habit_by_id
+from dependencies.users import user_by_id
 from exceptions.habits import (
     add_habit_responses,
     delete_habit_responses,
     get_all_my_habits_responses,
     get_habit_by_id_responses,
     update_habit_responses,
+    get_all_user_habits_responses,
 )
 from fastapi import APIRouter, Depends, HTTPException
 from models import User
@@ -126,6 +128,24 @@ async def get_habit_by_id(
         status_code=HTTP_403_FORBIDDEN,
         detail="У вас недостаточно прав для данной операции.",
     )
+
+
+@router.get(
+    "/user/{user_id}",
+    status_code=HTTP_200_OK,
+    response_model=list[HabitResponse],
+    responses=get_all_user_habits_responses,
+)
+async def get_user_habits(
+    session: AsyncSession = Depends(get_session),
+    user: User = Depends(user_by_id),
+    current_user: User = Depends(fastapi_users.current_user(superuser=True)),
+):
+    all_habits = await get_habits_by_user_id(
+        session=session,
+        user_id=user.id,
+    )
+    return all_habits
 
 
 @router.delete(

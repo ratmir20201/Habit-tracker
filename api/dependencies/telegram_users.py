@@ -11,7 +11,7 @@ from starlette.status import HTTP_404_NOT_FOUND
 async def user_by_telegram_id(
     telegram_id: int,
     session: AsyncSession = Depends(get_session),
-) -> Habit:
+) -> User:
     query_user = await session.execute(
         select(User).where(User.telegram_id == telegram_id)
     )

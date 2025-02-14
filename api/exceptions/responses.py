@@ -11,7 +11,7 @@ habit_already_exist_response = generate_response(
 )
 
 forbid_response = generate_response(
-    description="У вас недостаточно прав для данной операции.",
+    description="Недостаточно прав для данной операции.",
     detail="У вас недостаточно прав для данной операции.",
 )
 
