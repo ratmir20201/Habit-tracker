@@ -1,6 +1,6 @@
 import asyncio
 
-from kafka_producer.reminder import daily_reminders
+from kafka_producer.remind_sender import daily_reminders
 
 
 async def schedule_reminders():

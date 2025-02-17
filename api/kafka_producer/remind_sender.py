@@ -1,14 +1,12 @@
-import asyncio
 import json
 from datetime import datetime
-from typing import Any
 
-from aiokafka import AIOKafkaProducer
 
 from config import settings
 from crud.telegram import get_untracked_habits
 from database.db import get_async_context_session
 from kafka_producer.producer import get_producer
+from kafka_producer.remind_generator import generate_data_for_reminder
 from logger import logger
 from schemas.untrack import HabitSchema
 from validators.valid_untrack import valid_untracked_users_habits
@@ -16,20 +14,10 @@ from validators.valid_untrack import valid_untracked_users_habits
 
 async def send_reminder_to_kafka(telegram_id: int, habits: list[HabitSchema]):
     """Отправляет сообщение в Kafka"""
+
     async with get_producer() as producer:
-        message = json.dumps(
-            {
-                "telegram_id": telegram_id,
-                "habits": [
-                    {
-                        "id": habit.id,
-                        "name": habit.name,
-                        "tracking": [str(track.date) for track in habit.tracking],
-                    }
-                    for habit in habits
-                ],
-            },
-        )
+        data = await generate_data_for_reminder(telegram_id, habits)
+        message = json.dumps(data)
         logger.info(f"Отправка сообщения в топик {settings.notification.topic}...")
         await producer.send_and_wait(
             settings.notification.topic, message.encode("utf-8")
