@@ -10,6 +10,8 @@ from schemas.untrack import HabitSchema, TrackingSchema, UntrackResponseSchema
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.status import HTTP_200_OK
 
+from validators.valid_untrack import valid_untracked_users_habits
+
 router = APIRouter(tags=["Telegram"], prefix="/telegram")
 
 
@@ -31,24 +33,4 @@ async def untracked_users(
     """
 
     untracked_users_habits = await get_untracked_habits(session=session)
-
-    result = []
-
-    for i_user_habits in untracked_users_habits:
-        habits = i_user_habits["habits"]
-        validate_habits = [
-            HabitSchema(
-                id=habit.id,
-                name=habit.name,
-                tracking=[TrackingSchema(date=track.date) for track in habit.tracking],
-            )
-            for habit in habits
-        ]
-        result.append(
-            UntrackResponseSchema(
-                telegram_id=i_user_habits["telegram_id"],
-                habits=validate_habits,
-            )
-        )
-
-    return result
+    return await valid_untracked_users_habits(untracked_users_habits)

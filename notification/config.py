@@ -24,11 +24,20 @@ class ApiSettings(BaseSettings):
         env_prefix = "API__"
 
 
+class KafkaSettings(BaseSettings):
+    """Настройки Kafka."""
+
+    broker: str = "localhost:9092"
+
+    class Config:
+        env_prefix = "KAFKA__"
+
+
 class NotificationSettings(BaseSettings):
     """Настройки сервиса уведомлений."""
 
-    hour_we_remind: int = 17
-    timezone: str = "Asia/Almaty"
+    topic: str = "reminders"
+    client_id: str = "reminder_consumer"
 
     class Config:
         env_prefix = "NOTIFICATION__"
@@ -39,6 +48,7 @@ class Settings(BaseSettings):
 
     tg_bot: TelegramBotSettings = TelegramBotSettings()
     api: ApiSettings = ApiSettings()
+    kafka: KafkaSettings = KafkaSettings()
     notification: NotificationSettings = NotificationSettings()
 
 

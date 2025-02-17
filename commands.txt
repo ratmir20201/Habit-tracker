@@ -1,3 +1,17 @@
 python -c 'import secrets; print(secrets.token_hex())'  # генерация секретных токенов
 poetry install --without dev  # установить только продакшен-зависимости
 redis-server --port 6380   # запустить redis потом в докер использовать
+
+bin/kafka-topics.sh --delete \
+  --topic reminders \
+  --bootstrap-server localhost:9092
+
+# Установить retention.ms на 2 часа
+bin/kafka-configs.sh --bootstrap-server localhost:9092 \
+  --alter --entity-type topics --entity-name reminders \
+  --add-config retention.ms=7200000
+
+
+# Проверка что retention_ms успешно установлен
+docker exec -it kafka kafka-configs.sh --bootstrap-server localhost:9092 \
+  --describe --entity-type topics --entity-name reminders

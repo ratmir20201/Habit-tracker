@@ -19,8 +19,8 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-from api.database.base import Base
-from api import models  # noqa
+from database.base import Base
+import models  # noqa
 
 target_metadata = Base.metadata
 

@@ -71,6 +71,26 @@ class RedisSettings(BaseSettings):
         env_prefix = "REDIS__"
 
 
+class KafkaSettings(BaseSettings):
+    """Настройки Kafka."""
+
+    broker: str = "localhost:9092"
+
+    class Config:
+        env_prefix = "KAFKA__"
+
+
+class NotificationSettings(BaseSettings):
+    """Настройки сервиса уведомлений."""
+
+    topic: str = "reminders"
+    client_id: str = "reminder_producer"
+    hour_we_remind: int = 17
+
+    class Config:
+        env_prefix = "NOTIFICATION__"
+
+
 class Settings(BaseSettings):
     """Общие настройки приложения."""
 
@@ -78,6 +98,8 @@ class Settings(BaseSettings):
     access_token: AccessTokenSettings = AccessTokenSettings()
     api: ApiSettings = ApiSettings()
     redis: RedisSettings = RedisSettings()
+    kafka: KafkaSettings = KafkaSettings()
+    notification: NotificationSettings = NotificationSettings()
 
 
 settings = Settings()
