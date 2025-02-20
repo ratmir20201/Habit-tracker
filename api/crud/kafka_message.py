@@ -1,8 +1,7 @@
 import datetime
 
-from sqlalchemy.ext.asyncio import AsyncSession
 from models import KafkaMessage
-
+from sqlalchemy.ext.asyncio import AsyncSession
 from utils.kafka_message_checker import check_if_kafka_message_already_exist
 
 

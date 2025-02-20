@@ -1,7 +1,6 @@
 import json
 from datetime import datetime
 
-
 from config import settings
 from crud.telegram import get_untracked_habits
 from database.db import get_async_context_session

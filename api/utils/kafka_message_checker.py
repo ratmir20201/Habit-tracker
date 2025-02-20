@@ -1,6 +1,5 @@
 import datetime
 
-
 from logger import logger
 from models import KafkaMessage
 from sqlalchemy import select

@@ -1,11 +1,11 @@
 from fastapi.responses import JSONResponse
+from logger import logger
 from sqlalchemy.exc import SQLAlchemyError
-from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
+from starlette.middleware.base import (BaseHTTPMiddleware,
+                                       RequestResponseEndpoint)
 from starlette.requests import Request
 from starlette.responses import Response
 from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
-
-from logger import logger
 
 
 class ExceptionHandleMiddleware(BaseHTTPMiddleware):

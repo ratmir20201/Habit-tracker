@@ -3,9 +3,9 @@ from actions.create_superuser import create_superuser
 from authentication.auth_router import router as auth_roter
 from cache import init_cache
 from config import settings
-from exceptions.handlers import custom_forbid_handler, custom_unauthorized_handler
+from exceptions.handlers import (custom_forbid_handler,
+                                 custom_unauthorized_handler)
 from fastapi import FastAPI
-
 from middlewares.exception import ExceptionHandleMiddleware
 from middlewares.logging import LoggingMiddleware
 from routes.router import main_router

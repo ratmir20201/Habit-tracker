@@ -1,10 +1,10 @@
 import time
 
-from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
+from logger import logger
+from starlette.middleware.base import (BaseHTTPMiddleware,
+                                       RequestResponseEndpoint)
 from starlette.requests import Request
 from starlette.responses import Response
-
-from logger import logger
 
 
 class LoggingMiddleware(BaseHTTPMiddleware):

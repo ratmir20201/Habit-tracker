@@ -2,7 +2,6 @@ import asyncio
 from contextlib import asynccontextmanager
 
 from aiokafka import AIOKafkaConsumer
-
 from config import settings
 from logger import logger
 

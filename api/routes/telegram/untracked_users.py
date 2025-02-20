@@ -9,7 +9,6 @@ from models import User
 from schemas.untrack import HabitSchema, TrackingSchema, UntrackResponseSchema
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.status import HTTP_200_OK
-
 from validators.valid_untrack import valid_untracked_users_habits
 
 router = APIRouter(tags=["Telegram"], prefix="/telegram")
