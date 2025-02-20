@@ -3,9 +3,17 @@ from database.db import get_async_context_session
 from schemas.untrack import HabitSchema
 
 
-async def generate_data_for_reminder(telegram_id: int, habits: list[HabitSchema]):
+async def generate_data_for_reminder(
+    telegram_id: int,
+    habits: list[HabitSchema],
+) -> dict[str, int | list[HabitSchema]] | None:
     async with get_async_context_session() as session:
-        await create_kafka_message(session=session, telegram_id=telegram_id)
+        kafka_message = await create_kafka_message(
+            session=session,
+            telegram_id=telegram_id,
+        )
+    if not kafka_message:
+        return None
 
     data = {
         "telegram_id": telegram_id,

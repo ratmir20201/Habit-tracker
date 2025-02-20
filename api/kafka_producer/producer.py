@@ -21,7 +21,7 @@ async def get_producer():
     except asyncio.CancelledError:
         logger.info("Задача была отменена. Kafka consumer завершает работу.")
     except Exception as exc:
-        logger.error("Ошибка при работе с Kafka consumer: {exc}".format(exc=exc))
+        logger.error("Ошибка при работе с Kafka consumer: %s", exc)
         raise
     finally:
         await producer.stop()

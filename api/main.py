@@ -31,8 +31,8 @@ app.include_router(auth_roter)
 app.add_exception_handler(HTTP_401_UNAUTHORIZED, custom_unauthorized_handler)
 app.add_exception_handler(HTTP_403_FORBIDDEN, custom_forbid_handler)
 
-app.add_middleware(ExceptionHandleMiddleware)
 app.add_middleware(LoggingMiddleware)
+app.add_middleware(ExceptionHandleMiddleware)
 
 
 if __name__ == "__main__":

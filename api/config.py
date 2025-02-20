@@ -85,7 +85,7 @@ class NotificationSettings(BaseSettings):
 
     topic: str = "reminders"
     client_id: str = "reminder_producer"
-    hour_we_remind: int = 19
+    hour_we_remind: int = 17
 
     class Config:
         env_prefix = "NOTIFICATION__"

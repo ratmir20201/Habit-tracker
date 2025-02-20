@@ -6,6 +6,9 @@ bin/kafka-topics.sh --delete \
   --topic reminders \
   --bootstrap-server localhost:9092
 
+kafka-topics.sh --bootstrap-server localhost:9092 --list
+
+
 # Установить retention.ms на 2 часа
 bin/kafka-configs.sh --bootstrap-server localhost:9092 \
   --alter --entity-type topics --entity-name reminders \
@@ -15,3 +18,7 @@ bin/kafka-configs.sh --bootstrap-server localhost:9092 \
 # Проверка что retention_ms успешно установлен
 docker exec -it kafka kafka-configs.sh --bootstrap-server localhost:9092 \
   --describe --entity-type topics --entity-name reminders
+
+
+# Удалить логи
+rm -rf /home/kafka/kafka/logs/*

@@ -17,16 +17,20 @@ async def send_reminder_to_kafka(telegram_id: int, habits: list[HabitSchema]):
 
     async with get_producer() as producer:
         data = await generate_data_for_reminder(telegram_id, habits)
+
+        if not data:
+            logger.error(
+                "Kafka сообщение с таким telegram_id уже было отправлено сегодня."
+            )
+            return
+
         message = json.dumps(data)
-        logger.info(f"Отправка сообщения в топик {settings.notification.topic}...")
+        logger.info("Отправка сообщения в топик %s ...", settings.notification.topic)
         await producer.send_and_wait(
             settings.notification.topic, message.encode("utf-8")
         )
-        logger.info(
-            "Отправлено в Kafka: {message}.".format(
-                message=json.loads(message),
-            )
-        )
+        log_message = json.loads(message)
+        logger.info("Отправлено в Kafka: %s.", log_message)
 
 
 async def daily_reminders():
