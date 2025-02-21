@@ -12,10 +12,9 @@ RUN pip install poetry
 RUN poetry config virtualenvs.create false
 RUN poetry install --no-root
 
-COPY api /api
-
 RUN apt-get update && apt-get install -y supervisor
 
+COPY api /api
 COPY api/supervisord.ini /etc/supervisor/conf.d/supervisord.conf
 
 # Запускаем supervisord, который выполнит миграции, запустит API и Kafka Producer

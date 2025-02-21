@@ -15,7 +15,6 @@ class UserRead(schemas.BaseUser[int]):
 
 class UserCreate(schemas.BaseUserCreate):
     username: str
-    # habits: list[HabitBase] = field(default_factory=list)
     telegram_id: int | None
 
 

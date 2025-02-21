@@ -1,8 +1,10 @@
 from helpers.auth import AuthenticationHelper
 from message_generators.errors.auth import user_already_exist_message
 from message_generators.responses.auth import register_success_message
-from message_generators.services.auth import (input_name_message,
-                                              try_again_register_message)
+from message_generators.services.auth import (
+    input_name_message,
+    try_again_register_message,
+)
 from telebot.types import Message
 
 from bot import tg_bot
@@ -31,6 +33,7 @@ def register(message: Message, username: str, email: str, password: str):
         tg_bot.send_message(
             message.chat.id,
             register_success_message,
+            parse_mode="Markdown",
         )
     elif my_response == "register_user_already_exist":
         from handlers import get_username
@@ -38,9 +41,11 @@ def register(message: Message, username: str, email: str, password: str):
         tg_bot.send_message(
             message.chat.id,
             user_already_exist_message,
+            parse_mode="Markdown",
         )
         tg_bot.send_message(
             message.chat.id,
             try_again_register_message,
+            parse_mode="Markdown",
         )
         tg_bot.register_next_step_handler(message, get_username)

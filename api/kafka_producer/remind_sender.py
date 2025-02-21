@@ -11,7 +11,7 @@ from schemas.untrack import HabitSchema
 from validators.valid_untrack import valid_untracked_users_habits
 
 
-async def send_reminder_to_kafka(telegram_id: int, habits: list[HabitSchema]):
+async def send_reminder_to_kafka(telegram_id: int, habits: list[HabitSchema]) -> bool:
     """Отправляет сообщение в Kafka"""
 
     async with get_producer() as producer:
@@ -21,7 +21,7 @@ async def send_reminder_to_kafka(telegram_id: int, habits: list[HabitSchema]):
             logger.error(
                 "Kafka сообщение с таким telegram_id уже было отправлено сегодня."
             )
-            return
+            return False
 
         message = json.dumps(data)
         logger.info("Отправка сообщения в топик %s ...", settings.notification.topic)
@@ -31,8 +31,10 @@ async def send_reminder_to_kafka(telegram_id: int, habits: list[HabitSchema]):
         log_message = json.loads(message)
         logger.info("Отправлено в Kafka: %s.", log_message)
 
+        return True
 
-async def daily_reminders():
+
+async def daily_reminders() -> bool:
     """Проверяет время и отправляет напоминания раз в сутки"""
     async with get_async_context_session() as session:
         now = datetime.now()
@@ -46,3 +48,7 @@ async def daily_reminders():
                     telegram_id=i_user_habits.telegram_id,
                     habits=i_user_habits.habits,
                 )
+
+            return True
+
+    return False
