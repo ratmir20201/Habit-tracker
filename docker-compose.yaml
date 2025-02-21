@@ -1,24 +1,54 @@
 services:
-#  server:
-#      build:
-#        context: .
-#        dockerfile: Dockerfile
-#      command: ["uvicorn api.main:app --host 0.0.0.0 --port 5000 --reload"]
-#      ports:
-#        - "5000:5000"
-#      restart: always
-#      env_file:
-#        - .env
-#      environment:
-#        - DATABASE_URL=postgresql+asyncpg://${DB__USER}:${DB__PASSWORD}@${DB__HOST}:${DB__PORT}/${DB__NAME}
-#      depends_on:
-#        postgres:
-#          condition: service_healthy
-#      networks:
-#        - app-network
+  api:
+    container_name: api
+    build:
+      dockerfile: api/Dockerfile
+    env_file:
+      - api/.env
+    command: ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
+      - kafka-network
+
+  ngrok:
+    container_name: ngrok
+    image: ngrok/ngrok
+    restart: always
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK__AUTHTOKEN}
+    command: [ "http", "bot:8001" ]
+    ports:
+      - "4040:4040"
+    networks:
+      - bot-network
+
+  bot:
+    container_name: bot
+    build:
+      dockerfile: bot/Dockerfile
+    restart: always
+    env_file:
+      - bot/.env
+    command: [ "/bin/bash", "/bot/get_ngrok_url.sh" ]
+    ports:
+      - "8001:8001"
+    depends_on:
+      - ngrok
+    networks:
+      - bot-network
+      - app-network
 
   postgres:
+    container_name: postgres
     image: postgres:17.2
+    env_file:
+      - .env
     environment:
       - POSTGRES_DB=${DB__NAME}
       - POSTGRES_USER=${DB__USER}
@@ -28,15 +58,57 @@ services:
       - log_directory=/var/lib/postgresql/data/log
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -d ${DB__NAME} -U ${DB__USER}" ]
-      interval: 30s
-      timeout: 60s
-      retries: 5
-      start_period: 80s
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
     ports:
       - "${DB__PORT}:${DB__PORT}"
     networks:
       - app-network
 
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - bot-network
+      - app-network
+
+  zookeeper:
+    container_name: zookeeper
+    image: confluentinc/cp-zookeeper:latest
+    restart: always
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - "2181:2181"
+    networks:
+      - kafka-network
+
+  kafka:
+    container_name: kafka
+    image: confluentinc/cp-kafka:latest
+    restart: always
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+    networks:
+      - kafka-network
+
 networks:
   app-network:
+    driver: bridge
+  bot-network:
+    driver: bridge
+  kafka-network:
     driver: bridge

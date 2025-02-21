@@ -10,6 +10,7 @@ async def init_cache():
     logger.info("Инициализация кеша...")
 
     redis = aioredis.from_url(settings.redis.redis_url)
+    await redis.ping()
     FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
 
     logger.info("Кэш успешно инициализирован!")

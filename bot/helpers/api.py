@@ -1,18 +1,14 @@
-import logging
 from abc import ABC
 
 import requests
 from config import settings
 from message_generators.errors.auth import user_not_authorized_message
-from message_generators.errors.unexpected import \
-    unexpected_server_error_message
+from message_generators.errors.unexpected import unexpected_server_error_message
 from redis_cache.client import get_redis_client
 from telebot.types import CallbackQuery, Message
 
 from bot import tg_bot
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+from logger import logger
 
 
 class ApiHelper(ABC):

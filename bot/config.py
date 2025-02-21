@@ -27,7 +27,7 @@ class ApiSettings(BaseSettings):
 class RedisSettings(BaseSettings):
     """Настройки Redis."""
 
-    host: str = "localhost"
+    host: str = "redis"
     port: int = 6379
     db: int = 0
     token_expire: int = 3600

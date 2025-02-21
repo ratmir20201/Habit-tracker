@@ -12,7 +12,7 @@ class DbSettings(BaseSettings):
     host: str = "postgres"
     port: int = 5432
     name: str = ""
-    echo: bool = True
+    echo: bool = False
 
     @property
     def db_url(self) -> str:
@@ -56,7 +56,7 @@ class RedisSettings(BaseSettings):
     """Настройки Redis."""
 
     host: str = "localhost"
-    port: int = 6380
+    port: int = 6379
     db: int = 0
 
     @property

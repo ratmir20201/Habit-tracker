@@ -1,34 +1,30 @@
-import asyncio
-
 import uvicorn
-from config import settings
 from fastapi import FastAPI, HTTPException, Request
-from telebot import types
+from telebot import types, logger
 
-from bot import tg_bot
-
-app = FastAPI()
+from bot import tg_bot, set_webhook
 
 
-async def set_webhook():
-    tg_bot.delete_webhook(drop_pending_updates=True)
+async def lifespan(app: FastAPI):
+    await set_webhook()
+    yield
 
-    await asyncio.sleep(1)
 
-    tg_bot.set_webhook(url=settings.tg_bot.webhook_url)
+app = FastAPI(lifespan=lifespan)
 
 
 @app.post("/")
 async def telegram_webhook(request: Request):
     try:
         json_data = await request.json()
+        logger.info("Получен Webhook: %s", json_data)
         update = types.Update.de_json(json_data)
         tg_bot.process_new_updates([update])
     except Exception as e:
+        logger.info("Ошибка Webhook: %s", str(e))
         raise HTTPException(status_code=500, detail=str(e))
     return {"ok": True}
 
 
 if __name__ == "__main__":
-    asyncio.run(set_webhook())
-    uvicorn.run("main:app", reload=True, port=8001)
+    uvicorn.run("main:app", reload=True, port=8001, host="0.0.0.0")
