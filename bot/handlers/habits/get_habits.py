@@ -1,7 +1,6 @@
-from typing import Any
-
 from helpers.habits import HabitsHelper
 from keyboards.reply.habits import get_habits_crud_keyboard
+from message_generators.errors.habits import habits_not_exist_message
 from message_generators.keyboards.reply.habits import get_habits_button
 from message_generators.responses.habits import generate_get_habits_message
 from telebot.types import Message
@@ -24,6 +23,10 @@ def get_habits(message: Message) -> None:
 
     habits_helper = HabitsHelper(message)
     habits = habits_helper.get_user_habits()
+
+    if not habits:
+        tg_bot.send_message(message.chat.id, habits_not_exist_message)
+        return
 
     message_text = generate_get_habits_message(habits=habits)
     tg_bot.send_message(
