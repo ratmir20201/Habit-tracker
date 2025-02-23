@@ -5,7 +5,7 @@ from kafka_producer.remind_sender import daily_reminders
 from logger import logger
 
 
-async def schedule_reminders():
+async def schedule_reminders() -> None:
     """Запускает фоновый процесс отправки напоминаний."""
     while True:
         is_delivered = await daily_reminders()

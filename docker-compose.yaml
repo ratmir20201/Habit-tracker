@@ -78,7 +78,7 @@ services:
 
   redis:
     container_name: redis
-    image: redis:latest
+    image: redis:7.4.2
     restart: always
     environment:
       TZ: ${TIMEZONE}
@@ -103,8 +103,8 @@ services:
     ports:
       - "2181:2181"
     volumes:
-      - zookeeper_data:/var/lib/zookeeper
-      - zookeeper_log:/var/log/zookeeper
+      - zookeeper_data:/data
+      - zookeeper_log:/datalog
     networks:
       - kafka-network
 

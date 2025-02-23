@@ -23,3 +23,6 @@ class Habit(Base, IdIntPkMixin):
     def streak(self) -> int:
         """Получает количество дней выполнения привычки."""
         return len(self.tracking)
+
+
+from models import HabitTracking, User

@@ -22,5 +22,5 @@ async def user_by_id(
 
     raise HTTPException(
         status_code=HTTP_404_NOT_FOUND,
-        detail="Пользователь с таким id не был найден.".format(user_id),
+        detail="Пользователь с таким id {} не был найден.".format(user_id),
     )

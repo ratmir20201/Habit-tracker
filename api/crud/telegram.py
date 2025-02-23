@@ -1,5 +1,5 @@
 from datetime import date, datetime, timedelta
-from typing import Any
+from typing import Any, Sequence
 
 from models import Habit, HabitTracking, User
 from schemas.untrack import HabitSchema, TrackingSchema
@@ -7,7 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
-async def get_users_with_telegram_id(session: AsyncSession) -> list[User]:
+async def get_users_with_telegram_id(session: AsyncSession) -> Sequence[User]:
     """Получить пользователей, у которых есть telegram_id."""
     users_query = await session.execute(
         select(User).where(User.telegram_id.isnot(None)),

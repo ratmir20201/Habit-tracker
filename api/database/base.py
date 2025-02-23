@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from sqlalchemy.orm import DeclarativeBase, declared_attr
 
 
@@ -17,7 +19,7 @@ class Base(DeclarativeBase):
         return result_table_name.lower() + "s"
 
     repr_cols_num = 3
-    repr_cols = tuple()
+    repr_cols: Tuple[str, ...] = tuple()
 
     def __repr__(self):
         cols = []
@@ -25,11 +27,12 @@ class Base(DeclarativeBase):
             if col in self.repr_cols or idx < self.repr_cols_num:
                 cols.append(
                     "{col_name}={col_value}".format(
-                        col_name=col, col_value=getattr(self, col)
+                        col_name=col,
+                        col_value=getattr(self, col),
                     )
                 )
 
-        return "<{class_name}(cols)>".format(
+        return "<{class_name}({cols})>".format(
             class_name=self.__class__.__name__,
-            cols=cols,
+            cols=", ".join(cols),
         )

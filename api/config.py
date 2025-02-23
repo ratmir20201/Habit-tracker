@@ -61,7 +61,7 @@ class RedisSettings(BaseSettings):
 
     @property
     def redis_url(self) -> str:
-        return "redis://{host}:{port}/db".format(
+        return "redis://{host}:{port}/{db}".format(
             host=self.host,
             port=self.port,
             db=self.db,

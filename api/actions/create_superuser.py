@@ -1,4 +1,5 @@
 import contextlib
+from typing import Optional
 
 from authentication.user_manager import UserManager
 from database.db import get_async_context_session
@@ -26,7 +27,7 @@ async def create_superuser(
     email: str,
     username: str,
     password: str,
-    telegram_id: int = None,
+    telegram_id: Optional[int] = None,
     is_active: bool = True,
     is_superuser: bool = True,
     is_verified: bool = True,

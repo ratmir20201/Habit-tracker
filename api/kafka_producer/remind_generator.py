@@ -1,12 +1,12 @@
 from crud.kafka_message import create_kafka_message
 from database.db import get_async_context_session
-from schemas.untrack import HabitSchema
+from schemas.untrack import HabitSchema, UntrackResponseSchema
 
 
 async def generate_data_for_reminder(
     telegram_id: int,
     habits: list[HabitSchema],
-) -> dict[str, int | list[HabitSchema]] | None:
+) -> UntrackResponseSchema:
     async with get_async_context_session() as session:
         kafka_message = await create_kafka_message(
             session=session,
