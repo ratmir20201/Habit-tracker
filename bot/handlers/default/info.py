@@ -1,3 +1,5 @@
+from typing import Callable, cast
+
 from message_generators.keyboards.reply.default import info_button
 from message_generators.responses.default_commands import info_message
 from telebot.types import Message
@@ -5,13 +7,16 @@ from telebot.types import Message
 from bot import tg_bot
 
 
-@tg_bot.message_handler(commands=["info"])
+@cast(Callable[[Message], None], tg_bot.message_handler(commands=["info"]))
 def info_by_command(message: Message):
     get_info(message)
 
 
-@tg_bot.message_handler(func=lambda message: message.text == info_button)
-def info_by_command(message: Message):
+@cast(
+    Callable[[Message], None],
+    tg_bot.message_handler(func=lambda message: message.text == info_button),
+)
+def info_by_keyboard(message: Message):
     get_info(message)
 
 

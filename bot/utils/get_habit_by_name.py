@@ -6,20 +6,21 @@ from message_generators.errors.habits import (
     habit_not_exist_message,
     habits_not_exist_message,
 )
-from telebot.types import Message
+from telebot.types import Message, ReplyKeyboardMarkup
 
 from bot import tg_bot
+from schemas.habit import HabitSchema
 
 
 def get_habit_object_from_habits_by_name(
     message: Message,
-    habits: list[dict[str, Any]],
-) -> dict[str, Any] | None:
+    habits: list[HabitSchema],
+) -> HabitSchema | None:
     habit_name = message.text.strip().capitalize()
     habit_object = None
 
     for habit in habits:
-        if habit_name == habit["name"]:
+        if habit_name == habit.name:
             habit_object = habit
             break
 
@@ -36,7 +37,7 @@ def get_habit_object_from_habits_by_name(
 def get_habit_name_from_user(
     message: Message,
     message_text: str,
-    next_step_handler: Callable,
+    next_step_handler: Callable[[Message, list[HabitSchema]], None],
 ) -> None:
     """Запрашиваем у пользователя название привычки."""
 

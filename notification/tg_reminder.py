@@ -2,7 +2,7 @@ from typing import Any
 
 from generate_message import generate_reminder_message
 
-from bot import tg_bot
+from .bot import tg_bot
 
 
 async def send_reminders(untracked_user_habits: dict[str, Any]) -> None:

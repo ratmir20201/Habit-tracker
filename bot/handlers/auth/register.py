@@ -1,5 +1,10 @@
+from typing import Callable, cast
+
 from helpers.auth import AuthenticationHelper
-from message_generators.errors.auth import user_already_exist_message
+from message_generators.errors.auth import (
+    user_already_exist_message,
+    unexpected_register_error_message,
+)
 from message_generators.responses.auth import register_success_message
 from message_generators.services.auth import (
     input_name_message,
@@ -9,16 +14,23 @@ from telebot.types import Message
 
 from bot import tg_bot
 
+from validators.register_validator import validate_user_data
 
-@tg_bot.message_handler(commands=["register"])
+
+@cast(Callable[[Message], None], tg_bot.message_handler(commands=["register"]))
 def register_new_user(message: Message):
-    from handlers import get_username
+    from handlers.auth.before_register import get_username
 
     tg_bot.send_message(message.chat.id, input_name_message)
     tg_bot.register_next_step_handler(message, get_username)
 
 
-def register(message: Message, username: str, email: str, password: str):
+def register(
+    message: Message,
+    username: str,
+    email: str,
+    password: str,
+) -> None:
     user_data = {
         "telegram_id": message.from_user.id,
         "username": username,
@@ -26,8 +38,12 @@ def register(message: Message, username: str, email: str, password: str):
         "password": password,
     }
 
+    valid_user_data = validate_user_data(message, user_data)
+    if valid_user_data is None:
+        return None
+
     auth_helper = AuthenticationHelper(message)
-    my_response = auth_helper.register_user(user_data=user_data)
+    my_response = auth_helper.register_user(user_data=valid_user_data)
 
     if my_response == "success":
         tg_bot.send_message(
@@ -35,8 +51,9 @@ def register(message: Message, username: str, email: str, password: str):
             register_success_message,
             parse_mode="Markdown",
         )
+        return
     elif my_response == "register_user_already_exist":
-        from handlers import get_username
+        from handlers.auth.before_register import get_username
 
         tg_bot.send_message(
             message.chat.id,
@@ -49,3 +66,10 @@ def register(message: Message, username: str, email: str, password: str):
             parse_mode="Markdown",
         )
         tg_bot.register_next_step_handler(message, get_username)
+        return
+
+    tg_bot.send_message(
+        message.chat.id,
+        unexpected_register_error_message,
+    )
+    return

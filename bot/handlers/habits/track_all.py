@@ -1,8 +1,16 @@
-from helpers.habit_tracking import HabitTrackingHelper
+from typing import cast, Callable
+
+from helpers.habit_tracking import (
+    HabitTrackingHelper,
+    HABIT_ALREADY_POINTED,
+    HABIT_COMPLETED,
+    HABIT_POINTED,
+)
 from helpers.habits import HabitsHelper
 from keyboards.inline.confirmation_tracking import get_confirmation_tracking_keyboard
 from keyboards.reply.habits import get_habits_crud_keyboard
 from message_generators.errors.habits import habits_not_exist_message
+from message_generators.errors.server import unexpected_server_error_message
 from message_generators.keyboards.reply.habits import track_all_habit_button
 from message_generators.responses.congratulations import (
     generate_congratulations_message,
@@ -12,22 +20,25 @@ from message_generators.responses.tracking import (
     habit_already_pointed_message,
 )
 from message_generators.services.tracking import generate_answer_track_message
-from telebot.types import Message
+from telebot.types import Message, CallbackQuery
 
 from bot import tg_bot
 
 
-@tg_bot.message_handler(commands=["trackall"])
-def track_all_by_command(message: Message):
+@cast(Callable[[Message], None], tg_bot.message_handler(commands=["trackall"]))
+def track_all_by_command(message: Message) -> None:
     add_habits_tracking(message)
 
 
-@tg_bot.message_handler(func=lambda message: message.text == track_all_habit_button)
-def track_all_by_keyboard(message: Message):
+@cast(
+    Callable[[Message], None],
+    tg_bot.message_handler(func=lambda message: message.text == track_all_habit_button),
+)
+def track_all_by_keyboard(message: Message) -> None:
     add_habits_tracking(message)
 
 
-def add_habits_tracking(message: Message):
+def add_habits_tracking(message: Message) -> None:
     """Отправляем пользователю все его привычки для отметки."""
 
     habits_helper = HabitsHelper(message)
@@ -40,32 +51,37 @@ def add_habits_tracking(message: Message):
     for habit in habits:
         tg_bot.send_message(
             message.chat.id,
-            generate_answer_track_message(habit_name=habit["name"]),
-            reply_markup=get_confirmation_tracking_keyboard(habit["id"]),
+            generate_answer_track_message(habit_name=habit.name),
+            reply_markup=get_confirmation_tracking_keyboard(habit.id),
             parse_mode="Markdown",
         )
 
 
-@tg_bot.callback_query_handler(
-    func=lambda call: call.data.startswith("confirm_yes")
-    or call.data.startswith("confirm_no")
+@cast(
+    Callable[[Message], None],
+    tg_bot.callback_query_handler(
+        func=lambda call: call.data.startswith("confirm_yes")
+        or call.data.startswith("confirm_no")
+    ),
 )
-def handle_confirmation(call):
+def handle_confirmation(call: CallbackQuery) -> None:
     action, habit_id = call.data.rsplit("_", 1)
     habit_id = int(habit_id)
     if action == "confirm_yes":
         habit_tracking_helper = HabitTrackingHelper(call)
         my_response, habit = habit_tracking_helper.add_tracking(habit_id=habit_id)
 
-        if my_response == "habit_pointed":
+        if (my_response == HABIT_POINTED) and (habit is not None):
             message_text = generate_is_tracked(
-                habit_name=habit["name"],
-                habit_streak=habit["streak"],
+                habit_name=habit.name,
+                habit_streak=habit.streak,
             )
-        elif my_response == "habit_totally_complete":
-            message_text = generate_congratulations_message(habit_name=habit["name"])
-        else:
+        elif (my_response == HABIT_COMPLETED) and (habit is not None):
+            message_text = generate_congratulations_message(habit_name=habit.name)
+        elif my_response == HABIT_ALREADY_POINTED:
             message_text = habit_already_pointed_message
+        else:
+            message_text = unexpected_server_error_message
 
         tg_bot.send_message(
             call.message.chat.id,

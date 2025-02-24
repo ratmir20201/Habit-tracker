@@ -1,13 +1,13 @@
-from typing import Any
+from schemas.habit import HabitSchema
 
 
-def generate_get_habits_message(habits: list[dict[str, Any]]) -> str:
+def generate_get_habits_message(habits: list[HabitSchema]) -> str:
     message_text = "✨ *Ваши привычки:*\n\n"
 
     for habit in habits:
-        message_text += "📌 *{habit_name}*\n".format(habit_name=habit["name"])
+        message_text += "📌 *{habit_name}*\n".format(habit_name=habit.name)
         message_text += "   🔥 Дней подряд: *{habit_streak}*\n\n".format(
-            habit_streak=habit["streak"],
+            habit_streak=habit.streak,
         )
 
     return message_text

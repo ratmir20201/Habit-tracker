@@ -1,14 +1,19 @@
 from abc import ABC
+from typing import Optional, Any
 
 import requests
+from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
+
 from config import settings
+from exceptions.api_handler import api_error_handler
 from message_generators.errors.auth import user_not_authorized_message
-from message_generators.errors.unexpected import unexpected_server_error_message
+from message_generators.errors.server import unexpected_server_error_message
 from redis_cache.client import get_redis_client
 from telebot.types import CallbackQuery, Message
 
 from bot import tg_bot
 from logger import logger
+from schemas.exceptions import APIRequestError, UnexpectedServerError
 
 
 class ApiHelper(ABC):
@@ -47,13 +52,14 @@ class ApiHelper(ABC):
         )
         return None
 
+    @api_error_handler
     def _send_request(
         self,
         method: str,
         endpoint: str,
-        data: dict = None,
-        params: dict = None,
-    ) -> requests.Response | None:
+        data: Optional[dict[Any, Any]] = None,
+        params: Optional[dict[Any, Any]] = None,
+    ) -> requests.Response:
         """Метод для создания запросов к api."""
 
         url = "{api}{endpoint}".format(api=self.API_URL, endpoint=endpoint)
@@ -65,6 +71,8 @@ class ApiHelper(ABC):
                 json=data,
                 params=params,
             )
+            if response.status_code == HTTP_500_INTERNAL_SERVER_ERROR:
+                raise UnexpectedServerError("Непредвиденная ошибка сервера.")
             return response
         except requests.exceptions.RequestException as e:
             logger.error("Ошибка запроса: {}".format(e))
@@ -72,4 +80,4 @@ class ApiHelper(ABC):
                 self.message.chat.id,
                 unexpected_server_error_message,
             )
-            return None
+            raise APIRequestError("Ошибка запроса к API")

@@ -1,10 +1,7 @@
-from typing import Any
-
 from helpers.api import ApiHelper
 from message_generators.errors.habits import (
     delete_habit_error_message,
     habit_already_exist_message,
-    habits_not_exist_message,
 )
 from starlette.status import (
     HTTP_200_OK,
@@ -16,6 +13,7 @@ from starlette.status import (
 from telebot.types import Message
 
 from bot import tg_bot
+from schemas.habit import HabitSchema
 
 
 class HabitsHelper(ApiHelper):
@@ -24,19 +22,15 @@ class HabitsHelper(ApiHelper):
     def __init__(self, message: Message):
         super().__init__(message)
 
-    def get_user_habits(self) -> list[dict[str, Any]] | None:
+    def get_user_habits(self) -> list[HabitSchema] | None:
         response = self._send_request(method="get", endpoint="/api/habits/me")
 
-        if not response:
-            return None
-
         if response.status_code == HTTP_200_OK:
-            habits = response.json()
+            habits: list[HabitSchema] = response.json()
             return habits
-        elif response.status_code == HTTP_401_UNAUTHORIZED:
-            return
+        return None
 
-    def add_habit(self) -> dict[str, Any] | None:
+    def add_habit(self) -> HabitSchema | None:
         habit_name = self.message.text.strip().capitalize()
         habit_data = {"name": habit_name}
 
@@ -47,16 +41,13 @@ class HabitsHelper(ApiHelper):
         )
 
         if response.status_code == HTTP_201_CREATED:
-            habit = response.json()
+            habit: HabitSchema = response.json()
             return habit
         elif response.status_code == HTTP_400_BAD_REQUEST:
-            tg_bot.send_message(
-                self.message.chat.id,
-                habit_already_exist_message,
-            )
-            return
+            return None
+        return None
 
-    def update_habit(self, habit_id: int) -> dict[str, Any]:
+    def update_habit(self, habit_id: int) -> HabitSchema | None:
         new_habit_name = self.message.text.strip().capitalize()
         habit_data = {"name": new_habit_name}
 
@@ -67,14 +58,11 @@ class HabitsHelper(ApiHelper):
         )
 
         if response.status_code == HTTP_200_OK:
-            habit = response.json()
+            habit: HabitSchema = response.json()
             return habit
         elif response.status_code == HTTP_400_BAD_REQUEST:
-            tg_bot.send_message(
-                self.message.chat.id,
-                habit_already_exist_message,
-            )
-            return
+            return None
+        return None
 
     def delete_habit(self, habit_id: int) -> None:
         response = self._send_request(
@@ -87,6 +75,4 @@ class HabitsHelper(ApiHelper):
                 self.message.chat.id,
                 delete_habit_error_message,
             )
-            return None
-
-        return
+        return None

@@ -17,6 +17,3 @@ class HabitTracking(Base, IdIntPkMixin):
     __table_args__ = (
         UniqueConstraint("habit_id", "date", name="unique_habit_tracking_date"),
     )
-
-
-from models import Habit

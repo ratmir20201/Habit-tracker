@@ -12,7 +12,7 @@ tg_bot.set_my_commands(
 )
 
 
-async def set_webhook():
+async def set_webhook() -> None:
     tg_bot.delete_webhook(drop_pending_updates=True)
 
     await asyncio.sleep(1)

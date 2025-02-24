@@ -17,6 +17,3 @@ class User(Base, IdIntPkMixin, SQLAlchemyBaseUserTable[int]):
     @classmethod
     def get_db(cls, session: AsyncSession):
         return SQLAlchemyUserDatabase(session, User)
-
-
-from models import Habit

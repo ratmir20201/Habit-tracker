@@ -21,5 +21,5 @@ async def user_by_telegram_id(
 
     raise HTTPException(
         status_code=HTTP_404_NOT_FOUND,
-        detail="Пользователь с telegram_id {} не был найдена.".format(telegram_id),
+        detail="Пользователь с telegram_id {} не был найден.".format(telegram_id),
     )

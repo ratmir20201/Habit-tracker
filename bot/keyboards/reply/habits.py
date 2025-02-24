@@ -1,15 +1,17 @@
-from message_generators.keyboards.reply.habits import (add_first_habit_button,
-                                                       add_habit_button,
-                                                       delete_habit_button,
-                                                       edit_habit_button,
-                                                       get_habits_button,
-                                                       track_all_habit_button,
-                                                       track_one_habit_button)
+from message_generators.keyboards.reply.habits import (
+    add_first_habit_button,
+    add_habit_button,
+    delete_habit_button,
+    edit_habit_button,
+    get_habits_button,
+    track_all_habit_button,
+    track_one_habit_button,
+)
 from message_generators.services.keyboards import choose_command_message
 from telebot.types import KeyboardButton, ReplyKeyboardMarkup
 
 
-def get_habits_crud_keyboard():
+def get_habits_crud_keyboard() -> ReplyKeyboardMarkup:
     keyboard = ReplyKeyboardMarkup(
         resize_keyboard=True,
         input_field_placeholder=choose_command_message,
@@ -31,7 +33,7 @@ def get_habits_crud_keyboard():
     return keyboard
 
 
-def get_create_habit_keyboard():
+def get_create_habit_keyboard() -> ReplyKeyboardMarkup:
     keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 
     keyboard.add(KeyboardButton(add_first_habit_button))

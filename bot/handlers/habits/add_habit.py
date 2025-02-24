@@ -1,5 +1,8 @@
+from typing import Callable, cast
+
 from helpers.habits import HabitsHelper
 from keyboards.reply.habits import get_habits_crud_keyboard
+from message_generators.errors.habits import habit_already_exist_message
 from message_generators.keyboards.reply.habits import (
     add_habit_button,
     add_first_habit_button,
@@ -11,14 +14,17 @@ from telebot.types import Message
 from bot import tg_bot
 
 
-@tg_bot.message_handler(commands=["addhabit"])
+@cast(Callable[[Message], None], tg_bot.message_handler(commands=["addhabit"]))
 def add_habits_by_command(message: Message):
     get_habit_name(message)
 
 
-@tg_bot.message_handler(
-    func=lambda message: message.text == add_habit_button
-    or message.text == add_first_habit_button
+@cast(
+    Callable[[Message], None],
+    tg_bot.message_handler(
+        func=lambda message: message.text == add_habit_button
+        or message.text == add_first_habit_button
+    ),
 )
 def add_habits_by_keyboard(message: Message):
     get_habit_name(message)
@@ -35,7 +41,14 @@ def add_habit(message: Message):
     habits_helper = HabitsHelper(message)
     habit = habits_helper.add_habit()
 
-    message_text = generate_add_habit_message(habit_name=habit["name"])
+    if not habit:
+        tg_bot.send_message(
+            message.chat.id,
+            habit_already_exist_message,
+        )
+        return
+
+    message_text = generate_add_habit_message(habit_name=habit.name)
 
     tg_bot.send_message(
         message.chat.id,

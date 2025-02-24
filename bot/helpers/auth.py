@@ -4,10 +4,16 @@ import starlette
 from config import settings
 from helpers.api import ApiHelper
 from redis_cache.client import get_redis_client
-from starlette.status import (HTTP_200_OK, HTTP_201_CREATED,
-                              HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND)
+from starlette.status import (
+    HTTP_200_OK,
+    HTTP_201_CREATED,
+    HTTP_400_BAD_REQUEST,
+    HTTP_404_NOT_FOUND,
+)
 from telebot.types import Message
 from validators.register_validator import validate_user_data
+
+from schemas.register import RegisterSchema
 
 
 class AuthenticationHelper(ApiHelper):
@@ -16,24 +22,22 @@ class AuthenticationHelper(ApiHelper):
     def __init__(self, message: Message):
         super().__init__(message, is_auth=True)
 
-    def register_user(self, user_data: dict[str, Any]) -> str:
+    def register_user(self, user_data: RegisterSchema) -> str | None:
         """Функция для регистрации пользователя."""
-        valid_user_data = validate_user_data(self.message, user_data)
-        if valid_user_data is None:
-            return
 
         response = self._send_request(
             method="post",
             endpoint="/auth/register",
-            data=valid_user_data.model_dump(),
+            data=user_data,
         )
 
         if response.status_code == HTTP_201_CREATED:
             return "success"
         elif response.status_code == HTTP_400_BAD_REQUEST:
             return "register_user_already_exist"
+        return None
 
-    def login_and_save_token_in_redis(self) -> starlette.status:
+    def login_and_save_token_in_redis(self) -> str | None:
         """Функция для входа пользователя в систему."""
         telegram_id = self.message.from_user.id
 
@@ -46,9 +50,10 @@ class AuthenticationHelper(ApiHelper):
         if response.status_code == HTTP_200_OK:
             token = response.json()["token"]["access_token"]
             self._save_token_in_redis(token=token)
-            return HTTP_200_OK
+            return "success"
         elif response.status_code == HTTP_404_NOT_FOUND:
-            return HTTP_404_NOT_FOUND
+            return "user_not_found"
+        return None
 
     def _save_token_in_redis(self, token: str):
         """Функция для сохранения токена в redis."""

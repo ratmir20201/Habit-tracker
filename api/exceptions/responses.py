@@ -21,6 +21,15 @@ habit_not_found_response = generate_response(
     detail="Привычка с таким id не была найдена.",
 )
 
+user_with_telegram_id_not_found_response = generate_response(
+    description="Пользователь не был найден.",
+    detail="Пользователь с таким telegram_id не был найден.",
+)
+
+user_not_found_response = generate_response(
+    description="Пользователь не был найден.",
+    detail="Пользователь с таким id не был найден.",
+)
 
 unauthorized_response = generate_response(
     description="Ошибка авторизации. Требуется вход в систему.",

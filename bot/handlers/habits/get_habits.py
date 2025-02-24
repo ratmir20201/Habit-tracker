@@ -1,3 +1,5 @@
+from typing import Callable, cast
+
 from helpers.habits import HabitsHelper
 from keyboards.reply.habits import get_habits_crud_keyboard
 from message_generators.errors.habits import habits_not_exist_message
@@ -8,12 +10,15 @@ from telebot.types import Message
 from bot import tg_bot
 
 
-@tg_bot.message_handler(commands=["gethabits"])
+@cast(Callable[[Message], None], tg_bot.message_handler(commands=["gethabits"]))
 def get_habits_by_command(message: Message):
     get_habits(message)
 
 
-@tg_bot.message_handler(func=lambda message: message.text == get_habits_button)
+@cast(
+    Callable[[Message], None],
+    tg_bot.message_handler(func=lambda message: message.text == get_habits_button),
+)
 def get_habits_by_keyboard(message: Message):
     get_habits(message)
 
