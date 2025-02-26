@@ -13,5 +13,5 @@ async def check_reminder_topic():
                     message=message.value.decode("utf-8"),
                 )
             )
-            data = json.loads(message.value.decode("utf-8"))
-            await send_reminders(untracked_user_habits=data)
+            kafka_message = json.loads(message.value.decode("utf-8"))
+            await send_reminders(untracked_user_habits=kafka_message)

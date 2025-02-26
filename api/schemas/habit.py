@@ -1,10 +1,4 @@
-from typing import TYPE_CHECKING
-
-from models import Habit
-from pydantic import BaseModel, computed_field
-
-if TYPE_CHECKING:
-    pass
+from pydantic import BaseModel
 
 
 class HabitBase(BaseModel):

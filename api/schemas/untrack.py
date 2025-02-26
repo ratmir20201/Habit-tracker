@@ -1,7 +1,7 @@
 from datetime import date
-from typing import Dict, List
+from typing import List
 
-from pydantic import BaseModel, RootModel
+from pydantic import BaseModel
 
 
 class TrackingSchema(BaseModel):

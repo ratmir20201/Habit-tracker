@@ -2,8 +2,8 @@ import datetime
 
 from database.base import Base
 from models.mixins.id_int_pk import IdIntPkMixin
-from sqlalchemy import Date, ForeignKey, UniqueConstraint
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import Date, UniqueConstraint
+from sqlalchemy.orm import Mapped, mapped_column
 
 
 class KafkaMessage(Base, IdIntPkMixin):

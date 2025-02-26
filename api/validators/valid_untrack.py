@@ -8,7 +8,7 @@ async def valid_untracked_users_habits(
 ) -> list[UntrackResponseSchema]:
     """Метод превращающий данные в валидированную схему."""
 
-    result = []
+    untracked_habits_response = []
 
     for i_user_habits in untracked_users_habits:
         habits = i_user_habits["habits"]
@@ -20,11 +20,11 @@ async def valid_untracked_users_habits(
             )
             for habit in habits
         ]
-        result.append(
+        untracked_habits_response.append(
             UntrackResponseSchema(
                 telegram_id=i_user_habits["telegram_id"],
                 habits=validate_habits,
             )
         )
 
-    return result
+    return untracked_habits_response

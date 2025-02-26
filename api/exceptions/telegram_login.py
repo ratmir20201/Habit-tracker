@@ -1,5 +1,4 @@
-from starlette.status import HTTP_404_NOT_FOUND
-
 from exceptions.responses import user_with_telegram_id_not_found_response
+from starlette.status import HTTP_404_NOT_FOUND
 
 auth_telegram_responses = {HTTP_404_NOT_FOUND: user_with_telegram_id_not_found_response}

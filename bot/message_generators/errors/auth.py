@@ -17,7 +17,10 @@ def generate_register_error_message(errors: list[ErrorDetails]) -> str:
                 "Некорректный формат email. Пожалуйста, введите правильный email."
             )
         elif field == "password":
-            error_message = "Пароль должен содержать минимум 8 символов, одну заглавную букву и цифру."
+            error_message = (
+                "Пароль должен содержать минимум 8 символов, "
+                "одну заглавную букву и цифру."
+            )
 
         return "❌ Ошибка: {}".format(error_message)
 

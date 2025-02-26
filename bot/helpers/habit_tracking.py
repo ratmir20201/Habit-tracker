@@ -2,10 +2,8 @@ from typing import Optional
 
 from config import settings
 from helpers.api import ApiHelper
-from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
-from telebot.types import Message
-
 from schemas.habit import HabitSchema
+from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 
 HABIT_POINTED = "habit_pointed"
 HABIT_COMPLETED = "habit_totally_complete"
@@ -14,9 +12,6 @@ HABIT_ALREADY_POINTED = "habit_already_pointed"
 
 class HabitTrackingHelper(ApiHelper):
     """Класс для взаимодействия с моделью HabitTracking."""
-
-    def __init__(self, message: Message):
-        super().__init__(message)
 
     def add_tracking(
         self,
@@ -29,7 +24,7 @@ class HabitTrackingHelper(ApiHelper):
         response = self._send_request(
             method="post",
             endpoint="/api/track_habit",
-            data=tracking_data,
+            request_data=tracking_data,
         )
 
         if response.status_code == HTTP_201_CREATED:

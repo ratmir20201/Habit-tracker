@@ -6,7 +6,7 @@ from exceptions.untracked_users import untracked_users_responses
 from fastapi import APIRouter, Depends
 from fastapi_cache.decorator import cache
 from models import User
-from schemas.untrack import HabitSchema, TrackingSchema, UntrackResponseSchema
+from schemas.untrack import UntrackResponseSchema
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.status import HTTP_200_OK
 from validators.valid_untrack import valid_untracked_users_habits

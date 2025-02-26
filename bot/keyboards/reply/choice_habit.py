@@ -1,6 +1,5 @@
-from telebot.types import KeyboardButton, ReplyKeyboardMarkup
-
 from schemas.habit import HabitSchema
+from telebot.types import KeyboardButton, ReplyKeyboardMarkup
 
 
 def get_habits_keyboard(habits: list[HabitSchema]) -> ReplyKeyboardMarkup:

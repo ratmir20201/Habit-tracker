@@ -1,9 +1,20 @@
+MIN_TEENS = 11
+MAX_TEENS = 19
+SINGLE = 1
+FEW_MIN = 2
+FEW_MAX = 4
+
+
 def plural_days(days: int) -> str:
-    if 11 <= days % 100 <= 19:
+    """Определяет правильную форму слова "день" в зависимости от числа."""
+    remainder_100 = days % 100
+    remainder_10 = days % 10
+
+    if MIN_TEENS <= remainder_100 <= MAX_TEENS:
         return "дней"
-    elif days % 10 == 1:
+    elif remainder_10 == SINGLE:
         return "день"
-    elif 2 <= days % 10 <= 4:
+    elif FEW_MIN <= remainder_10 <= FEW_MAX:
         return "дня"
     else:
         return "дней"

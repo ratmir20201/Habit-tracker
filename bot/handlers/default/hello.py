@@ -1,4 +1,4 @@
-from typing import cast, Callable
+from typing import Callable, cast
 
 from keyboards.reply.start import get_start_keyboard
 from message_generators.keyboards.reply.default import start_button
@@ -8,7 +8,10 @@ from telebot.types import Message
 from bot import tg_bot
 
 
-@cast(Callable[[Message], None], tg_bot.message_handler(commands=["start", "hello"]))
+@cast(
+    Callable[[Message], None],
+    tg_bot.message_handler(commands=["start", "hello"]),
+)
 def hello_by_command(message: Message):
     hello(message)
 

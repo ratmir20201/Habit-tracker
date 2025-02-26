@@ -10,9 +10,9 @@ class Base(DeclarativeBase):
     def __tablename__(cls) -> str:
         result_table_name = ""
         class_name = cls.__name__
-        for i in range(len(class_name) - 1):
-            result_table_name += class_name[i]
-            if class_name[i + 1].isupper():
+        for index in range(len(class_name) - 1):
+            result_table_name += class_name[index]
+            if class_name[index + 1].isupper():
                 result_table_name += "_"
         result_table_name += class_name[-1]
 

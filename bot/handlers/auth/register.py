@@ -2,8 +2,8 @@ from typing import Callable, cast
 
 from helpers.auth import AuthenticationHelper
 from message_generators.errors.auth import (
-    user_already_exist_message,
     unexpected_register_error_message,
+    user_already_exist_message,
 )
 from message_generators.responses.auth import register_success_message
 from message_generators.services.auth import (
@@ -11,18 +11,17 @@ from message_generators.services.auth import (
     try_again_register_message,
 )
 from telebot.types import Message
+from validators.register_validator import validate_user_data
 
 from bot import tg_bot
-
-from validators.register_validator import validate_user_data
 
 
 @cast(Callable[[Message], None], tg_bot.message_handler(commands=["register"]))
 def register_new_user(message: Message):
-    from handlers.auth.before_register import get_username
+    from handlers.auth.before_register import take_username_for_register
 
     tg_bot.send_message(message.chat.id, input_name_message)
-    tg_bot.register_next_step_handler(message, get_username)
+    tg_bot.register_next_step_handler(message, take_username_for_register)
 
 
 def register(
@@ -39,8 +38,8 @@ def register(
     }
 
     valid_user_data = validate_user_data(message, user_data)
-    if valid_user_data is None:
-        return None
+    if not valid_user_data:
+        return
 
     auth_helper = AuthenticationHelper(message)
     my_response = auth_helper.register_user(user_data=valid_user_data)
@@ -51,9 +50,8 @@ def register(
             register_success_message,
             parse_mode="Markdown",
         )
-        return
     elif my_response == "register_user_already_exist":
-        from handlers.auth.before_register import get_username
+        from handlers.auth.before_register import take_username_for_register
 
         tg_bot.send_message(
             message.chat.id,
@@ -65,11 +63,9 @@ def register(
             try_again_register_message,
             parse_mode="Markdown",
         )
-        tg_bot.register_next_step_handler(message, get_username)
-        return
-
-    tg_bot.send_message(
-        message.chat.id,
-        unexpected_register_error_message,
-    )
-    return
+        tg_bot.register_next_step_handler(message, take_username_for_register)
+    else:
+        tg_bot.send_message(
+            message.chat.id,
+            unexpected_register_error_message,
+        )

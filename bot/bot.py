@@ -21,4 +21,4 @@ async def set_webhook() -> None:
     logger.info("Бот успешно установил Webhook!")
 
 
-from handlers import *  # noqa
+import handlers  # noqa: E402, F401

@@ -1,15 +1,13 @@
-from typing import Any, Callable
+from typing import Callable
 
 from helpers.habits import HabitsHelper
 from keyboards.reply.choice_habit import get_habits_keyboard
-from message_generators.errors.habits import (
-    habit_not_exist_message,
-    habits_not_exist_message,
-)
-from telebot.types import Message, ReplyKeyboardMarkup
+from message_generators.errors.habits import (habit_not_exist_message,
+                                              habits_not_exist_message)
+from schemas.habit import HabitSchema
+from telebot.types import Message
 
 from bot import tg_bot
-from schemas.habit import HabitSchema
 
 
 def get_habit_object_from_habits_by_name(
@@ -34,7 +32,7 @@ def get_habit_object_from_habits_by_name(
     return habit_object
 
 
-def get_habit_name_from_user(
+def take_habit_name_from_user(
     message: Message,
     message_text: str,
     next_step_handler: Callable[[Message, list[HabitSchema]], None],

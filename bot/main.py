@@ -1,8 +1,10 @@
 import uvicorn
+from config import settings
 from fastapi import FastAPI, HTTPException, Request
-from telebot import types, logger
+from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
+from telebot import logger, types
 
-from bot import tg_bot, set_webhook
+from bot import set_webhook, tg_bot
 
 
 async def lifespan(app: FastAPI):
@@ -20,11 +22,14 @@ async def telegram_webhook(request: Request):
         logger.info("Получен Webhook: %s", json_data)
         update = types.Update.de_json(json_data)
         tg_bot.process_new_updates([update])
-    except Exception as e:
-        logger.info("Ошибка Webhook: %s", str(e))
-        raise HTTPException(status_code=500, detail=str(e))
+    except Exception as exc:
+        logger.info("Ошибка Webhook: %s", str(exc))
+        raise HTTPException(
+            status_code=HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=str(exc),
+        )
     return {"ok": True}
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", reload=True, port=8001, host="0.0.0.0")
+    uvicorn.run("main:app", reload=True, port=settings.tg_bot.debug_port)

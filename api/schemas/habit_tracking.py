@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import date
+from datetime import date  # noqa: F401
 
 from pydantic import BaseModel
 from schemas.habit import HabitResponse

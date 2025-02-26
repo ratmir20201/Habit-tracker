@@ -15,7 +15,7 @@ async def generate_data_for_reminder(
     if not kafka_message:
         return None
 
-    data = {
+    untracked_habits_users = {
         "telegram_id": telegram_id,
         "habits": [
             {
@@ -27,4 +27,4 @@ async def generate_data_for_reminder(
         ],
     }
 
-    return data
+    return untracked_habits_users

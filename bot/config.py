@@ -10,6 +10,7 @@ class TelegramBotSettings(BaseSettings):
     token: str = ""
     webhook_url: str = ""
     carry_over_complete_habits_days: int = 21
+    debug_port: int = 8001
 
     class Config:
         env_prefix = "TG__"

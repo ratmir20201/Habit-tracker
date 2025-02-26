@@ -1,10 +1,9 @@
-from redis.asyncio.client import Redis
-
 from config import settings
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from logger import logger
 from redis import asyncio as aioredis
+from redis.asyncio.client import Redis
 
 
 async def init_cache():

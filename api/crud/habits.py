@@ -4,7 +4,7 @@ from schemas.habit import HabitCreate, HabitUpdate
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload, selectinload
-from starlette.status import HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN
+from starlette.status import HTTP_403_FORBIDDEN
 from utils.habit_checker import check_if_habit_already_exist
 
 
@@ -71,8 +71,8 @@ async def update_habit_by_id(
     )
 
     if habit.user_id == user_id:
-        for name, value in habit_update.model_dump(exclude_unset=True).items():
-            setattr(habit, name, value)
+        for name, updated_value in habit_update.model_dump(exclude_unset=True).items():
+            setattr(habit, name, updated_value)
         await session.commit()
         return habit
 

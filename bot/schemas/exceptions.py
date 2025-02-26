@@ -8,3 +8,7 @@ class InvalidUserDataError(Exception):
 
 class UnexpectedServerError(Exception):
     """Неожиданная ошибка сервера."""
+
+
+class UnauthorizedUserError(Exception):
+    """Неавторизованный пользователь."""

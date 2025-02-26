@@ -20,12 +20,11 @@ class ExceptionHandleMiddleware(BaseHTTPMiddleware):
         try:
             return await call_next(request)
         except SQLAlchemyError as exc:
-            logger.error("Exception: {exc}".format(exc=str(exc)))
+            logger.error("SQL exception: {exc}".format(exc=str(exc)))
             return JSONResponse(
-                    status_code=HTTP_500_INTERNAL_SERVER_ERROR,
-                    content={"detail": str(exc)},
-                )
-
+                status_code=HTTP_500_INTERNAL_SERVER_ERROR,
+                content={"detail": str(exc)},
+            )
         except Exception as exc:
             logger.error("Exception: {exc}".format(exc=str(exc)))
             return JSONResponse(

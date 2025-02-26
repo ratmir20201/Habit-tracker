@@ -1,15 +1,13 @@
 import json
 
-from starlette.status import HTTP_201_CREATED
-
 from authentication.backend import authentication_backend
 from authentication.strategy import get_database_strategy
 from dependencies.telegram_users import user_by_telegram_id
+from exceptions.telegram_login import auth_telegram_responses
 from fastapi import APIRouter, Depends
 from fastapi_users.authentication.strategy import DatabaseStrategy
-
-from exceptions.telegram_login import auth_telegram_responses
-from models import User, AccessToken
+from models import AccessToken, User
+from starlette.status import HTTP_201_CREATED
 
 router = APIRouter(tags=["Telegram"])
 

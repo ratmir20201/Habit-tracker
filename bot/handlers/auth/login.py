@@ -1,14 +1,14 @@
 from typing import Callable, cast
 
-from handlers.auth.before_register import get_username
+from handlers.auth.before_register import take_username_for_register
 from helpers.auth import AuthenticationHelper
 from helpers.habits import HabitsHelper
-from keyboards.reply.habits import get_create_habit_keyboard, get_habits_crud_keyboard
+from keyboards.reply.habits import (get_create_habit_keyboard,
+                                    get_habits_crud_keyboard)
 from message_generators.errors.auth import unexpected_login_error_message
 from message_generators.keyboards.reply.default import login_button
 from message_generators.responses.auth import auth_success_message
 from message_generators.services.auth import register_suggestion_message
-from starlette.status import HTTP_200_OK, HTTP_404_NOT_FOUND
 from telebot.types import Message
 
 from bot import tg_bot
@@ -35,27 +35,24 @@ def login(message: Message) -> None:
         habits_helper = HabitsHelper(message)
         habits = habits_helper.get_user_habits()
 
-        if not habits:
-            reply_markup = get_create_habit_keyboard()
-        else:
+        if habits:
             reply_markup = get_habits_crud_keyboard()
+        else:
+            reply_markup = get_create_habit_keyboard()
 
         tg_bot.send_message(
             message.chat.id,
             auth_success_message,
             reply_markup=reply_markup,
         )
-        return None
     elif my_response == "user_not_found":
         tg_bot.send_message(
             message.chat.id,
             register_suggestion_message,
         )
-        tg_bot.register_next_step_handler(message, get_username)
-        return None
-
-    tg_bot.send_message(
-        message.chat.id,
-        unexpected_login_error_message,
-    )
-    return None
+        tg_bot.register_next_step_handler(message, take_username_for_register)
+    else:
+        tg_bot.send_message(
+            message.chat.id,
+            unexpected_login_error_message,
+        )

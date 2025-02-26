@@ -31,10 +31,12 @@ async def create_superuser(
     is_active: bool = True,
     is_superuser: bool = True,
     is_verified: bool = True,
-):
+) -> User:
     async with get_async_context_session() as session:
-        result = await session.execute(select(User).filter(User.is_superuser == True))
-        superuser = result.scalar_one_or_none()
+        superuser_query = await session.execute(
+            select(User).where(User.is_superuser.is_(True)),
+        )
+        superuser = superuser_query.scalar_one_or_none()
 
     # Если суперпользователь существует, не создаем нового
     if superuser:
@@ -50,6 +52,10 @@ async def create_superuser(
         is_verified=is_verified,
     )
 
+    return await add_superuser_to_db(user_create=user_create)
+
+
+async def add_superuser_to_db(user_create: UserCreate) -> User:
     async with get_async_context_session() as session:
         async with get_user_db_context(session) as user_db:
             async with get_user_manager_context(user_db) as user_manager:
