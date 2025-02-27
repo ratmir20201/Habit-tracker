@@ -31,6 +31,7 @@ class RedisSettings(BaseSettings):
     host: str = "redis"
     port: int = 6379
     db: int = 0
+    # Кол-во секунд которое хранится токен должен быть равным access_token_settings.lifetime_seconds из каталога api
     token_expire: int = 3600
 
     class Config:

@@ -31,7 +31,7 @@ class DbSettings(BaseSettings):
 class AccessTokenSettings(BaseSettings):
     """Настройки токена для аутентификации."""
 
-    lifetime_seconds: int = 3600
+    lifetime_seconds: int = 3600  # Кол-во секунд которое хранится токен
     reset_password_token_secret: str = ""
     verification_token_secret: str = ""
 

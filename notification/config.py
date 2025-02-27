@@ -13,17 +13,6 @@ class TelegramBotSettings(BaseSettings):
         env_prefix = "TG__"
 
 
-class ApiSettings(BaseSettings):
-    """Настройки api сервера."""
-
-    url: str = "http://localhost:8000"
-    superuser_email: str = "admin@admin.com"
-    superuser_password: str = "admin"
-
-    class Config:
-        env_prefix = "API__"
-
-
 class KafkaSettings(BaseSettings):
     """Настройки Kafka."""
 
@@ -47,7 +36,6 @@ class Settings(BaseSettings):
     """Общие настройки приложения."""
 
     tg_bot: TelegramBotSettings = TelegramBotSettings()
-    api: ApiSettings = ApiSettings()
     kafka: KafkaSettings = KafkaSettings()
     notification: NotificationSettings = NotificationSettings()
 
