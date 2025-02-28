@@ -4,15 +4,11 @@ from helpers.habit_tracking import HabitTrackingHelper
 from keyboards.reply.habits import get_habits_crud_keyboard
 from message_generators.keyboards.reply.habits import track_one_habit_button
 from message_generators.services.tracking import (
-    answer_point_habit_message,
-    generate_tracking_message_text,
-)
+    answer_point_habit_message, generate_tracking_message_text)
 from schemas.habit import HabitSchema
 from telebot.types import Message
-from utils.get_habit_by_name import (
-    get_habit_object_from_habits_by_name,
-    take_habit_name_from_user,
-)
+from utils.get_habit_by_name import (get_habit_object_from_habits_by_name,
+                                     take_habit_name_from_user)
 
 from bot import tg_bot
 

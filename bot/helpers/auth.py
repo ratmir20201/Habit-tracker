@@ -2,12 +2,7 @@ from config import settings
 from helpers.api import ApiHelper
 from redis_cache.client import get_redis_client
 from schemas.register import RegisterSchema
-from starlette.status import (
-    HTTP_200_OK,
-    HTTP_201_CREATED,
-    HTTP_400_BAD_REQUEST,
-    HTTP_404_NOT_FOUND,
-)
+from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 from telebot.types import Message
 
 
@@ -20,10 +15,11 @@ class AuthenticationHelper(ApiHelper):
     def register_user(self, user_data: RegisterSchema) -> str | None:
         """Функция для регистрации пользователя."""
 
+        user_dict = user_data.model_dump()
         response = self._send_request(
             method="post",
             endpoint="/auth/register",
-            request_data=user_data,
+            request_data=user_dict,
         )
 
         if response.status_code == HTTP_201_CREATED:
@@ -42,8 +38,8 @@ class AuthenticationHelper(ApiHelper):
             request_params={"telegram_id": telegram_id},
         )
 
-        if response.status_code == HTTP_200_OK:
-            token = response.json()["token"]["access_token"]
+        if response.status_code == HTTP_201_CREATED:
+            token = response.json().get("token").get("access_token")
             self._save_token_in_redis(token=token)
             return "success"
         elif response.status_code == HTTP_404_NOT_FOUND:

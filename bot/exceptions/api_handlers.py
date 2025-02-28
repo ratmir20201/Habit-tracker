@@ -2,11 +2,8 @@ import functools
 from typing import Any, Callable
 
 from logger import logger
-from schemas.exceptions import (
-    APIRequestError,
-    UnexpectedServerError,
-    UnauthorizedUserError,
-)
+from schemas.exceptions import (APIRequestError, UnauthorizedUserError,
+                                UnexpectedServerError)
 
 
 def api_error_handler(func: Callable[..., Any]) -> Callable[..., Any]:

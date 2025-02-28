@@ -10,7 +10,7 @@ from bot import tg_bot
 def take_username_for_register(message: Message):
     if is_command(message):
         return
-    username = message.text
+    username = message.text.strip()
     tg_bot.send_message(message.chat.id, input_email_message)
     tg_bot.register_next_step_handler(message, take_email_for_register, username)
 
@@ -18,7 +18,7 @@ def take_username_for_register(message: Message):
 def take_email_for_register(message: Message, username: str):
     if is_command(message):
         return
-    email = message.text
+    email = message.text.strip()
     tg_bot.send_message(message.chat.id, input_password_message)
     tg_bot.register_next_step_handler(
         message, take_password_for_register, username, email
@@ -28,5 +28,5 @@ def take_email_for_register(message: Message, username: str):
 def take_password_for_register(message: Message, username: str, email: str):
     if is_command(message):
         return
-    password = message.text
+    password = message.text.strip()
     register(message, username, email, password)

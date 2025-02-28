@@ -17,4 +17,4 @@ done
 echo "TG__WEBHOOK_URL=$NGROK_URL" > /bot/.env
 
 # Запуск основного бота
-exec python main.py
+exec uvicorn main:app --host 0.0.0.0 --port 8001 --reload

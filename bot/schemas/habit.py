@@ -7,3 +7,11 @@ class HabitSchema(BaseModel):
     id: int
     name: str
     streak: int
+
+
+class HabitCreated(BaseModel):
+    name: str
+
+
+class HabitUpdated(BaseModel):
+    name: str

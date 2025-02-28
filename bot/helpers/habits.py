@@ -1,6 +1,6 @@
 from helpers.api import ApiHelper
 from message_generators.errors.habits import delete_habit_error_message
-from schemas.habit import HabitSchema
+from schemas.habit import HabitCreated, HabitSchema, HabitUpdated
 from starlette.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
@@ -18,11 +18,11 @@ class HabitsHelper(ApiHelper):
         response = self._send_request(method="get", endpoint="/api/habits/me")
 
         if response.status_code == HTTP_200_OK:
-            habits: list[HabitSchema] = response.json()
-            return habits
+            habits = response.json()
+            return [HabitSchema.model_validate(i_habit) for i_habit in habits]
         return None
 
-    def add_habit(self) -> HabitSchema | None:
+    def add_habit(self) -> HabitCreated | None:
         habit_name = self.message.text.strip().capitalize()
         habit_data = {"name": habit_name}
 
@@ -31,15 +31,14 @@ class HabitsHelper(ApiHelper):
             endpoint="/api/habits",
             request_data=habit_data,
         )
-
         if response.status_code == HTTP_201_CREATED:
-            habit: HabitSchema = response.json()
-            return habit
+            habit = response.json()
+            return HabitCreated.model_validate(habit)
         elif response.status_code == HTTP_400_BAD_REQUEST:
             return None
         return None
 
-    def update_habit(self, habit_id: int) -> HabitSchema | None:
+    def update_habit(self, habit_id: int) -> HabitUpdated | None:
         new_habit_name = self.message.text.strip().capitalize()
         habit_data = {"name": new_habit_name}
 
@@ -50,8 +49,8 @@ class HabitsHelper(ApiHelper):
         )
 
         if response.status_code == HTTP_200_OK:
-            habit: HabitSchema = response.json()
-            return habit
+            habit = response.json()
+            return HabitUpdated.model_validate(habit)
         elif response.status_code == HTTP_400_BAD_REQUEST:
             return None
         return None

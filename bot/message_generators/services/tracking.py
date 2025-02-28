@@ -1,12 +1,10 @@
-from helpers.habit_tracking import HABIT_ALREADY_POINTED, HABIT_COMPLETED, HABIT_POINTED
+from helpers.habit_tracking import (HABIT_ALREADY_POINTED, HABIT_COMPLETED,
+                                    HABIT_POINTED)
 from message_generators.errors.server import unexpected_server_error_message
-from message_generators.responses.congratulations import (
-    generate_congratulations_message,
-)
+from message_generators.responses.congratulations import \
+    generate_congratulations_message
 from message_generators.responses.tracking import (
-    generate_is_tracked,
-    habit_already_pointed_message,
-)
+    generate_is_tracked, habit_already_pointed_message)
 from schemas.habit import HabitSchema
 
 

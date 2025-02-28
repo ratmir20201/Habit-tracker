@@ -1,15 +1,11 @@
 from typing import Callable, cast
 
 from helpers.auth import AuthenticationHelper
-from message_generators.errors.auth import (
-    unexpected_register_error_message,
-    user_already_exist_message,
-)
+from message_generators.errors.auth import (unexpected_register_error_message,
+                                            user_already_exist_message)
 from message_generators.responses.auth import register_success_message
-from message_generators.services.auth import (
-    input_name_message,
-    try_again_register_message,
-)
+from message_generators.services.auth import (input_name_message,
+                                              try_again_register_message)
 from telebot.types import Message
 from validators.register_validator import validate_user_data
 
@@ -24,12 +20,7 @@ def register_new_user(message: Message):
     tg_bot.register_next_step_handler(message, take_username_for_register)
 
 
-def register(
-    message: Message,
-    username: str,
-    email: str,
-    password: str,
-) -> None:
+def register(message: Message, username: str, email: str, password: str) -> None:
     user_data = {
         "telegram_id": message.from_user.id,
         "username": username,

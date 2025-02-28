@@ -21,11 +21,17 @@ def generate_delete_habit_message(habit_name: str) -> str:
     return "✅ Привычка *{}* успешно удалена.".format(habit_name)
 
 
-def generate_add_habit_message(habit_name: str) -> str:
+def generate_add_habit_message(habit_name: str, first_habit: bool = False) -> str:
+    if first_habit:
+        first_sentence = "✨ *Ваша первая привычка добавлена!* ✨"
+    else:
+        first_sentence = "✨ *Новая привычка добавлена!* ✨"
+
     message_text = (
-        "✨ *Новая привычка добавлена!* ✨\n\n"
-        "✅ Привычка *{habit_name}* успешно создана!"
+        "{first_sentence}\n\n" "✅ Привычка *{habit_name}* успешно создана!"
     ).format(
+        first_sentence=first_sentence,
         habit_name=habit_name,
     )
+
     return message_text

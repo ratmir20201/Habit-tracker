@@ -28,12 +28,13 @@ class HabitTrackingHelper(ApiHelper):
         )
 
         if response.status_code == HTTP_201_CREATED:
-            habit_object = response.json().get("habit")
-            if not habit_object:
+            habit = response.json().get("habit")
+            if not habit:
                 return None, None
 
-            habit_streak = habit_object.get("streak", 0)
-            if habit_streak >= settings.tg_bot.carry_over_complete_habits_days:
+            habit_object = HabitSchema.model_validate(habit)
+
+            if habit_object.streak >= settings.tg_bot.carry_over_complete_habits_days:
                 return HABIT_COMPLETED, habit_object
             return HABIT_POINTED, habit_object
         elif response.status_code == HTTP_400_BAD_REQUEST:

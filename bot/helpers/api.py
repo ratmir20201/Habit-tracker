@@ -3,17 +3,14 @@ from typing import Any, Optional
 
 import requests
 from config import settings
-
-from exceptions.api_handlers import unauth_user_error_handler, api_error_handler
+from exceptions.api_handlers import (api_error_handler,
+                                     unauth_user_error_handler)
 from logger import logger
 from message_generators.errors.auth import user_not_authorized_message
 from message_generators.errors.server import unexpected_server_error_message
 from redis_cache.client import get_redis_client
-from schemas.exceptions import (
-    APIRequestError,
-    UnexpectedServerError,
-    UnauthorizedUserError,
-)
+from schemas.exceptions import (APIRequestError, UnauthorizedUserError,
+                                UnexpectedServerError)
 from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
 from telebot.types import CallbackQuery, Message
 
@@ -38,8 +35,9 @@ class ApiHelper(ABC):
         self, is_auth: bool = False
     ) -> dict[str, str] | None:
         """Метод для получения заголовков, для запросов к api."""
+        basic_headers = {"Content-Type": "application/json"}
         if is_auth:
-            return {}
+            return basic_headers
 
         telegram_id = self.message.from_user.id
 
@@ -49,7 +47,8 @@ class ApiHelper(ABC):
         )
 
         if token:
-            return {"Authorization": "Bearer {token}".format(token=token)}
+            basic_headers["Authorization"] = "Bearer {token}".format(token=token)
+            return basic_headers
 
         tg_bot.send_message(
             self.message.chat.id,

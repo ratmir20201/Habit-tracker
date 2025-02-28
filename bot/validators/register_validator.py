@@ -18,7 +18,7 @@ def validate_user_data(
 ) -> RegisterSchema:
 
     try:
-        valid_user_data = RegisterSchema(**user_data)
+        valid_user_data = RegisterSchema.model_validate(user_data)
         return valid_user_data
     except ValidationError as exc:
         from handlers.auth.before_register import take_username_for_register

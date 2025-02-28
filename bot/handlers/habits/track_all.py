@@ -2,15 +2,17 @@ from typing import Callable, cast
 
 from helpers.habit_tracking import HabitTrackingHelper
 from helpers.habits import HabitsHelper
-from keyboards.inline.confirmation_tracking import get_confirmation_tracking_keyboard
+from keyboards.inline.confirmation_tracking import \
+    get_confirmation_tracking_keyboard
 from keyboards.reply.habits import get_habits_crud_keyboard
 from message_generators.errors.habits import habits_not_exist_message
 from message_generators.keyboards.reply.habits import track_all_habit_button
-from message_generators.services.tracking import generate_answer_track_message
-from telebot.types import CallbackQuery, Message
-from message_generators.services.tracking import generate_tracking_message_text
-from bot import tg_bot
+from message_generators.services.tracking import (
+    generate_answer_track_message, generate_tracking_message_text)
 from schemas.habit import HabitSchema
+from telebot.types import CallbackQuery, Message
+
+from bot import tg_bot
 
 
 @cast(Callable[[Message], None], tg_bot.message_handler(commands=["trackall"]))
