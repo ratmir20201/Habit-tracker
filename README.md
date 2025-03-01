@@ -2,8 +2,9 @@
    <h1 align="center">Чат-бот для трекинга привычек</h1>
 </div>
 
-![Краткий функционал](assets/video/Habit-Tracker.gif)
-
+<p align="center">
+  <img src="assets/video/Habit-Tracker.gif" alt="Краткий функционал">
+</p>
 
 ## Описание проекта
 
