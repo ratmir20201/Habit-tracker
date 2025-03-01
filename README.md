@@ -2,10 +2,7 @@
    <h1 align="center">Чат-бот для трекинга привычек</h1>
 </div>
 
-<video autoplay loop muted playsinline>
-  <source src="assets/video/Habit-Tracker 1.mp4" type="video/mp4">
-  Ваш браузер не поддерживает видео.
-</video>
+![Краткий функционал](assets/video/Habit-Tracker.gif)
 
 
 ## Описание проекта
