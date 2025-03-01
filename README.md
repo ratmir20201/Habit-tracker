@@ -3,7 +3,7 @@
 </div>
 
 <video autoplay loop muted playsinline>
-  <source src="video/Habit-Tracker 1.mp4" type="video/mp4">
+  <source src="assets/video/Habit-Tracker 1.mp4" type="video/mp4">
   Ваш браузер не поддерживает видео.
 </video>
 
