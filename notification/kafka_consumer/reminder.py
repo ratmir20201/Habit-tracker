@@ -6,6 +6,7 @@ from tg_reminder import send_reminders
 
 
 async def check_reminder_topic():
+    """Функция для получения сообщений из kafka."""
     async with get_consumer() as consumer:
         async for message in consumer:
             logger.info(
