@@ -10,8 +10,12 @@ class HabitSchema(BaseModel):
 
 
 class HabitCreated(BaseModel):
+    """Схема для создания привычки."""
+
     name: str
 
 
 class HabitUpdated(BaseModel):
+    """Схема для изменения привычки."""
+
     name: str

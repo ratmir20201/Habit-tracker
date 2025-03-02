@@ -6,6 +6,8 @@ from schemas.exceptions import InvalidUserDataError
 
 
 def invalid_user_data_handler(func: Callable[..., Any]) -> Callable[..., Any]:
+    """Декоратор для обработки некорректных данных пользователя."""
+
     @functools.wraps(func)
     def wrapper(*args: Any, **kwargs: Any):
         try:

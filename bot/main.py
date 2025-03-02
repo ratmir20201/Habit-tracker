@@ -17,6 +17,7 @@ app = FastAPI(lifespan=lifespan)
 
 @app.post("/")
 async def telegram_webhook(request: Request):
+    """Роут для получения данных через вебхук."""
     try:
         json_data = await request.json()
         logger.info("Получен Webhook: %s", json_data)

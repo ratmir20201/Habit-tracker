@@ -13,6 +13,7 @@ tg_bot.set_my_commands(
 
 
 async def set_webhook() -> None:
+    """Удаляет старый вебхук и устанавливает новый."""
     tg_bot.delete_webhook(drop_pending_updates=True)
 
     await asyncio.sleep(1)

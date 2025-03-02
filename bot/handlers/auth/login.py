@@ -3,8 +3,7 @@ from typing import Callable, cast
 from handlers.auth.before_register import take_username_for_register
 from helpers.auth import AuthenticationHelper
 from helpers.habits import HabitsHelper
-from keyboards.reply.habits import (get_create_habit_keyboard,
-                                    get_habits_crud_keyboard)
+from keyboards.reply.habits import get_create_habit_keyboard, get_habits_crud_keyboard
 from message_generators.errors.auth import unexpected_login_error_message
 from message_generators.keyboards.reply.default import login_button
 from message_generators.responses.auth import auth_success_message
@@ -16,6 +15,7 @@ from bot import tg_bot
 
 @cast(Callable[[Message], None], tg_bot.message_handler(commands=["login"]))
 def login_by_command(message: Message):
+    """Выполнить команду login."""
     login(message)
 
 
@@ -24,10 +24,21 @@ def login_by_command(message: Message):
     tg_bot.message_handler(func=lambda message: message.text == login_button),
 )
 def login_by_keyboard(message: Message):
+    """Выполнить команду login с помощью кнопки."""
     login(message)
 
 
 def login(message: Message) -> None:
+    """
+    Авторизация пользователя.
+
+    При успешной авторизации пользователю в зависимости от его списка
+    привычек будет выдана клавиатура с кнопками.
+
+    Если пользователь не авторизован его перекинет на регистрацию.
+
+    Иначе неожиданная ошибка сервера.
+    """
     auth_helper = AuthenticationHelper(message)
     my_response = auth_helper.login_and_save_token_in_redis()
 

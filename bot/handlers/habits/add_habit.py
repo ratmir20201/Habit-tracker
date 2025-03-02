@@ -16,6 +16,7 @@ from bot import tg_bot
 
 @cast(Callable[[Message], None], tg_bot.message_handler(commands=["addhabit"]))
 def add_habits_by_command(message: Message):
+    """Выполнить команду addhabit."""
     take_habit_name(message)
 
 
@@ -27,6 +28,7 @@ def add_habits_by_command(message: Message):
     ),
 )
 def add_habits_by_keyboard(message: Message):
+    """Выполнить команду addhabit с помощью кнопки."""
     take_habit_name(message)
 
 

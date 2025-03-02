@@ -16,7 +16,7 @@ def validate_user_data(
     message: Message,
     user_data: dict[str, Any],
 ) -> RegisterSchema:
-
+    """Валидирует данные пользователя о регистрации."""
     try:
         valid_user_data = RegisterSchema.model_validate(user_data)
         return valid_user_data

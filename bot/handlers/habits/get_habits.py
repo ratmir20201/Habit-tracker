@@ -12,6 +12,7 @@ from bot import tg_bot
 
 @cast(Callable[[Message], None], tg_bot.message_handler(commands=["gethabits"]))
 def command_get_habits(message: Message):
+    """Выполнить команду gethabits."""
     send_habits(message)
 
 
@@ -20,11 +21,12 @@ def command_get_habits(message: Message):
     tg_bot.message_handler(func=lambda message: message.text == get_habits_button),
 )
 def keyboard_get_habits(message: Message):
+    """Выполнить команду gethabits с помощью кнопки."""
     send_habits(message)
 
 
 def send_habits(message: Message) -> None:
-    """Команда для отображения всех привычек пользователя."""
+    """Функция для отображения всех привычек пользователя."""
 
     habits_helper = HabitsHelper(message)
     habits = habits_helper.get_user_habits()

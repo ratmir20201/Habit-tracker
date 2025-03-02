@@ -2,13 +2,14 @@ from typing import Callable, cast
 
 from helpers.habit_tracking import HabitTrackingHelper
 from helpers.habits import HabitsHelper
-from keyboards.inline.confirmation_tracking import \
-    get_confirmation_tracking_keyboard
+from keyboards.inline.confirmation_tracking import get_confirmation_tracking_keyboard
 from keyboards.reply.habits import get_habits_crud_keyboard
 from message_generators.errors.habits import habits_not_exist_message
 from message_generators.keyboards.reply.habits import track_all_habit_button
 from message_generators.services.tracking import (
-    generate_answer_track_message, generate_tracking_message_text)
+    generate_answer_track_message,
+    generate_tracking_message_text,
+)
 from schemas.habit import HabitSchema
 from telebot.types import CallbackQuery, Message
 
@@ -17,6 +18,7 @@ from bot import tg_bot
 
 @cast(Callable[[Message], None], tg_bot.message_handler(commands=["trackall"]))
 def track_all_by_command(message: Message) -> None:
+    """Выполнить команду trackall."""
     add_habits_tracking(message)
 
 
@@ -25,6 +27,7 @@ def track_all_by_command(message: Message) -> None:
     tg_bot.message_handler(func=lambda message: message.text == track_all_habit_button),
 )
 def track_all_by_keyboard(message: Message) -> None:
+    """Выполнить команду trackall с помощью кнопки."""
     add_habits_tracking(message)
 
 
@@ -55,6 +58,13 @@ def add_habits_tracking(message: Message) -> None:
     ),
 )
 def handle_confirmation(call: CallbackQuery) -> None:
+    """
+    Обрабатывает выбор пользователя.
+
+    При отметке ✅ пользователь получит сообщение об успешности
+    операции при ❌ пользователь не получит никакого сообщения.
+    Также после выбора кнопки удалятся.
+    """
     action, habit_id = get_action_and_habit_id(call=call)
     if action == "confirm_yes":
         habit_tracking_helper = HabitTrackingHelper(call)
@@ -73,7 +83,7 @@ def handle_confirmation(call: CallbackQuery) -> None:
 
 
 def delete_buttons(call: CallbackQuery) -> None:
-    """Удаляет кнопки после выбора"""
+    """Удаляет кнопки после выбора."""
     tg_bot.edit_message_reply_markup(
         chat_id=call.message.chat.id,
         message_id=call.message.message_id,
@@ -82,6 +92,7 @@ def delete_buttons(call: CallbackQuery) -> None:
 
 
 def get_action_and_habit_id(call: CallbackQuery) -> tuple[str, int]:
+    """Отдает выбор пользователя и habit_id из CallbackQuery."""
     action, habit_id = call.data.rsplit("_", 1)
     habit_id = int(habit_id)
 
@@ -93,6 +104,7 @@ def send_confirmation_tracking_message(
     habit: HabitSchema | None,
     message: Message,
 ) -> None:
+    """Отправляет сообщение о подтверждении выбора пользователя (✅)."""
     message_text = generate_tracking_message_text(
         my_response=my_response,
         habit=habit,

@@ -4,17 +4,26 @@ from helpers.habit_tracking import HabitTrackingHelper
 from keyboards.reply.habits import get_habits_crud_keyboard
 from message_generators.keyboards.reply.habits import track_one_habit_button
 from message_generators.services.tracking import (
-    answer_point_habit_message, generate_tracking_message_text)
+    answer_point_habit_message,
+    generate_tracking_message_text,
+)
 from schemas.habit import HabitSchema
 from telebot.types import Message
-from utils.get_habit_by_name import (get_habit_object_from_habits_by_name,
-                                     take_habit_name_from_user)
+from utils.get_habit_by_name import (
+    get_habit_object_from_habits_by_name,
+    take_habit_name_from_user,
+)
 
 from bot import tg_bot
 
 
 @cast(Callable[[Message], None], tg_bot.message_handler(commands=["trackone"]))
 def track_one_by_command(message: Message):
+    """
+    Выполнить команду trackone.
+
+    Запрашиваем у пользователя привычку из его списка.
+    """
     take_habit_name_from_user(
         message=message,
         message_text=answer_point_habit_message,
@@ -27,6 +36,11 @@ def track_one_by_command(message: Message):
     tg_bot.message_handler(func=lambda message: message.text == track_one_habit_button),
 )
 def track_one_by_keyboard(message: Message) -> None:
+    """
+    Выполнить команду trackone с помощью кнопки.
+
+    Запрашиваем у пользователя привычку из его списка.
+    """
     take_habit_name_from_user(
         message=message,
         message_text=answer_point_habit_message,
@@ -35,7 +49,7 @@ def track_one_by_keyboard(message: Message) -> None:
 
 
 def add_habit_tracking(message: Message, habits: list[HabitSchema]) -> None:
-    """Обрабатываем ответ пользователя и создаем привычку."""
+    """Обрабатываем ответ пользователя и отмечаем выполнение привычки."""
     habit_tracking_helper = HabitTrackingHelper(message)
 
     habit_object = get_habit_object_from_habits_by_name(message, habits)

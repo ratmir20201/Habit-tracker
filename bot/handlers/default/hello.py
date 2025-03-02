@@ -13,6 +13,7 @@ from bot import tg_bot
     tg_bot.message_handler(commands=["start", "hello"]),
 )
 def hello_by_command(message: Message):
+    """Выполнить команду start или hello."""
     hello(message)
 
 
@@ -21,10 +22,12 @@ def hello_by_command(message: Message):
     tg_bot.message_handler(func=lambda message: message.text == start_button),
 )
 def hello_by_keyboard(message: Message):
+    """Выполнить команду start или hello с помощью кнопки."""
     hello(message)
 
 
 def hello(message: Message):
+    """По приветствоваться и выдать начальную клавиатуру."""
     tg_bot.send_message(
         message.chat.id,
         hello_message,

@@ -9,6 +9,7 @@ from bot import tg_bot
 
 @cast(Callable[[Message], None], tg_bot.message_handler(commands=["help"]))
 def help_by_command(message: Message):
+    """Выполнить команду help."""
     help_message(message)
 
 
@@ -17,10 +18,12 @@ def help_by_command(message: Message):
     tg_bot.message_handler(func=lambda message: message.text == help_button),
 )
 def help_by_keyboard(message: Message):
+    """Выполнить команду help с помощью кнопки."""
     help_message(message)
 
 
 def help_message(message: Message):
+    """Отправляет все команды бота."""
     tg_bot.send_message(
         message.chat.id,
         generate_help_message(),

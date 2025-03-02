@@ -2,8 +2,10 @@ from typing import Callable
 
 from helpers.habits import HabitsHelper
 from keyboards.reply.choice_habit import get_habits_keyboard
-from message_generators.errors.habits import (habit_not_exist_message,
-                                              habits_not_exist_message)
+from message_generators.errors.habits import (
+    habit_not_exist_message,
+    habits_not_exist_message,
+)
 from schemas.habit import HabitSchema
 from telebot.types import Message
 
@@ -14,6 +16,8 @@ def get_habit_object_from_habits_by_name(
     message: Message,
     habits: list[HabitSchema],
 ) -> HabitSchema | None:
+    """Отдает объект привычки из списка привычек пользователя."""
+
     habit_name = message.text.strip().capitalize()
     habit_object = None
 

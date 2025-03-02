@@ -11,4 +11,5 @@ from bot import tg_bot
     tg_bot.message_handler(func=lambda message: True),
 )
 def echo(message: Message):
+    """Эхо при вводе неизвестной команды."""
     tg_bot.reply_to(message, echo_message)

@@ -1,11 +1,15 @@
 from typing import Callable, cast
 
 from helpers.auth import AuthenticationHelper
-from message_generators.errors.auth import (unexpected_register_error_message,
-                                            user_already_exist_message)
+from message_generators.errors.auth import (
+    unexpected_register_error_message,
+    user_already_exist_message,
+)
 from message_generators.responses.auth import register_success_message
-from message_generators.services.auth import (input_name_message,
-                                              try_again_register_message)
+from message_generators.services.auth import (
+    input_name_message,
+    try_again_register_message,
+)
 from telebot.types import Message
 from validators.register_validator import validate_user_data
 
@@ -14,6 +18,8 @@ from bot import tg_bot
 
 @cast(Callable[[Message], None], tg_bot.message_handler(commands=["register"]))
 def register_new_user(message: Message):
+    """Выполнить команду register."""
+
     from handlers.auth.before_register import take_username_for_register
 
     tg_bot.send_message(message.chat.id, input_name_message)
@@ -21,6 +27,12 @@ def register_new_user(message: Message):
 
 
 def register(message: Message, username: str, email: str, password: str) -> None:
+    """
+    Выполняет регистрацию пользователя.
+
+    Валидирует данные, при неверном вводе будет просить ввести данные верно,
+    до тех пор пока пользователь не введет другую команду.
+    """
     user_data = {
         "telegram_id": message.from_user.id,
         "username": username,

@@ -3,14 +3,16 @@ from typing import Any, Optional
 
 import requests
 from config import settings
-from exceptions.api_handlers import (api_error_handler,
-                                     unauth_user_error_handler)
+from exceptions.api_handlers import api_error_handler, unauth_user_error_handler
 from logger import logger
 from message_generators.errors.auth import user_not_authorized_message
 from message_generators.errors.server import unexpected_server_error_message
 from redis_cache.client import get_redis_client
-from schemas.exceptions import (APIRequestError, UnauthorizedUserError,
-                                UnexpectedServerError)
+from schemas.exceptions import (
+    APIRequestError,
+    UnauthorizedUserError,
+    UnexpectedServerError,
+)
 from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
 from telebot.types import CallbackQuery, Message
 
@@ -34,7 +36,17 @@ class ApiHelper(ABC):
     def get_auth_headers_by_telegram_id_in_message(
         self, is_auth: bool = False
     ) -> dict[str, str] | None:
-        """Метод для получения заголовков, для запросов к api."""
+        """
+        Метод для получения заголовков, для запросов к api.
+
+        Параметр is_auth является флагом, чтобы пометить, что мы работаем
+        с аутентификацией. При работе с основной логикой приложения мы уже будем
+        являться авторизованными и is_auth (Аутентификация) будет False.
+
+        При работе с основной логикой приложения мы будем получать токен
+        из redis.
+        """
+
         basic_headers = {"Content-Type": "application/json"}
         if is_auth:
             return basic_headers
@@ -64,7 +76,11 @@ class ApiHelper(ABC):
         request_data: Optional[dict[Any, Any]] = None,
         request_params: Optional[dict[Any, Any]] = None,
     ) -> requests.Response:
-        """Метод для создания запросов к api."""
+        """
+        Метод для создания запросов к api.
+
+        При ошибке будет отправлять сообщение в боте и записывать логи.
+        """
 
         url = "{api}{endpoint}".format(api=self.api_url, endpoint=endpoint)
         try:

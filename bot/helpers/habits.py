@@ -15,6 +15,8 @@ class HabitsHelper(ApiHelper):
     """Класс для взаимодействия с моделью Habit."""
 
     def get_user_habits(self) -> list[HabitSchema] | None:
+        """Делает запрос на получение всех привычек пользователя."""
+
         response = self._send_request(method="get", endpoint="/api/habits/me")
 
         if response.status_code == HTTP_200_OK:
@@ -23,6 +25,8 @@ class HabitsHelper(ApiHelper):
         return None
 
     def add_habit(self) -> HabitCreated | None:
+        """Делает запрос на создание новой привычки."""
+
         habit_name = self.message.text.strip().capitalize()
         habit_data = {"name": habit_name}
 
@@ -39,6 +43,8 @@ class HabitsHelper(ApiHelper):
         return None
 
     def update_habit(self, habit_id: int) -> HabitUpdated | None:
+        """Делает запрос на изменение привычки."""
+
         new_habit_name = self.message.text.strip().capitalize()
         habit_data = {"name": new_habit_name}
 
@@ -56,6 +62,8 @@ class HabitsHelper(ApiHelper):
         return None
 
     def delete_habit(self, habit_id: int) -> None:
+        """Делает запрос на удаление привычки."""
+
         response = self._send_request(
             method="delete",
             endpoint="/api/habits/{habit_id}".format(habit_id=habit_id),

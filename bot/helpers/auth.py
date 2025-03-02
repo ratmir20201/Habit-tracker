@@ -29,7 +29,13 @@ class AuthenticationHelper(ApiHelper):
         return None
 
     def login_and_save_token_in_redis(self) -> str | None:
-        """Функция для входа пользователя в систему."""
+        """
+        Функция для входа пользователя в систему.
+
+        При авторизации пользователя мы также сохраняем его telegram_id
+        как токен в redis.
+        """
+
         telegram_id = self.message.from_user.id
 
         response = self._send_request(
@@ -47,7 +53,12 @@ class AuthenticationHelper(ApiHelper):
         return None
 
     def logout_and_delete_token_in_redis(self) -> str:
-        """Функция для выхода пользователя из аккаунта."""
+        """
+        Функция для выхода пользователя из аккаунта.
+
+        Также удаляем ранее созданный токен из redis.
+        """
+
         redis_client = get_redis_client()
         telegram_id = self.message.from_user.id
 

@@ -17,7 +17,13 @@ class HabitTrackingHelper(ApiHelper):
         self,
         habit_id: int,
     ) -> tuple[Optional[str], Optional[HabitSchema]]:
-        """Отправляет запрос на отслеживание привычки и возвращает статус."""
+        """
+        Отправляет запрос на отслеживание привычки и возвращает статус.
+
+        Возможные ответы: HABIT_POINTED(успешно), HABIT_COMPLETED(пользователь выполнил
+        план), HABIT_ALREADY_POINTED(привычка уже помечена). При успешных ответах
+        также отправляется объект привычки.
+        """
 
         tracking_data = {"habit_id": habit_id}
 
