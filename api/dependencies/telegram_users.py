@@ -10,6 +10,8 @@ async def user_by_telegram_id(
     telegram_id: int,
     session: AsyncSession = Depends(get_session),
 ) -> User:
+    """Зависимость для получения пользователя по его telegram_id."""
+
     query_user = await session.execute(
         select(User).where(User.telegram_id == telegram_id)
     )

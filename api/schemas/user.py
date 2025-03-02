@@ -8,17 +8,23 @@ from schemas.habit import HabitBase
 
 
 class UserRead(schemas.BaseUser[int]):
+    """Схема для чтения пользователя."""
+
     username: str
     habits: list[HabitBase] = field(default_factory=list)
     telegram_id: int | None
 
 
 class UserCreate(schemas.BaseUserCreate):
+    """Схема для создания пользователя."""
+
     username: str
     telegram_id: int | None
 
 
 class UserUpdate(schemas.BaseUserUpdate):
+    """Схема для изменения пользователя."""
+
     username: str
     habits: list[HabitBase] = field(default_factory=list)
 

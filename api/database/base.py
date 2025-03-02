@@ -8,6 +8,7 @@ class Base(DeclarativeBase):
 
     @declared_attr.directive
     def __tablename__(cls) -> str:
+        """Создает таблицу - название класса + 's'."""
         result_table_name = ""
         class_name = cls.__name__
         for index in range(len(class_name) - 1):
@@ -22,6 +23,12 @@ class Base(DeclarativeBase):
     repr_cols: Tuple[str, ...] = tuple()
 
     def __repr__(self):
+        """
+        Выводит класс и некоторые его колонки.
+
+        Количество колонок можно указать в аргументе repr_cols_num,
+        а какие-то определенные колонки можно указать в repr_cols.
+        """
         cols = []
         for idx, col in enumerate(self.__table__.columns.keys()):
             if col in self.repr_cols or idx < self.repr_cols_num:

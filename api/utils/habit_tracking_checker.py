@@ -11,6 +11,8 @@ async def check_habit_tracking_already_exist(
     session: AsyncSession,
     habit_id: int,
 ) -> None:
+    """Проверят, существует ли привычка с habit_id которая уже отмечена сегодня."""
+
     today = datetime.datetime.now().date()
     query = await session.execute(
         select(HabitTracking).where(

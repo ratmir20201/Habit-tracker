@@ -9,6 +9,8 @@ async def create_kafka_message(
     session: AsyncSession,
     telegram_id: int,
 ) -> KafkaMessage | None:
+    """Создает объект сообщения(KafkaMessage), проверяя на дубликат."""
+
     is_exist = await check_if_kafka_message_already_exist(
         session=session,
         telegram_id=telegram_id,

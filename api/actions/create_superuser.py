@@ -17,6 +17,7 @@ async def create_user(
     user_manager: UserManager,
     user_create: UserCreate,
 ) -> User:
+    """Создает пользователя."""
     user = await user_manager.create(
         user_create=user_create,
     )
@@ -32,13 +33,18 @@ async def create_superuser(
     is_superuser: bool = True,
     is_verified: bool = True,
 ) -> User:
+    """
+    Создает суперпользователя.
+
+    Если суперпользователь существует, не создаем нового.
+    """
+
     async with get_async_context_session() as session:
         superuser_query = await session.execute(
             select(User).where(User.is_superuser.is_(True)),
         )
         superuser = superuser_query.scalar_one_or_none()
 
-    # Если суперпользователь существует, не создаем нового
     if superuser:
         return superuser
 
@@ -56,6 +62,7 @@ async def create_superuser(
 
 
 async def add_superuser_to_db(user_create: UserCreate) -> User:
+    """Добавляет суперпользователя в бд."""
     async with get_async_context_session() as session:
         async with get_user_db_context(session) as user_db:
             async with get_user_manager_context(user_db) as user_manager:

@@ -11,6 +11,8 @@ async def check_if_habit_already_exist(
     habit_name: str,
     user_id: int,
 ) -> None:
+    """Проверяет, существует ли у пользователя с user_id привычка с именем habit_name."""
+
     habit_query = await session.execute(
         select(Habit)
         .options(

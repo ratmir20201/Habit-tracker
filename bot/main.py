@@ -8,6 +8,7 @@ from bot import set_webhook, tg_bot
 
 
 async def lifespan(app: FastAPI):
+    """Перед запуском приложения устанавливает вебхук."""
     await set_webhook()
     yield
 

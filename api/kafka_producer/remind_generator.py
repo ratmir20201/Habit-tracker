@@ -7,6 +7,8 @@ async def generate_data_for_reminder(
     telegram_id: int,
     habits: list[HabitSchema],
 ) -> UntrackResponseSchema:
+    """Генерирует словарь с данными об пользователях забывших отметить привычки."""
+
     async with get_async_context_session() as session:
         kafka_message = await create_kafka_message(
             session=session,

@@ -13,6 +13,8 @@ from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
 
 
 async def lifespan(app: FastAPI):
+    """Перед запуском приложения создает superuser'а и инициализирует кэш."""
+
     await create_superuser(
         email=settings.api.superuser_email,
         username=settings.api.superuser_name,

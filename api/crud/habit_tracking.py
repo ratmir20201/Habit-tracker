@@ -11,6 +11,7 @@ async def create_habit_tracking(
     habit_track: HabitTrackingCreate,
     habit: Habit,
 ) -> HabitTracking:
+    """Создает модель HabitTracking (трэкинг привычки)."""
     await check_habit_tracking_already_exist(
         session=session,
         habit_id=habit_track.habit_id,

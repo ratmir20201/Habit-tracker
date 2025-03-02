@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 async def get_users_with_telegram_id(session: AsyncSession) -> Sequence[User]:
     """Получить пользователей, у которых есть telegram_id."""
+
     users_query = await session.execute(
         select(User).where(User.telegram_id.isnot(None)),
     )
@@ -20,6 +21,7 @@ async def get_untracked_habits_for_user(
     user: User,
 ) -> dict[str, Any] | None:
     """Получает непомеченные привычки для одного пользователя."""
+
     yesterday = datetime.now() - timedelta(days=1)
 
     query = await session.execute(

@@ -23,6 +23,7 @@ async def auth_telegram(
         get_database_strategy
     ),
 ):
+    """Роут для авторизации пользователя с помощью telegram_id."""
     token_data = await authentication_backend.login(db_strategy, user)
     token = json.loads(token_data.body)
 

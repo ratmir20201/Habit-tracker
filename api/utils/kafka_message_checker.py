@@ -10,6 +10,8 @@ async def check_if_kafka_message_already_exist(
     session: AsyncSession,
     telegram_id: int,
 ) -> bool:
+    """Проверяет, существует ли объект KafkaMessage, c telegram_id созданный сегодня."""
+
     kafka_message_query = await session.execute(
         select(KafkaMessage).where(
             (KafkaMessage.telegram_id == telegram_id)

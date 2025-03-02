@@ -14,6 +14,8 @@ async def user_by_id(
     user_id: int,
     session: AsyncSession = Depends(get_session),
 ) -> User:
+    """Зависимость для получения пользователя по его id."""
+
     query_user = await session.execute(
         select(User).where(User.id == user_id),
     )

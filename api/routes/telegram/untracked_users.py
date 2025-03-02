@@ -28,7 +28,8 @@ async def untracked_users(
     """
     Endpoint для получения пользователей не отметивших свои привычки.
 
-    Может использовать только superuser.
+    Может использоваться только superuser.
+    Этот маршрут закэширован.
     """
 
     untracked_users_habits = await get_untracked_habits(session=session)

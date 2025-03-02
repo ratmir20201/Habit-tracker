@@ -13,6 +13,8 @@ async def create_habit(
     habit: HabitCreate,
     user_id: int,
 ) -> Habit:
+    """Создает объект привычки(Habit)."""
+
     await check_if_habit_already_exist(
         session=session,
         habit_name=habit.name,
@@ -31,6 +33,8 @@ async def get_habits_by_user_id(
     session: AsyncSession,
     user_id: int,
 ) -> list[Habit]:
+    """Отдаёт все привычки(Habit) пользователя по user_id."""
+
     habits_query = await session.execute(
         select(Habit)
         .options(
@@ -45,6 +49,8 @@ async def get_habits_by_user_id(
 
 
 async def get_habit(session: AsyncSession, habit_id: int) -> Habit | None:
+    """Отдаёт все привычку(Habit) по ее id."""
+
     habit_query = await session.execute(
         select(Habit)
         .options(
@@ -64,6 +70,8 @@ async def update_habit_by_id(
     habit_update: HabitUpdate,
     user_id: int,
 ) -> Habit:
+    """Изменяет объект привычки(Habit)."""
+
     await check_if_habit_already_exist(
         session=session,
         habit_name=habit_update.name,
@@ -87,6 +95,8 @@ async def delete_habit_by_id(
     session: AsyncSession,
     user_id: int,
 ) -> None:
+    """Удаляет объект привычки(Habit)."""
+
     if habit.user_id == user_id:
         await session.delete(habit)
         await session.commit()

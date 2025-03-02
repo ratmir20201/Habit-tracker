@@ -10,6 +10,7 @@ async def habit_by_id(
     habit_id: int,
     session: AsyncSession = Depends(get_session),
 ) -> Habit:
+    """Зависимость для получения привычки по ее id."""
     habit = await get_habit(session=session, habit_id=habit_id)
     if habit is not None:
         return habit
